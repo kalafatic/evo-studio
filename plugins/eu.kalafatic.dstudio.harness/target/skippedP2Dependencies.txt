@@ -1,10 +1,10 @@
-eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/jackson-annotations-2.20.jar @ /home/petr/git/DStudio-121126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
-eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/jackson-core-2.20.0.jar @ /home/petr/git/DStudio-121126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
-eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/jackson-databind-2.20.0.jar @ /home/petr/git/DStudio-121126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
-eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/sqlite-jdbc.jar @ /home/petr/git/DStudio-121126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
+eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/jackson-annotations-2.20.jar @ /home/petr/git/evo-studio-221126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
+eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/jackson-core-2.20.0.jar @ /home/petr/git/evo-studio-221126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
+eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/jackson-databind-2.20.0.jar @ /home/petr/git/evo-studio-221126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
+eu.kalafatic.dstudio:eu.kalafatic.dstudio.infrastructure:eclipse-plugin:lib/sqlite-jdbc.jar @ /home/petr/git/evo-studio-221126/plugins/eu.kalafatic.dstudio.infrastructure/target/eu.kalafatic.dstudio.infrastructure-2.6.11-SNAPSHOT.jar
 p2.eclipse.plugin:org.eclipse.jgit.source:eclipse-plugin @ /home/petr/.m2/repository/p2/osgi/bundle/org.eclipse.jgit.source/7.5.0.202512021534-r/org.eclipse.jgit.source-7.5.0.202512021534-r.jar
 p2.eclipse.plugin:org.eclipse.jgit:eclipse-plugin @ /home/petr/.m2/repository/p2/osgi/bundle/org.eclipse.jgit/7.5.0.202512021534-r/org.eclipse.jgit-7.5.0.202512021534-r.jar
 p2.eclipse.plugin:org.eclipse.osgi.source:eclipse-plugin @ /home/petr/.m2/repository/p2/osgi/bundle/org.eclipse.osgi.source/3.24.0.v20251126-0427/org.eclipse.osgi.source-3.24.0.v20251126-0427.jar
 p2.eclipse.plugin:org.eclipse.osgi:eclipse-plugin @ /home/petr/.m2/repository/p2/osgi/bundle/org.eclipse.osgi/3.24.0.v20251126-0427/org.eclipse.osgi-3.24.0.v20251126-0427.jar
-p2.eclipse.plugin:slf4j.api:eclipse-plugin @ /home/petr/git/DStudio-121126/targetplatform/orbit/slf4j.api-2.0.17.jar
-p2.eclipse.plugin:slf4j.nop:eclipse-plugin @ /home/petr/git/DStudio-121126/targetplatform/orbit/slf4j.nop-2.0.18.jar
+p2.eclipse.plugin:slf4j.api:eclipse-plugin @ /home/petr/git/evo-studio-221126/targetplatform/orbit/slf4j.api-2.0.17.jar
+p2.eclipse.plugin:slf4j.nop:eclipse-plugin @ /home/petr/git/evo-studio-221126/targetplatform/orbit/slf4j.nop-2.0.18.jar
