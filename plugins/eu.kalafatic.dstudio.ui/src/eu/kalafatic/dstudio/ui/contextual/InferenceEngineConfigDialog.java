@@ -21,6 +21,20 @@ import org.eclipse.swt.widgets.Text;
  */
 public class InferenceEngineConfigDialog extends Dialog {
 
+    private static final Map<String, String> LABELS = Map.of(
+            "endpoint", "Endpoint",
+            "apiKey", "API key",
+            "defaultModel", "Default model",
+            "model", "Model",
+            "timeoutSeconds", "Timeout (seconds)");
+
+    private static final Map<String, String> HELP = Map.of(
+            "endpoint", "Address of the runtime service.",
+            "apiKey", "Secret API key. Stored encrypted; shown masked.",
+            "defaultModel", "Model used when none is specified.",
+            "model", "Model identifier for this engine.",
+            "timeoutSeconds", "Request timeout in seconds.");
+
     private final String engineName;
     private final Map<String, String> current;
     private final Map<String, Text> fields = new LinkedHashMap<>();
@@ -43,13 +57,28 @@ public class InferenceEngineConfigDialog extends Dialog {
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
         container.setLayout(new GridLayout(2, false));
+
+        Label hint = new Label(container, SWT.WRAP);
+        hint.setText("Settings are optional — leave a field empty to use the engine's "
+                + "default. Values shown as •••• are stored secrets and are kept when left "
+                + "unchanged.");
+        GridData hintData = new GridData(GridData.FILL_HORIZONTAL);
+        hintData.horizontalSpan = 2;
+        hint.setLayoutData(hintData);
+
         for (Map.Entry<String, String> entry : current.entrySet()) {
+            String key = entry.getKey();
             Label label = new Label(container, SWT.NONE);
-            label.setText(entry.getKey());
+            label.setText(LABELS.getOrDefault(key, key));
             Text text = new Text(container, SWT.BORDER);
             text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
             text.setText(entry.getValue());
-            fields.put(entry.getKey(), text);
+            String tooltip = HELP.get(key);
+            if (tooltip == null) {
+                tooltip = "Optional setting for the inference engine.";
+            }
+            text.setToolTipText(tooltip);
+            fields.put(key, text);
         }
         return container;
     }

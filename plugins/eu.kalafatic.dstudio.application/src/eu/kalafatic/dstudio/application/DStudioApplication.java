@@ -16,6 +16,14 @@ public class DStudioApplication implements IApplication {
 
     private static final String PLUGIN_ID = "eu.kalafatic.dstudio.application";
 
+    /**
+     * Eclipse 4 property that disables inheriting the OS dark appearance when no explicit
+     * theme preference exists, so the Light theme remains the default on first launch
+     * regardless of the host OS appearance.
+     */
+    private static final String DISABLE_OS_DARK_THEME_INHERIT =
+            "org.eclipse.e4.ui.css.theme.disableOSDarkThemeInherit";
+
     private DStudioHeadlessRunner headlessRunner;
 
     public static boolean isHeadlessRequested(IApplicationContext context) {
@@ -37,6 +45,9 @@ public class DStudioApplication implements IApplication {
 
     @Override
     public Object start(IApplicationContext context) {
+        // Light theme is the default: disable OS dark-appearance inheritance so a fresh
+        // install (or a user without an explicit theme preference) always starts light.
+        System.setProperty(DISABLE_OS_DARK_THEME_INHERIT, "true");
         // Register the local update repository (<install>/updates) when present.
         DStudioUpdateRepositoryRegistrar.registerAsync();
         DStudioLifecycleCoordinator coordinator = new DStudioLifecycleCoordinator();

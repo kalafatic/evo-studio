@@ -181,4 +181,33 @@ class AgentProfileAndExecutionConfigTest {
         resolved = service.resolve("p-none", "t-none");
         assertEquals("dcode", resolved.harnessId());
     }
+
+    @Test
+    void removeGlobalAndProjectOverrideRestoreDefaults() {
+        ExecutionConfigurationService service = newConfigService();
+        service.saveGlobal(new ExecutionConfiguration("dcode", "enr", "global-model",
+                "", Map.of(), List.of(), Map.of(), Map.of(),
+                ExecutionConfiguration.SOURCE_GLOBAL));
+        service.saveProjectOverride("p1", new ExecutionConfiguration("", "ollama",
+                "p1-model", "", Map.of(), List.of(), Map.of(), Map.of(),
+                ExecutionConfiguration.SOURCE_PROJECT));
+
+        // project-specific values do not leak into unrelated projects
+        ExecutionConfiguration other = service.resolve("p2", null);
+        assertEquals("enr", other.providerId());
+        assertEquals("global-model", other.modelId());
+
+        // removing the project override falls back to the global defaults
+        service.removeProjectOverride("p1");
+        ExecutionConfiguration restored = service.resolve("p1", null);
+        assertEquals("enr", restored.providerId());
+        assertEquals("global-model", restored.modelId());
+
+        // removing the global defaults returns to empty (recommended defaults)
+        service.removeGlobal();
+        ExecutionConfiguration empty = service.resolve("p1", null);
+        assertTrue(empty.harnessId().isBlank());
+        assertTrue(empty.providerId().isBlank());
+        assertTrue(empty.modelId().isBlank());
+    }
 }

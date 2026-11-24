@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: DStudio Infrastructure
+Bundle-Name: EVO-Studio Infrastructure
 Bundle-SymbolicName: eu.kalafatic.dstudio.infrastructure
 Bundle-Version: 2.6.11.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-21

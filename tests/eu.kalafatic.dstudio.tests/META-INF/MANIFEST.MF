@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: DStudio Tests
+Bundle-Name: EVO-Studio Tests
 Bundle-SymbolicName: eu.kalafatic.dstudio.tests
 Bundle-Version: 2.6.11.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-21

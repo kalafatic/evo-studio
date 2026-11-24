@@ -19,6 +19,12 @@ public interface ExecutionConfigurationService {
 
     void removeTaskOverride(String taskKey);
 
+    /** Removes the persisted global defaults, returning to the recommended defaults. */
+    void removeGlobal();
+
+    /** Removes the persisted override for a project, if any. */
+    void removeProjectOverride(String projectId);
+
     Optional<ExecutionConfiguration> getGlobal();
 
     Optional<ExecutionConfiguration> getProjectOverride(String projectId);

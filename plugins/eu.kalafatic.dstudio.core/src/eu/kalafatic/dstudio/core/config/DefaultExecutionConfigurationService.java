@@ -62,6 +62,19 @@ public class DefaultExecutionConfigurationService implements ExecutionConfigurat
     }
 
     @Override
+    public void removeGlobal() {
+        store.delete(SCOPE_GLOBAL, KEY_GLOBAL);
+    }
+
+    @Override
+    public void removeProjectOverride(String projectId) {
+        if (projectId == null || projectId.isBlank()) {
+            return;
+        }
+        store.delete(SCOPE_PROJECT, projectId);
+    }
+
+    @Override
     public Optional<ExecutionConfiguration> getGlobal() {
         return store.find(SCOPE_GLOBAL, KEY_GLOBAL);
     }

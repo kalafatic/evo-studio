@@ -3,5 +3,5 @@
    <feature id="eu.kalafatic.dstudio.feature" version="0.0.0">
       <category name="eu.kalafatic.dstudio.category"/>
    </feature>
-   <category-def name="eu.kalafatic.dstudio.category" label="DStudio"/>
+   <category-def name="eu.kalafatic.dstudio.category" label="EVO-Studio"/>
 </site>

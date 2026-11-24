@@ -387,13 +387,13 @@
     document.title = product + " Settings";
     $("cState").textContent = "UP";
     $("cEndpoint").textContent = window.location.origin;
-    $("cBackend").textContent = String((state.media.application || "DSTUDIO"));
+    $("cBackend").textContent = product;
     setConnection("online", "READY · " + window.location.origin);
     try {
       const health = await json("/api/status");
       state.media = health || {};
       $("cVersion").textContent = (health && health.version) || "?";
-      $("cBackend").textContent = (health && health.application) || $("cBackend").textContent;
+      $("cBackend").textContent = product;
       $("cState").textContent = (health && health.status)
           || (health && health.ready ? "READY" : "UP");
     } catch (e) { /* health optional */ }

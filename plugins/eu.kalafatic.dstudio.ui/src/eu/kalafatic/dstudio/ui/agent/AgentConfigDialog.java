@@ -1,7 +1,10 @@
 package eu.kalafatic.dstudio.ui.agent;
 
 import eu.kalafatic.dstudio.core.agent.AgentProfile;
+import eu.kalafatic.dstudio.ui.FormHistory;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,37 +56,65 @@ public class AgentConfigDialog extends Dialog {
         getShell().setText(existing == null ? "Create Agent Profile" : "Edit Agent Profile");
         GridLayoutFactory.swtDefaults().numColumns(2).applyTo(container);
 
-        nameText = field(container, "Name:", existing == null ? "" : existing.getName());
-        descriptionText = field(container, "Description:",
-                existing == null ? "" : existing.getDescription());
-        roleText = field(container, "Role:", existing == null ? "" : existing.getRole());
-        instructionsText = field(container, "System Instructions:",
-                existing == null ? "" : existing.getSystemInstructions(), true);
-        permissionsText = field(container, "Tool Permissions (comma separated):",
-                existing == null ? "" : String.join(",", existing.getToolPermissions()));
-        restrictionsText = field(container, "Restrictions (comma separated):",
-                existing == null ? "" : String.join(",", existing.getRestrictions()));
-        harnessText = field(container, "Preferred Harness (id, empty = any):",
-                existing == null ? "" : existing.getPreferredHarnessId());
-        providerText = field(container, "Preferred Provider (engine id, empty = any):",
-                existing == null ? "" : existing.getPreferredProviderId());
-        modelText = field(container, "Preferred Model (empty = any):",
-                existing == null ? "" : existing.getPreferredModel());
-        parametersText = field(container, "Execution Parameters (key=value, comma separated):",
-                existing == null ? "" : joinParameters(existing.getExecutionParameters()));
+        Label hint = new Label(container, SWT.WRAP);
+        hint.setText("Fields marked * are required. Empty preferences act as wildcards "
+                + "(any harness, provider or model).");
+        GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(hint);
+
+        nameText = field(container, "Name *",
+                existing == null ? defaultAgentName() : existing.getName(),
+                "Short, human-readable name for this profile. Required. A suggested "
+                        + "name is already provided.");
+        descriptionText = field(container, "Description",
+                existing == null ? "" : existing.getDescription(),
+                "Optional description of what this profile is for.");
+        roleText = field(container, "Role", existing == null ? "" : existing.getRole(),
+                "Optional role label, e.g. 'architect' or 'reviewer'.");
+        instructionsText = field(container, "System Instructions",
+                existing == null ? "" : existing.getSystemInstructions(),
+                "System prompt / persona instructions sent to the model. Optional.", true);
+        permissionsText = field(container, "Tool Permissions (comma separated)",
+                existing == null ? "" : String.join(",", existing.getToolPermissions()),
+                "Tools this agent may use. Empty inherits the harness defaults.");
+        restrictionsText = field(container, "Restrictions (comma separated)",
+                existing == null ? "" : String.join(",", existing.getRestrictions()),
+                "Tools or actions this agent may not use. Optional.");
+        harnessText = field(container, "Preferred Harness (id, empty = any)",
+                existing == null ? orEmpty(FormHistory.get("agent.harness"))
+                        : existing.getPreferredHarnessId(),
+                "Preferred coding harness id. Empty = any harness. Pre-filled with the "
+                        + "last-used value.");
+        providerText = field(container, "Preferred Provider (engine id, empty = any)",
+                existing == null ? orEmpty(FormHistory.get("agent.provider"))
+                        : existing.getPreferredProviderId(),
+                "Preferred inference engine id. Empty = any provider. Pre-filled with "
+                        + "the last-used value.");
+        modelText = field(container, "Preferred Model (empty = any)",
+                existing == null ? orEmpty(FormHistory.get("agent.model"))
+                        : existing.getPreferredModel(),
+                "Preferred model id. Empty = any model. Pre-filled with the last-used "
+                        + "value.");
+        parametersText = field(container,
+                "Execution Parameters (key=value, comma separated)",
+                existing == null ? "" : joinParameters(existing.getExecutionParameters()),
+                "Optional key=value execution parameters.");
         return container;
     }
 
-    private Text field(Composite parent, String label, String initial) {
-        return field(parent, label, initial, false);
+    private Text field(Composite parent, String label, String initial, String tooltip) {
+        return field(parent, label, initial, tooltip, false);
     }
 
-    private Text field(Composite parent, String label, String initial, boolean multiline) {
+    private Text field(Composite parent, String label, String initial, String tooltip,
+            boolean multiline) {
         Label labelControl = new Label(parent, SWT.NONE);
         labelControl.setText(label);
         Text text = new Text(parent, multiline ? (SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL)
                 : SWT.BORDER);
         text.setText(initial == null ? "" : initial);
+        if (tooltip != null && !tooltip.isBlank()) {
+            text.setToolTipText(tooltip);
+        }
         GridDataFactory.fillDefaults().grab(true, false).hint(380,
                 multiline ? 90 : SWT.DEFAULT).applyTo(text);
         return text;
@@ -113,7 +144,20 @@ public class AgentConfigDialog extends Dialog {
                 harnessText.getText().trim(), providerText.getText().trim(),
                 modelText.getText().trim(), parseParameters(parametersText.getText()),
                 existing == null ? now : existing.getCreatedAt(), now);
+        // Remember the successfully saved preferences as the next create-form defaults.
+        FormHistory.put("agent.harness", harnessText.getText().trim());
+        FormHistory.put("agent.provider", providerText.getText().trim());
+        FormHistory.put("agent.model", modelText.getText().trim());
         super.okPressed();
+    }
+
+    private static String defaultAgentName() {
+        return "Agent " + LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    private static String orEmpty(String value) {
+        return value == null ? "" : value;
     }
 
     private static List<String> splitList(String text) {

@@ -42,6 +42,6 @@
    <preferencesInfo><targetPlatform>JavaSE-21</targetPlatform></preferencesInfo>
    <cssInfo/>
    <properties>
-      <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_dark"/>
+      <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default"/>
    </properties>
 </product>

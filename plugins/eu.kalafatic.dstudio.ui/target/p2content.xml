@@ -1,26 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='eu.kalafatic.dstudio.ui' version='2.6.11.202611232031' generation='2'>
-    <update id='eu.kalafatic.dstudio.ui' range='[0.0.0,2.6.11.202611232031)' severity='0'/>
+  <unit id='eu.kalafatic.dstudio.ui' version='2.6.11.202611241811' generation='2'>
+    <update id='eu.kalafatic.dstudio.ui' range='[0.0.0,2.6.11.202611241811)' severity='0'/>
     <properties size='5'>
-      <property name='org.eclipse.equinox.p2.name' value='DStudio UI'/>
+      <property name='org.eclipse.equinox.p2.name' value='EVO-Studio UI'/>
       <property name='maven-groupId' value='eu.kalafatic.dstudio'/>
       <property name='maven-artifactId' value='eu.kalafatic.dstudio.ui'/>
       <property name='maven-version' value='2.6.11-SNAPSHOT'/>
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='5'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='eu.kalafatic.dstudio.ui' version='2.6.11.202611232031'/>
-      <provided namespace='osgi.bundle' name='eu.kalafatic.dstudio.ui' version='2.6.11.202611232031'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='eu.kalafatic.dstudio.ui' version='2.6.11.202611241811'/>
+      <provided namespace='osgi.bundle' name='eu.kalafatic.dstudio.ui' version='2.6.11.202611241811'/>
       <provided namespace='java.package' name='eu.kalafatic.dstudio.ui' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='eu.kalafatic.dstudio.ui' version='2.6.11.202611232031'>
+      <provided namespace='osgi.identity' name='eu.kalafatic.dstudio.ui' version='2.6.11.202611241811'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
       </provided>
       <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
     </provides>
-    <requires size='20'>
+    <requires size='21'>
       <required namespace='osgi.bundle' name='eu.kalafatic.dstudio.core' range='2.6.11'/>
       <required namespace='osgi.bundle' name='eu.kalafatic.dstudio.application' range='2.6.11'/>
       <required namespace='osgi.bundle' name='eu.kalafatic.dstudio.ui.inference' range='2.6.11'/>
@@ -39,25 +39,26 @@
       <required namespace='osgi.bundle' name='org.eclipse.egit.core' range='[7.0.0,8.0.0)'/>
       <required namespace='java.package' name='org.eclipse.core.filesystem' range='0.0.0'/>
       <required namespace='java.package' name='org.eclipse.core.resources' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.css.swt.theme' range='0.0.0'/>
       <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=21))'>
         <description>
           eu.kalafatic.dstudio.ui
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='eu.kalafatic.dstudio.ui.source' range='[2.6.11.202611232031,2.6.11.202611232031]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='eu.kalafatic.dstudio.ui.source' range='[2.6.11.202611241811,2.6.11.202611241811]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='eu.kalafatic.dstudio.ui' version='2.6.11.202611232031'/>
+      <artifact classifier='osgi.bundle' id='eu.kalafatic.dstudio.ui' version='2.6.11.202611241811'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: eu.kalafatic.dstudio.ui;singleton:=true&#xA;Bundle-Version: 2.6.11.202611232031&#xA;
+          Bundle-SymbolicName: eu.kalafatic.dstudio.ui;singleton:=true&#xA;Bundle-Version: 2.6.11.202611241811&#xA;
         </instruction>
       </instructions>
     </touchpointData>

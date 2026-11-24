@@ -1,6 +1,7 @@
-/* DStudio Web — inference workspace arranged like the DCode web app:
- * topbar (center status + right controls), left views, tabbed work area,
- * right Context panel and bottom Console/Events/Problems. DStudio's own objects. */
+/* EVO-Studio Inference workspace — single shared frontend (SWT Browser and external
+ * browser). Professional four-area layout: application header, left session explorer,
+ * main conversation workspace + bottom composer, and an optional contextual inspector.
+ * All sessions, messages and streaming go through the existing backend API. */
 (function () {
   "use strict";
 
@@ -28,18 +29,21 @@
     context: { type: "", item: null },
     busy: false,
     stream: null,
-    tabOpen: true,
     consoleEntries: [],
     consoleAutoscroll: true,
     eventStream: null,
     lastEventId: 0,
-    filesPath: ""
+    filesPath: "",
+    attachments: [],
+    inspectorTab: "context",
+    changesVisible: false
   };
 
+  /** Observes workspace/chat/composer size changes so the layout re-syncs even when the
+   *  SWT Browser is resized without a traditional window resize event. */
+  let resizeObserver = null;
+
   // ---------------- persistence / conversations ----------------
-  // Conversations are backend sessions (/api/inference/sessions — persisted by
-  // DStudio's InferenceService). localStorage keeps only unsent drafts and UI
-  // preferences; it is never a second session manager.
 
   function loadStore() {
     try {
@@ -59,7 +63,7 @@
   function newConversation() {
     return {
       id: "c-" + Date.now().toString(36) + "-" + Math.floor(Math.random() * 1e6).toString(36),
-      title: "New conversation",
+      title: "New session",
       messages: [],
       providerId: state.providerId || "",
       modelId: state.modelId || "",
@@ -74,7 +78,6 @@
     return state.conversations.find((c) => c.id === state.currentId) || null;
   }
 
-  /** Merges backend sessions into the conversation list (drafts stay on top). */
   async function loadBackendSessions() {
     try {
       const body = await json("/api/inference/sessions");
@@ -117,8 +120,7 @@
     persist();
   }
 
-  // ---------------- theme / toast / connection ----------------
-  // applyTheme/toast come from common.js (single implementation, both pages).
+  // ---------------- connection / status ----------------
 
   function setConnection(kind, text) {
     state.connected = kind === "connected";
@@ -139,6 +141,12 @@
       $("sb-model").textContent = "model " + (model ? model.name : "—");
     }
     if ($("sb-build")) { $("sb-build").textContent = FRONTEND_BUILD; }
+  }
+
+  function updateTopbar() {
+    const project = state.allProjects.find((p) => p.id === state.projectId);
+    $("top-project").textContent = project ? project.name : "no project";
+    updateStatusbar();
   }
 
   // ---------------- console / events / problems ----------------
@@ -173,6 +181,14 @@
     const pane = $("panel-events");
     pane.appendChild(node);
     if (state.consoleAutoscroll) { pane.scrollTop = pane.scrollHeight; }
+    const activity = $("activity-log");
+    if (activity) {
+      const line = document.createElement("div");
+      line.className = "activity-line";
+      line.textContent = stamp() + " " + message;
+      activity.appendChild(line);
+      activity.scrollTop = activity.scrollHeight;
+    }
   }
 
   function problem(message) {
@@ -184,7 +200,7 @@
     if (state.consoleAutoscroll) { pane.scrollTop = pane.scrollHeight; }
   }
 
-  // ---------------- live event stream (shared backend event bus) ----------------
+  // ---------------- live event stream ----------------
 
   function startEventStream() {
     if (state.eventStream || !state.connected) { return; }
@@ -205,15 +221,14 @@
                   : (data && data.type ? String(data.type) : "");
               event(kind + (message ? " " + message : ""));
             });
-      } catch (e) { /* connection lost — reconnect below */ }
+      } catch (e) { /* reconnect below */ }
       state.eventStream = false;
       if (state.connected) { setTimeout(startEventStream, 3000); }
     };
     connect();
   }
 
-  // ---------------- selects / data ----------------
-  // fillSelect comes from common.js.
+  // ---------------- data ----------------
 
   function providerLabel(provider) {
     return provider.name + (provider.isDefault ? " \u2605" : "")
@@ -267,6 +282,7 @@
     if (state.projectId && !state.allProjects.some((p) => p.id === state.projectId)) {
       state.projectId = "";
     }
+    renderContextSelect();
   }
 
   async function refreshHarnesses() {
@@ -277,41 +293,11 @@
     }
   }
 
-  // ---------------- render: topbar / tabs / context ----------------
-  // formatBytes comes from common.js.
-
-  function updateTopbar() {
-    const project = state.allProjects.find((p) => p.id === state.projectId);
-    const engine = state.allProviders.find((p) => p.id === state.providerId);
-    const model = state.allModels.find((m) => m.id === state.modelId);
-    $("top-project").textContent = project ? "project: " + project.name : "no project";
-    $("top-engine").textContent = engine ? "engine: " + engine.name
-        + (engine.isDefault ? " \u2605" : "") : "no engine";
-    $("top-model").textContent = model ? "model: " + model.name : "no model";
-    $("modelMeta").textContent = [engine ? engine.name : "",
-      model ? model.name : "",
-      model && model.sizeBytes ? formatBytes(model.sizeBytes) : ""]
-        .filter(Boolean).join(" · ");
-    updateStatusbar();
-  }
-
-  function renderTab() {
-    const pane = $("inference-pane");
-    const noTab = $("no-tab");
-    if (!state.tabOpen) {
-      pane.classList.remove("active");
-      noTab.hidden = false;
-      return;
-    }
-    pane.classList.add("active");
-    noTab.hidden = true;
-    const conversation = current();
-    $("tabTitle").textContent = conversation && conversation.title
-        ? conversation.title : "Inference";
-  }
+  // ---------------- inspector ----------------
 
   function renderContext() {
     const box = $("right-content");
+    if (!box) { return; }
     if (!state.context.type || !state.context.item) {
       box.innerHTML = "<div class=\"empty-note\">Select a session, project, engine, "
           + "model or harness for details.</div>";
@@ -330,7 +316,8 @@
     } else if (state.context.type === "project") {
       add("Name", item.name);
       add("Root", item.rootPath);
-    } else if (state.context.type === "engine") {      add("Name", item.name);
+    } else if (state.context.type === "engine") {
+      add("Name", item.name);
       add("Type", item.type);
       add("Status", item.status);
       add("Endpoint", item.endpoint);
@@ -348,14 +335,8 @@
     }
     box.innerHTML = "<div class=\"ctx-title\">" + esc(item.name || item.title
         || state.context.type) + "</div>" + rows.join("");
-    if (state.context.type === "project") { renderProjectFiles(box, item); }
   }
 
-  /**
-   * Real project file browser (GET /api/workspace/files — server-contained path
-   * resolution). Directory browsing, file preview and "Use in prompt" (inserts
-   * the file path plus its content so the model actually receives it).
-   */
   async function renderProjectFiles(box, project) {
     const section = document.createElement("div");
     section.className = "ctx-files";
@@ -399,6 +380,21 @@
           name.textContent = (child.directory ? "▸ " : "· ") + child.name;
           name.title = child.path || child.name;
           line.appendChild(name);
+          const bar = document.createElement("span");
+          bar.className = "file-actions";
+          if (!child.directory) {
+            const attach = document.createElement("button");
+            attach.className = "btn btn-small";
+            attach.textContent = "attach";
+            attach.title = "Add this file as context to the next message";
+            attach.onclick = (event) => {
+              event.stopPropagation();
+              addAttachment({ name: child.name, path: child.path || child.name,
+                  projectId: project.id });
+              toast("Attached " + (child.path || child.name));
+            };
+            bar.appendChild(attach);
+          }
           const action = document.createElement("button");
           action.className = "btn btn-small";
           action.textContent = child.directory ? "open" : "preview";
@@ -407,8 +403,9 @@
             state.filesPath = child.path || child.name;
             renderProjectFiles(box, project);
           };
+          bar.appendChild(action);
           line.onclick = () => action.click();
-          line.appendChild(action);
+          line.appendChild(bar);
           section.appendChild(line);
         }
       } else if (body.content != null) {
@@ -416,6 +413,18 @@
         meta.className = "ctx-sub";
         meta.textContent = "File: " + (body.path || "");
         section.appendChild(meta);
+        const actions = document.createElement("div");
+        actions.className = "ctx-files-head";
+        const attach = document.createElement("button");
+        attach.className = "btn btn-small";
+        attach.textContent = "Attach";
+        attach.title = "Add this file as context";
+        attach.onclick = () => {
+          addAttachment({ name: body.path || "", path: body.path || "",
+              projectId: project.id });
+          toast("Attached " + (body.path || ""));
+        };
+        actions.appendChild(attach);
         const insert = document.createElement("button");
         insert.className = "btn btn-small";
         insert.textContent = "Use in prompt";
@@ -429,7 +438,8 @@
           input.focus();
           toast("File " + path + " added to the prompt.");
         };
-        section.appendChild(insert);
+        actions.appendChild(insert);
+        section.appendChild(actions);
         const pre = document.createElement("pre");
         pre.className = "file-preview";
         pre.textContent = String(body.content).slice(0, 20000);
@@ -445,10 +455,62 @@
     }
   }
 
-  // ---------------- render: left views ----------------
-  // esc comes from common.js.
+  function renderInspector() {
+    document.querySelectorAll("#inspector-tabs .insp-tab").forEach((tab) =>
+        tab.classList.toggle("active", tab.dataset.tab === state.inspectorTab));
+    const context = $("right-content");
+    const activity = $("activity-log");
+    const details = $("details-content");
+    const showContext = state.inspectorTab === "context" || state.inspectorTab === "files";
+    context.hidden = !showContext;
+    activity.hidden = state.inspectorTab !== "activity";
+    details.hidden = state.inspectorTab !== "details";
+    if (state.inspectorTab === "context") {
+      renderContext();
+    } else if (state.inspectorTab === "files") {
+      renderFiles();
+    } else if (state.inspectorTab === "details") {
+      renderDetails();
+    }
+  }
 
-  function item(node, title, sub, onClick, actions) {
+  function renderFiles() {
+    const box = $("right-content");
+    box.innerHTML = "";
+    const project = state.allProjects.find((p) => p.id === state.projectId);
+    if (project) {
+      state.context = { type: "project", item: project };
+      renderProjectFiles(box, project);
+    } else {
+      box.innerHTML = "<div class=\"empty-note\">Open a project to browse its files.</div>";
+    }
+  }
+
+  function renderDetails() {
+    const box = $("details-content");
+    const conversation = current();
+    if (!conversation) {
+      box.innerHTML = "<div class=\"empty-note\">No active session.</div>";
+      return;
+    }
+    const rows = [];
+    const add = (k, v) => rows.push("<div class=\"ctx-kv\"><span class=\"k\">"
+        + esc(k) + "</span><span class=\"v\">" + esc(v == null ? "—" : v)
+        + "</span></div>");
+    add("Session id", conversation.studioSessionId || conversation.id);
+    add("Provider", conversation.providerId || "—");
+    add("Model", conversation.modelId || "—");
+    add("Status", conversation.backend ? (conversation.status || "SESSION") : "LOCAL DRAFT");
+    add("Created", conversation.createdAt);
+    add("Updated", conversation.updatedAt || "—");
+    add("Messages", conversation.messages === null
+        ? "not loaded" : String(conversation.messages.length));
+    box.innerHTML = rows.join("");
+  }
+
+  // ---------------- left views / session explorer ----------------
+
+  function item(node, title, sub, onClick) {
     const row = document.createElement("div");
     row.className = "item";
     const body = document.createElement("div");
@@ -465,13 +527,6 @@
     }
     row.appendChild(body);
     if (onClick) { row.onclick = onClick; }
-    if (actions) {
-      const bar = document.createElement("div");
-      bar.className = "item-actions";
-      actions.forEach((a) => { bar.appendChild(a); });
-      bar.onclick = (e) => e.stopPropagation();
-      row.appendChild(bar);
-    }
     node.appendChild(row);
     return row;
   }
@@ -488,24 +543,6 @@
     }
 
     if (state.view === "inference" || state.view === "sessions") {
-      const head = document.createElement("div");
-      head.className = "section-head";
-      const label = document.createElement("span");
-      label.textContent = "Conversations";
-      const add = document.createElement("button");
-      add.className = "btn btn-small";
-      add.textContent = "New";
-      add.onclick = () => { startNewConversation(); renderLeft(); };
-      head.appendChild(label);
-      head.appendChild(add);
-      content.appendChild(head);
-      const search = document.createElement("input");
-      search.type = "search";
-      search.className = "list-search";
-      search.placeholder = "Filter sessions…";
-      search.value = state.sessionFilter || "";
-      search.oninput = () => { state.sessionFilter = search.value; renderLeft(); };
-      content.appendChild(search);
       const list = document.createElement("div");
       list.className = "item-list";
       content.appendChild(list);
@@ -516,7 +553,7 @@
         const empty = document.createElement("div");
         empty.className = "empty-note";
         empty.style.padding = "10px";
-        empty.textContent = "No conversations yet.";
+        empty.textContent = "No sessions yet.";
         list.appendChild(empty);
       } else if (!visible.length) {
         const empty = document.createElement("div");
@@ -528,48 +565,15 @@
       for (const conversation of visible.slice().sort((a, b) =>
           (b.updatedAt || b.createdAt || "").localeCompare(a.updatedAt || a.createdAt || ""))) {
         const count = conversation.messages === null ? "·" : conversation.messages.length;
-        const row = item(list, conversation.title || "New conversation",
+        const row = item(list, conversation.title || "New session",
             (conversation.modelId || "no model") + " · " + count + " msg"
             + (conversation.backend ? " · server" : ""),
             () => selectConversation(conversation.id));
         if (conversation.id === state.currentId) { row.classList.add("active"); }
-        const rename = document.createElement("button");
-        rename.className = "btn btn-small";
-        rename.textContent = "✎";
-        rename.title = "Rename session";
-        rename.onclick = async (event) => {
-          event.stopPropagation();
-          const value = await window.Inference.askText("Rename session",
-              "session title", conversation.title || "", false);
-          if (value === null || !value) { return; }
-          conversation.title = value;
-          if (conversation.backend && conversation.studioSessionId) {
-            try {
-              await json("/api/inference/sessions/"
-                  + encodeURIComponent(conversation.studioSessionId) + "/rename",
-                  { method: "POST", body: { title: value } });
-            } catch (e) {
-              toast("Rename failed: " + e.message, true);
-            }
-          }
-          persist();
-          renderLeft();
-          renderTab();
-        };
-        const del = document.createElement("button");
-        del.className = "btn btn-small";
-        del.textContent = "\u00D7";
-        del.title = "Delete conversation";
-        del.onclick = (event) => {
-          event.stopPropagation();
-          deleteConversation(conversation.id);
-          renderLeft();
-        };
-        const bar = document.createElement("div");
-        bar.className = "item-actions";
-        bar.appendChild(rename);
-        bar.appendChild(del);
-        row.appendChild(bar);
+        row.addEventListener("contextmenu", (event) => {
+          event.preventDefault();
+          openSessionMenu(event.clientX, event.clientY, conversation);
+        });
       }
       return;
     }
@@ -588,22 +592,7 @@
     list.className = "item-list";
     content.appendChild(list);
 
-    if (state.view === "projects") {
-      label.textContent = "Projects";
-      if (!state.allProjects.length) {
-        list.innerHTML = "<div class=\"empty-note\" style=\"padding:10px\">"
-            + "No projects. Open them from the Settings tab.</div>";
-      }
-      for (const project of state.allProjects) {
-        const row = item(list, project.name, project.rootPath, () => {
-          state.projectId = project.id;
-          state.filesPath = "";
-          state.context = { type: "project", item: project };
-          updateTopbar(); renderContext(); renderLeft();
-        });
-        if (project.id === state.projectId) { row.classList.add("active"); }
-      }
-    } else if (state.view === "engines") {
+    if (state.view === "engines") {
       label.textContent = "Inference engines";
       for (const engine of state.allProviders) {
         const row = item(list, engine.name + (engine.isDefault ? " \u2605" : ""),
@@ -660,6 +649,88 @@
     }
   }
 
+  // ---------------- session context menu ----------------
+
+  function openSessionMenu(x, y, conversation) {
+    const menu = $("context-menu");
+    menu.innerHTML = "";
+    menu.hidden = false;
+    menu.style.left = x + "px";
+    menu.style.top = y + "px";
+    const actions = [
+      { label: "Open", run: () => selectConversation(conversation.id) },
+      { label: "Rename", run: () => renameConversation(conversation) },
+      { label: "Delete", run: () => deleteConversation(conversation.id) }
+    ];
+    for (const action of actions) {
+      const button = document.createElement("button");
+      button.textContent = action.label;
+      if (action.label === "Delete") { button.className = "danger"; }
+      button.onclick = () => { closeMenu(); action.run(); };
+      menu.appendChild(button);
+    }
+  }
+
+  function closeMenu() {
+    const menu = $("context-menu");
+    menu.hidden = true;
+    menu.innerHTML = "";
+    const more = $("more-menu");
+    if (more) { more.hidden = true; }
+  }
+
+  function confirmDialog(title, message) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay";
+      const modal = document.createElement("div");
+      modal.className = "modal";
+      const titleNode = document.createElement("div");
+      titleNode.className = "modal-title";
+      titleNode.textContent = title;
+      const textNode = document.createElement("div");
+      textNode.className = "modal-text";
+      textNode.textContent = message;
+      const actions = document.createElement("div");
+      actions.className = "modal-actions";
+      const cancel = document.createElement("button");
+      cancel.textContent = "Cancel";
+      const apply = document.createElement("button");
+      apply.className = "danger";
+      apply.textContent = "Delete";
+      const close = (value) => { overlay.remove(); resolve(value); };
+      cancel.onclick = () => close(false);
+      apply.onclick = () => close(true);
+      overlay.onclick = (event) => { if (event.target === overlay) { close(false); } };
+      actions.appendChild(cancel);
+      actions.appendChild(apply);
+      modal.appendChild(titleNode);
+      modal.appendChild(textNode);
+      modal.appendChild(actions);
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+      apply.focus();
+    });
+  }
+
+  async function renameConversation(conversation) {
+    const value = await window.Inference.askText("Rename session",
+        "session title", conversation.title || "", false);
+    if (value === null || !value) { return; }
+    conversation.title = value;
+    if (conversation.backend && conversation.studioSessionId) {
+      try {
+        await json("/api/inference/sessions/"
+            + encodeURIComponent(conversation.studioSessionId) + "/rename",
+            { method: "POST", body: { title: value } });
+      } catch (e) {
+        toast("Rename failed: " + e.message, true);
+      }
+    }
+    persist();
+    renderLeft();
+  }
+
   // ---------------- chat ----------------
 
   function selectConversation(id) {
@@ -670,15 +741,13 @@
         state.providerId = conversation.providerId;
         $("providerSelect").value = conversation.providerId;
         refreshModels(conversation.modelId).then(() => {
-          updateTopbar(); renderContext(); renderChat(); renderTab();
+          updateTopbar(); renderContext(); renderChat();
         }).catch(() => {});
       }
       state.context = { type: "session", item: conversation };
     }
-    openTab();
     renderLeft();
     renderChat();
-    renderTab();
     updateTopbar();
     renderContext();
     if (conversation && conversation.backend && conversation.messages === null) {
@@ -692,10 +761,11 @@
       const wire = await json("/api/inference/sessions/"
           + encodeURIComponent(conversation.studioSessionId));
       conversation.messages = (Array.isArray(wire.messages) ? wire.messages : [])
-          .map((m) => ({ role: m.role || "assistant", content: m.content || "" }));
+          .map((m) => ({ role: m.role || "assistant", content: m.content || "",
+              createdAt: m.createdAt || "" }));
       if (wire.title) { conversation.title = wire.title; }
       if (conversation.id === state.currentId) {
-        renderChat(); renderTab(); renderLeft(); renderContext();
+        renderChat(); renderLeft(); renderContext();
       }
     } catch (e) {
       log("error", "Session " + conversation.studioSessionId
@@ -707,6 +777,10 @@
 
   async function deleteConversation(id) {
     const conversation = state.conversations.find((c) => c.id === id);
+    const title = conversation ? conversation.title : "session";
+    const confirmed = await confirmDialog("Delete session",
+        "Delete \"" + title + "\"? This cannot be undone.");
+    if (!confirmed) { return; }
     if (conversation && conversation.backend) {
       try {
         await json("/api/inference/sessions/" + encodeURIComponent(id),
@@ -723,7 +797,6 @@
     persist();
     renderLeft();
     renderChat();
-    renderTab();
     updateTopbar();
     renderContext();
   }
@@ -736,10 +809,8 @@
     state.currentId = conversation.id;
     state.context = { type: "session", item: conversation };
     persist();
-    openTab();
     renderLeft();
     renderChat();
-    renderTab();
     updateTopbar();
     renderContext();
     $("promptInput").focus();
@@ -767,6 +838,82 @@
     persist();
   }
 
+  function messageNode(message, index, messages) {
+    const node = document.createElement("div");
+    node.className = "msg " + message.role;
+    const head = document.createElement("div");
+    head.className = "msg-head";
+    const who = document.createElement("span");
+    who.className = "who";
+    who.textContent = message.role;
+    head.appendChild(who);
+    if (message.createdAt) {
+      const time = document.createElement("span");
+      time.className = "msg-time";
+      time.textContent = String(message.createdAt).slice(11, 19);
+      head.appendChild(time);
+    }
+    const spacer = document.createElement("span");
+    spacer.className = "spacer";
+    head.appendChild(spacer);
+    const actions = document.createElement("span");
+    actions.className = "msg-actions";
+    if (message.role === "assistant") {
+      const copy = document.createElement("button");
+      copy.className = "msg-action";
+      copy.textContent = "copy";
+      copy.title = "Copy response";
+      copy.onclick = () => {
+        copyToClipboard(message.content || "").then(() => {
+          copy.textContent = "copied";
+          setTimeout(() => { copy.textContent = "copy"; }, 1400);
+        }).catch(() => toast("Clipboard unavailable.", true));
+      };
+      actions.appendChild(copy);
+      const resend = document.createElement("button");
+      resend.className = "msg-action";
+      resend.textContent = "retry";
+      resend.title = "Re-send the previous prompt";
+      resend.onclick = () => resendLastPrompt();
+      actions.appendChild(resend);
+    } else if (message.role === "user") {
+      const edit = document.createElement("button");
+      edit.className = "msg-action";
+      edit.textContent = "edit";
+      edit.title = "Edit and resend this prompt";
+      edit.onclick = () => {
+        const input = $("promptInput");
+        input.value = message.content || "";
+        input.focus();
+        // remove this message and everything after it so it can be re-sent
+        const conversation = current();
+        if (conversation) {
+          const at = conversation.messages.indexOf(message);
+          if (at >= 0) { conversation.messages.splice(at); renderChat(); }
+        }
+      };
+      actions.appendChild(edit);
+      const copy = document.createElement("button");
+      copy.className = "msg-action";
+      copy.textContent = "copy";
+      copy.title = "Copy prompt";
+      copy.onclick = () => {
+        copyToClipboard(message.content || "").then(() => {
+          copy.textContent = "copied";
+          setTimeout(() => { copy.textContent = "copy"; }, 1400);
+        }).catch(() => toast("Clipboard unavailable.", true));
+      };
+      actions.appendChild(copy);
+    }
+    head.appendChild(actions);
+    const text = document.createElement("div");
+    text.className = "text";
+    text.innerHTML = renderMarkdown(message.content);
+    node.appendChild(head);
+    node.appendChild(text);
+    return node;
+  }
+
   function renderChat() {
     const logBox = $("chatLog");
     logBox.innerHTML = "";
@@ -782,49 +929,14 @@
       const text = document.createElement("div");
       text.className = "placeholder-text";
       text.textContent = "Choose a provider and model above, then send a prompt. "
-          + "Engines, models, projects and harnesses are configured in the Settings tab.";
+          + "Engines, models, projects and harnesses are configured in Settings.";
       placeholder.appendChild(title);
       placeholder.appendChild(text);
       logBox.appendChild(placeholder);
       return;
     }
-    for (const message of messages) {
-      const node = document.createElement("div");
-      node.className = "msg " + message.role;
-      const head = document.createElement("div");
-      head.className = "msg-head";
-      const who = document.createElement("span");
-      who.className = "who";
-      who.textContent = message.role;
-      head.appendChild(who);
-      if (message.createdAt) {
-        const time = document.createElement("span");
-        time.className = "msg-time";
-        time.textContent = String(message.createdAt).slice(11, 19);
-        head.appendChild(time);
-      }
-      const spacer = document.createElement("span");
-      spacer.className = "spacer";
-      head.appendChild(spacer);
-      if (message.role === "assistant") {
-        const copy = document.createElement("button");
-        copy.className = "msg-action";
-        copy.textContent = "copy";
-        copy.title = "Copy message";
-        copy.onclick = () => {
-          copyToClipboard(message.content || "").then(() => {
-            copy.textContent = "copied";
-            setTimeout(() => { copy.textContent = "copy"; }, 1400);
-          }).catch(() => toast("Clipboard unavailable.", true));
-        };
-        head.appendChild(copy);
-      }
-      const text = document.createElement("div");
-      text.className = "text";
-      text.innerHTML = renderMarkdown(message.content);
-      node.appendChild(head);
-      node.appendChild(text);
-      logBox.appendChild(node);
+    for (let i = 0; i < messages.length; i++) {
+      logBox.appendChild(messageNode(messages[i], i, messages));
     }
     logBox.scrollTop = logBox.scrollHeight;
   }
@@ -840,6 +952,107 @@
     if (last) { last.innerHTML = renderMarkdown(message.content); }
     const logBox = $("chatLog");
     logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  // ---------------- attachments ----------------
+
+  function addAttachment(attachment) {
+    if (!attachment || (!attachment.name && !attachment.path)) { return; }
+    const existing = state.attachments.find((a) =>
+        (a.path && a.path === attachment.path) || (a.name && a.name === attachment.name));
+    if (!existing) { state.attachments.push(attachment); }
+    renderAttachments();
+  }
+
+  function removeAttachment(index) {
+    state.attachments.splice(index, 1);
+    renderAttachments();
+  }
+
+  function renderAttachments() {
+    const box = $("attachments");
+    box.innerHTML = "";
+    box.hidden = state.attachments.length === 0;
+    state.attachments.forEach((attachment, index) => {
+      const chip = document.createElement("span");
+      chip.className = "attachment-chip";
+      const name = document.createElement("span");
+      name.className = "attachment-name";
+      name.textContent = attachment.name || attachment.path || "file";
+      name.title = attachment.path || attachment.name || "";
+      chip.appendChild(name);
+      if (attachment.path) {
+        const path = document.createElement("span");
+        path.className = "attachment-path";
+        path.textContent = attachment.path;
+        chip.appendChild(path);
+      }
+      const remove = document.createElement("button");
+      remove.className = "attachment-remove";
+      remove.textContent = "×";
+      remove.title = "Remove attachment";
+      remove.onclick = () => removeAttachment(index);
+      chip.appendChild(remove);
+      box.appendChild(chip);
+    });
+  }
+
+  /** Resolves each attachment's content so it can be included in the prompt. */
+  async function resolveAttachmentContent(attachment) {
+    if (attachment.content != null) { return attachment.content; }
+    if (attachment.projectId && attachment.path) {
+      try {
+        const body = await json("/api/workspace/files?project="
+            + encodeURIComponent(attachment.projectId)
+            + "&path=" + encodeURIComponent(attachment.path));
+        return body && body.content != null ? String(body.content) : "";
+      } catch (e) {
+        return "";
+      }
+    }
+    return "";
+  }
+
+  async function buildPromptText(userText) {
+    let text = userText || "";
+    const blocks = [];
+    for (const attachment of state.attachments) {
+      const content = await resolveAttachmentContent(attachment);
+      const label = attachment.path || attachment.name || "file";
+      blocks.push("File: " + label + "\n```\n" + content.slice(0, 30000) + "\n```");
+    }
+    if (blocks.length) {
+      text = blocks.join("\n\n") + (text ? "\n\n" + text : "");
+    }
+    return text;
+  }
+
+  function handleDroppedFiles(files) {
+    const list = Array.from(files || []);
+    for (const file of list) {
+      if (file.size > 1024 * 1024) {
+        toast("Attachment too large: " + file.name, true);
+        continue;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        addAttachment({ name: file.name, content: String(reader.result || "") });
+      };
+      reader.onerror = () => toast("Could not read " + file.name, true);
+      reader.readAsText(file);
+    }
+  }
+
+  function renderContextSelect() {
+    const select = $("context-select");
+    if (!select) { return; }
+    select.innerHTML = "<option value=\"\">no project context</option>";
+    const project = state.allProjects.find((p) => p.id === state.projectId);
+    if (!project) { return; }
+    const option = document.createElement("option");
+    option.value = project.id;
+    option.textContent = "project: " + project.name;
+    select.appendChild(option);
   }
 
   // ---------------- send / stream ----------------
@@ -866,11 +1079,32 @@
     persist();
     return created.id;
   }
+
+  function resendLastPrompt() {
+    const conversation = current();
+    if (!conversation || !conversation.messages.length) { return; }
+    // find the last user message (excluding a trailing empty assistant message)
+    let lastUserIndex = -1;
+    for (let i = conversation.messages.length - 1; i >= 0; i--) {
+      if (conversation.messages[i].role === "user") { lastUserIndex = i; break; }
+    }
+    if (lastUserIndex < 0) { return; }
+    const prompt = conversation.messages[lastUserIndex].content;
+    // remove the trailing assistant response so it can be regenerated
+    if (lastUserIndex + 1 < conversation.messages.length
+        && conversation.messages[conversation.messages.length - 1].role === "assistant") {
+      conversation.messages.splice(lastUserIndex + 1);
+    }
+    $("promptInput").value = prompt;
+    renderChat();
+    send();
+  }
+
   async function send() {
     if (state.busy) { return; }
     const input = $("promptInput");
     const text = input.value.trim();
-    if (!text) { return; }
+    if (!text && !state.attachments.length) { return; }
     if (!state.providerId || !state.modelId) {
       toast("Select an engine and model first (Settings scans engines and browses models).", true);
       return;
@@ -880,7 +1114,6 @@
     if (active.messages === null) { await loadBackendMessages(active); }
     if (active.studioSessionId && (active.providerId !== state.providerId
         || active.modelId !== state.modelId)) {
-      // A server session pins engine/model; switching requires a fresh one.
       if (active.backend) {
         try {
           await json("/api/inference/sessions/"
@@ -892,14 +1125,25 @@
     }
     active.providerId = state.providerId;
     active.modelId = state.modelId;
+
+    // Fold attachment contents into the user message (existing file-content capability).
+    let content;
+    try {
+      content = await buildPromptText(text);
+    } catch (e) {
+      toast("Attachment resolution failed: " + e.message, true);
+      return;
+    }
+
     const assistantMessage = { role: "assistant", content: "" };
-    active.messages.push({ role: "user", content: text });
+    active.messages.push({ role: "user", content: content });
     active.messages.push(assistantMessage);
+    state.attachments = [];
+    renderAttachments();
     input.value = "";
     renderChat();
     touchConversation();
     renderLeft();
-    renderTab();
     renderContext();
     log("inference", "send → " + state.providerId + " / " + state.modelId);
 
@@ -914,7 +1158,7 @@
       event("session " + sessionId.slice(0, 12) + " streaming");
       await sse("/api/inference/sessions/" + encodeURIComponent(sessionId)
           + "/messages/stream", {
-        method: "POST", body: { content: text }, signal: controller.signal
+        method: "POST", body: { content: content }, signal: controller.signal
       }, (type, data) => {
         if (type === "chunk") {
           if (data && data.text != null) { appendToken(data.text); }
@@ -942,9 +1186,6 @@
       renderChat();
     } else if (wasCancelled) {
       if (!assistantMessage.content) { assistantMessage.content = "[cancelled]"; }
-      // The cancelled backend session cannot accept further messages (409), so it
-      // is removed and the conversation becomes a local draft again — the next
-      // send creates a fresh server session.
       if (active.studioSessionId) {
         try {
           await json("/api/inference/sessions/"
@@ -961,7 +1202,6 @@
     }
     touchConversation();
     renderLeft();
-    renderTab();
     renderContext();
   }
 
@@ -980,37 +1220,92 @@
     $("sendStatus").textContent = "Cancelling…";
   }
 
-  function openTab() {
-    state.tabOpen = true;
-    const pane = $("inference-pane");
-    const noTab = $("no-tab");
-    pane.classList.add("active");
-    noTab.hidden = true;
-    renderTab();
+  // ---------------- panels (sidebar / inspector / changes) ----------------
+
+  function toggleSidebar() {
+    document.body.classList.toggle("sidebar-collapsed");
   }
 
-  function closeTab() {
-    state.tabOpen = false;
-    $("inference-pane").classList.remove("active");
-    $("no-tab").hidden = false;
+  /**
+   * Re-syncs the conversation viewport after a resize. CSS flexbox re-flows
+   * intrinsically; this only keeps the chat scrolled to the newest message when the
+   * user was already following it, so nothing ends up clipped after a resize. Uses
+   * ResizeObserver (the SWT Browser may change size without a window resize) with a
+   * window.resize fallback. No polling.
+   */
+  function wireResizeHandling() {
+    const chat = $("chatLog");
+    if (!chat) { return; }
+    const atBottom = () => chat.scrollHeight - chat.scrollTop - chat.clientHeight < 48;
+    const sync = () => { if (atBottom()) { chat.scrollTop = chat.scrollHeight; } };
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(sync);
+      resizeObserver.observe(chat);
+      const row = $("workspace-row");
+      if (row) { resizeObserver.observe(row); }
+      const composer = $("composer");
+      if (composer) { resizeObserver.observe(composer); }
+    }
+    window.addEventListener("resize", sync);
+  }
+
+  function toggleInspector() {
+    const inspector = $("inspector");
+    inspector.hidden = !inspector.hidden;
+  }
+
+  function renderChanges() {
+    const panel = $("changes-panel");
+    const content = $("changes-content");
+    if (!state.changesVisible) {
+      panel.hidden = true;
+      return;
+    }
+    panel.hidden = false;
+    content.innerHTML = "<div class=\"empty-note\">No file changes for this session. "
+        + "File-change review is available in the desktop Change Review view after a "
+        + "coding task.</div>";
   }
 
   // ---------------- wiring ----------------
 
   function wire() {
+    $("btn-sidebar").onclick = toggleSidebar;
+    $("btn-inspector").onclick = toggleInspector;
+    $("new-session-btn").onclick = () => { startNewConversation(); };
+    $("session-search").oninput = (event) => {
+      state.sessionFilter = event.target.value;
+      renderLeft();
+    };
+
     document.querySelectorAll("#left-nav .nav-btn").forEach((button) => {
       button.onclick = () => {
         if (state.view === "tasks" && button.dataset.view !== "tasks") {
           window.DStudioTasks.deactivate();
         }
         state.view = button.dataset.view;
-        openTab();
+        if (button.dataset.view === "tasks") {
+          // task details render into right-content; ensure it is visible
+          state.inspectorTab = "context";
+          $("right-content").hidden = false;
+          const activity = $("activity-log");
+          if (activity) { activity.hidden = true; }
+          const details = $("details-content");
+          if (details) { details.hidden = true; }
+        }
         renderLeft();
         renderChat();
-        renderTab();
         renderContext();
       };
     });
+
+    document.querySelectorAll("#inspector-tabs .insp-tab").forEach((tab) => {
+      tab.onclick = () => {
+        state.inspectorTab = tab.dataset.tab;
+        renderInspector();
+      };
+    });
+
     document.querySelectorAll(".bottom-tab").forEach((tab) => {
       tab.onclick = () => {
         document.querySelectorAll(".bottom-tab").forEach((t) =>
@@ -1021,6 +1316,7 @@
         $("panel-" + tab.dataset.panel).classList.add("active");
       };
     });
+
     $("chip-autoscroll").onclick = () => {
       state.consoleAutoscroll = !state.consoleAutoscroll;
       $("chip-autoscroll").classList.toggle("active", state.consoleAutoscroll);
@@ -1032,16 +1328,8 @@
       if (navigator.clipboard) { navigator.clipboard.writeText(text); }
       log("info", "console copied to clipboard");
     };
-    $("chip-export").onclick = () => {
-      const blob = new Blob([state.consoleEntries.join("\n")], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "dstudio-console.txt";
-      link.click();
-    };
-    $("tabClose").onclick = (event) => { event.stopPropagation(); closeTab(); };
-    document.querySelector(".tab[data-tab=\"inference\"]").onclick = openTab;
-    $("openInferenceBtn").onclick = () => { openTab(); $("promptInput").focus(); };
+    $("chip-export").onclick = exportConsole;
+
     $("sendBtn").onclick = send;
     $("cancelBtn").onclick = cancel;
     $("refreshBtn").onclick = () => bootData(true);
@@ -1071,6 +1359,8 @@
       }
       updateTopbar(); renderContext(); renderLeft(); renderChat();
     };
+
+    // Composer keyboard behavior: Enter sends, Shift+Enter adds a newline.
     $("promptInput").addEventListener("keydown", (event) => {
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
@@ -1078,7 +1368,71 @@
       }
     });
 
-    // Global web-UI shortcuts (documented in help.html#shortcuts).
+    // Attachments: file picker + drag-and-drop.
+    $("attach-btn").onclick = () => $("file-input").click();
+    $("file-input").onchange = () => {
+      handleDroppedFiles($("file-input").files);
+      $("file-input").value = "";
+    };
+    $("context-select").onchange = () => {
+      const projectId = $("context-select").value;
+      if (!projectId) { return; }
+      const project = state.allProjects.find((p) => p.id === projectId);
+      if (project) {
+        state.projectId = project.id;
+        state.context = { type: "project", item: project };
+        renderContext();
+        // open the Files inspector so the user can pick a file to attach
+        state.inspectorTab = "files";
+        renderInspector();
+      }
+      $("context-select").value = "";
+    };
+
+    const composer = $("composer");
+    composer.addEventListener("dragover", (event) => { event.preventDefault(); });
+    composer.addEventListener("drop", (event) => {
+      event.preventDefault();
+      if (event.dataTransfer && event.dataTransfer.files
+          && event.dataTransfer.files.length) {
+        handleDroppedFiles(event.dataTransfer.files);
+      }
+    });
+
+    // "More" menu.
+    $("btn-more").onclick = (event) => {
+      event.stopPropagation();
+      const menu = $("more-menu");
+      menu.hidden = !menu.hidden;
+      if (!menu.hidden) {
+        menu.style.right = "8px";
+        menu.style.top = "48px";
+        menu.style.left = "auto";
+      }
+    };
+    $("more-menu").querySelectorAll("button[data-action]").forEach((button) => {
+      button.onclick = () => {
+        const action = button.dataset.action;
+        closeMenu();
+        if (action === "new-session") { startNewConversation(); }
+        else if (action === "export-console") { exportConsole(); }
+        else if (action === "clear-console") { $("panel-console").innerHTML = ""; }
+      };
+    });
+
+    // Changes panel toggle (hidden by default).
+    $("changes-close").onclick = () => { state.changesVisible = false; renderChanges(); };
+
+    // Dismiss menus on outside click.
+    document.addEventListener("click", (event) => {
+      const menu = $("context-menu");
+      if (!menu.hidden && !menu.contains(event.target)) { closeMenu(); }
+      const more = $("more-menu");
+      if (more && !more.hidden && event.target !== $("btn-more")
+          && !more.contains(event.target)) { more.hidden = true; }
+    });
+
+    // Global shortcuts.
     document.addEventListener("keydown", (event) => {
       const modifier = event.ctrlKey || event.metaKey;
       const key = event.key.toLowerCase();
@@ -1088,11 +1442,25 @@
       } else if (modifier && key === "n") {
         event.preventDefault();
         startNewConversation();
+      } else if (modifier && key === "b") {
+        event.preventDefault();
+        toggleSidebar();
+      } else if (modifier && key === ".") {
+        event.preventDefault();
+        toggleInspector();
       } else if (event.key === "Escape" && state.busy) {
         event.preventDefault();
         cancel();
       }
     });
+  }
+
+  function exportConsole() {
+    const blob = new Blob([state.consoleEntries.join("\n")], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "evostudio-console.txt";
+    link.click();
   }
 
   async function bootData(showToast) {
@@ -1115,8 +1483,8 @@
       updateTopbar();
       renderLeft();
       renderChat();
-      renderTab();
       renderContext();
+      renderInspector();
       if (showToast) { toast("Providers, models, projects, harnesses and sessions reloaded."); }
       log("info", "connected to EVO-Studio at " + window.location.origin);
     } catch (e) {
@@ -1132,20 +1500,20 @@
     if (window.DStudioTasks) {
       window.DStudioTasks.boot({ $, esc, toast, log, json, projects, harnesses });
     }
-    const build = $("frontend-build");
+    const build = $("frontend-build") || $("sb-build");
     if (build) { build.textContent = FRONTEND_BUILD; }
     console.log("EVO-Studio frontend build " + FRONTEND_BUILD
         + " (" + window.location.origin + ")");
     const conversation = current();
     if (conversation) { state.context = { type: "session", item: conversation }; }
     wire();
+    wireResizeHandling();
     renderLeft();
     renderChat();
-    renderTab();
+    renderInspector();
     updateTopbar();
     renderContext();
     await bootData(false);
-    // Select the newest backend session once the list has loaded; drafts stay on top.
     if (!current() && state.conversations.length) {
       state.currentId = state.conversations[0].id;
       selectConversation(state.currentId);

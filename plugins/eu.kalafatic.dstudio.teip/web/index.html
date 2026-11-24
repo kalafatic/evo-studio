@@ -7,101 +7,132 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header id="topbar">
-  <div class="brand">
+
+<!-- A. APPLICATION HEADER -->
+<header id="app-header">
+  <div class="header-left">
+    <button id="btn-sidebar" class="icon-btn" title="Toggle navigation (Ctrl+B)">☰</button>
     <span class="brand-mark">&#9672;</span>
     <span class="brand-name">EVO-Studio</span>
-    <span class="brand-sub">EVO Studio</span>
   </div>
-  <div class="topbar-center">
-    <span id="top-project" class="top-item">no project</span>
-    <span id="top-engine" class="top-item">no engine</span>
-    <span id="top-model" class="top-item">no model</span>
+  <div class="header-center">
+    <div class="header-field" title="Current project / workspace">
+      <span class="header-field-label">Project</span>
+      <span id="top-project" class="header-field-value">no project</span>
+    </div>
+    <div class="header-select">
+      <span class="header-field-label">Provider</span>
+      <select id="providerSelect" title="Inference provider"><option value="">loading…</option></select>
+    </div>
+    <div class="header-select">
+      <span class="header-field-label">Model</span>
+      <select id="modelSelect" title="Model"><option value="">loading…</option></select>
+    </div>
+    <button id="refreshBtn" class="icon-btn" title="Reload providers and models">↻</button>
   </div>
-  <div class="topbar-right">
-    <span id="frontend-build" class="build-badge" title="Frontend revision">web r4</span>
+  <div class="header-right">
+    <span id="context-usage" class="context-usage" title="Context window usage (when reported by the model)">∅ ctx</span>
     <span id="connection-status" class="conn conn-disconnected" title="Backend connection">&#9679; offline</span>
-    <button id="btn-conn" class="btn btn-small" title="Connection diagnostics">connection</button>
-    <button id="btn-auth" class="btn btn-small" title="Set server bearer token">auth</button>
-    <a id="btn-settings" class="btn btn-small" href="settings.html" title="Providers, models, projects, harnesses">settings</a>
-    <button id="btn-theme" class="btn btn-small" title="Toggle light/dark theme">theme</button>
-    <a id="btn-help" class="btn btn-small" href="help.html" target="_blank" rel="noopener" title="Help and documentation">help</a>
+    <button id="btn-conn" class="icon-btn" title="Connection diagnostics">ⓘ</button>
+    <button id="btn-auth" class="icon-btn" title="Set server bearer token">🔑</button>
+    <button id="btn-theme" class="icon-btn" title="Toggle light/dark theme">◐</button>
+    <a id="btn-settings" class="icon-btn" href="settings.html" title="Providers, models, projects, harnesses">⚙</a>
+    <a id="btn-help" class="icon-btn" href="help.html" target="_blank" rel="noopener" title="Help and documentation">?</a>
+    <button id="btn-more" class="icon-btn" title="More actions">⋮</button>
+    <span id="frontend-build" class="build-badge" title="Frontend revision">web</span>
+    <div id="more-menu" class="menu" hidden>
+      <button data-action="new-session">New Session</button>
+      <button data-action="export-console">Export Console</button>
+      <button data-action="clear-console">Clear Console</button>
+    </div>
   </div>
 </header>
 
-<div id="main">
-  <aside id="left-panel">
+<div id="app-body">
+
+  <!-- B. LEFT NAVIGATION / SESSION EXPLORER -->
+  <aside id="left-sidebar">
+    <button id="new-session-btn" class="btn btn-primary btn-block" title="Start a new session (Ctrl+N)">+ New Session</button>
+    <input id="session-search" type="search" class="list-search" placeholder="Search sessions…">
     <nav id="left-nav">
       <div class="nav-group-label">Workspace</div>
       <div class="nav-group">
         <button class="nav-btn active" data-view="inference">Inference</button>
+        <button class="nav-btn" data-view="sessions">Sessions</button>
         <button class="nav-btn" data-view="tasks">Tasks</button>
       </div>
       <div class="nav-group-label">Manage</div>
       <div class="nav-group">
-        <button class="nav-btn" data-view="sessions">Sessions</button>
         <button class="nav-btn" data-view="engines">Engines</button>
         <button class="nav-btn" data-view="models">Models</button>
         <button class="nav-btn" data-view="harnesses">Harnesses</button>
       </div>
     </nav>
-    <div id="left-content"></div>
+    <div id="left-content" class="sidebar-content"></div>
   </aside>
 
-  <section id="work-area">
-    <div id="tabs-bar">
-      <div class="tab active" data-tab="inference">
-        <span id="tabTitle">Inference</span>
-        <span class="tab-close" id="tabClose" title="Close tab">&#10005;</span>
-      </div>
-    </div>
-    <div id="tab-content">
-      <div id="inference-pane" class="pane active">
-        <div id="toolbar">
-          <label class="inline"><span>Provider</span>
-            <select id="providerSelect"><option value="">loading…</option></select>
-          </label>
-          <label class="inline"><span>Model</span>
-            <select id="modelSelect"><option value="">loading…</option></select>
-          </label>
-          <button id="refreshBtn" class="btn btn-small" title="Reload providers and models">refresh</button>
-          <span class="spacer"></span>
-          <span id="modelMeta" class="top-item"></span>
-        </div>
-        <div id="chatLog" class="chat">
-          <div class="placeholder">
-            <div class="placeholder-title">Start a conversation</div>
-            <div class="placeholder-text">Choose a provider and model above, then send a prompt.
-              Engines, models, projects and harnesses are configured in the Settings tab.</div>
-          </div>
-        </div>
-        <div id="composer">
-          <textarea id="promptInput" rows="3"
-            placeholder="Ask the selected model… (Enter to send, Shift+Enter for a newline)"></textarea>
-          <div class="composer-actions">
-            <span id="sendStatus" class="muted"></span>
-            <span class="spacer"></span>
-            <button id="cancelBtn" class="btn btn-danger" hidden>cancel</button>
-            <button id="sendBtn" class="btn btn-primary">send</button>
-          </div>
-        </div>
-      </div>
-      <div id="no-tab" class="placeholder" hidden>
-        <div class="placeholder-title">No tab open</div>
-        <div class="placeholder-text">Open the inference workspace from the left panel.</div>
-        <button id="openInferenceBtn" class="btn">Open Inference</button>
-      </div>
-    </div>
-  </section>
+  <!-- C. MAIN WORKSPACE -->
+  <main id="main-workspace">
+    <div id="workspace-row">
+      <section id="conversation-panel" class="workspace-panel">
+        <div id="chatLog" class="chat"></div>
+      </section>
 
-  <aside id="right-panel">
-    <div class="panel-title">Context</div>
-    <div id="right-content" class="panel-scroll">
-      <div class="empty-note">Select a session, project, engine, model or harness for details.</div>
+      <!-- Optional: Diff / Changes panel (hidden when no changes) -->
+      <aside id="changes-panel" class="workspace-panel" hidden>
+        <div class="panel-head">
+          <span class="panel-head-title">Changes</span>
+          <button id="changes-close" class="icon-btn" title="Hide changes panel">&#10005;</button>
+        </div>
+        <div id="changes-content" class="panel-scroll"></div>
+      </aside>
+    </div>
+
+    <!-- D. BOTTOM COMPOSER -->
+    <section id="composer">
+      <div id="attachments" class="attachments" hidden></div>
+      <div class="composer-box">
+        <textarea id="promptInput" rows="3"
+          placeholder="Ask the model… (Enter to send, Shift+Enter for a new line)"></textarea>
+        <div class="composer-bar">
+          <div class="composer-actions">
+            <button id="attach-btn" class="icon-btn" title="Attach a project file">📎</button>
+            <input id="file-input" type="file" multiple hidden>
+            <select id="context-select" class="context-select" title="Attach context from the active project">
+              <option value="">no project context</option>
+            </select>
+          </div>
+          <div class="composer-right">
+            <span id="sendStatus" class="muted"></span>
+            <button id="cancelBtn" class="btn btn-danger" hidden>Stop</button>
+            <button id="sendBtn" class="btn btn-primary">Send</button>
+          </div>
+        </div>
+        <div class="composer-hint">Enter to send · Shift+Enter for new line · Ctrl+K to focus</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- OPTIONAL CONTEXTUAL INSPECTOR -->
+  <aside id="inspector">
+    <div id="inspector-tabs" class="inspector-tabs">
+      <button class="insp-tab active" data-tab="context">Context</button>
+      <button class="insp-tab" data-tab="files">Files</button>
+      <button class="insp-tab" data-tab="activity">Activity</button>
+      <button class="insp-tab" data-tab="details">Details</button>
+      <button id="btn-inspector" class="icon-btn" title="Hide inspector (Ctrl+.)">»</button>
+    </div>
+    <div id="inspector-content" class="panel-scroll">
+      <div id="right-content">
+        <div class="empty-note">Select a session, project, engine, model or harness for details.</div>
+      </div>
+      <div id="activity-log" hidden></div>
+      <div id="details-content" hidden></div>
     </div>
   </aside>
 </div>
 
+<!-- Console / Events / Problems -->
 <footer id="bottom-panel">
   <div class="bottom-tabs">
     <button class="bottom-tab active" data-panel="console">Console</button>
@@ -109,7 +140,7 @@
     <button class="bottom-tab" data-panel="problems">Problems</button>
     <span class="spacer"></span>
     <div id="console-controls" class="console-controls">
-      <button class="console-chip" id="chip-autoscroll">Auto-scroll</button>
+      <button class="console-chip active" id="chip-autoscroll">Auto-scroll</button>
       <button class="console-chip" id="chip-clear">Clear</button>
       <button class="console-chip" id="chip-copy">Copy</button>
       <button class="console-chip" id="chip-export">Export</button>
@@ -122,15 +153,16 @@
   </div>
 </footer>
 
-<footer id="statusbar">
+<div id="statusbar">
   <span id="sb-engine" class="sb-item">engine —</span>
   <span id="sb-model" class="sb-item">model —</span>
   <span class="spacer"></span>
   <span id="sb-status" class="sb-item">offline</span>
-  <span id="sb-build" class="sb-item">web r4</span>
-</footer>
+</div>
 
 <div id="toast" class="toast" hidden></div>
+<div id="context-menu" class="menu" hidden></div>
+
 <script src="common.js"></script>
 <script src="tasks.js"></script>
 <script src="app.js"></script>

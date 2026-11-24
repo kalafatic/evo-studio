@@ -121,6 +121,9 @@
       <command
             id="eu.kalafatic.dstudio.command.openInferenceEditor"
             name="Open Inference Editor"/>
+      <command
+            id="eu.kalafatic.dstudio.command.toggleTheme"
+            name="Toggle Theme"/>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -166,6 +169,9 @@
       <handler
             class="eu.kalafatic.dstudio.ui.handlers.OpenInferenceEditorHandler"
             commandId="eu.kalafatic.dstudio.command.openInferenceEditor"/>
+      <handler
+            class="eu.kalafatic.dstudio.ui.handlers.ToggleThemeHandler"
+            commandId="eu.kalafatic.dstudio.command.toggleTheme"/>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -265,6 +271,11 @@
                 commandId="eu.kalafatic.dstudio.command.openInferenceEditor"
                 label="Open Inference Editor"
                 style="push"/>
+          <command
+                commandId="eu.kalafatic.dstudio.command.toggleTheme"
+                label="Toggle Theme"
+                style="push"
+                tooltip="Switch between the Light and Dark theme. The choice is remembered."/>
        </menuContribution>
     </extension>
    <extension
