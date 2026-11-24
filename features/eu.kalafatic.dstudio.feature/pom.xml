@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.feature</artifactId>
     <packaging>eclipse-feature</packaging>
-    <name>DStudio - Feature</name>
+    <name>EVO-Studio - Feature</name>
 </project>

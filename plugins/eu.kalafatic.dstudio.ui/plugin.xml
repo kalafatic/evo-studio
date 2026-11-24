@@ -26,7 +26,7 @@
             class="eu.kalafatic.dstudio.ui.editor.DStudioMultiPageEditor"
             default="false"
             id="eu.kalafatic.dstudio.ui.editors.multi"
-            name="DStudio Inference"/>
+            name="EVO-Studio Inference"/>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -75,7 +75,7 @@
          point="org.eclipse.ui.console.consoleFactories">
       <consoleFactory
             class="eu.kalafatic.dstudio.ui.console.ExecutionConsoleFactory"
-            label="DStudio Execution Console"/>
+            label="EVO-Studio Execution Console"/>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -191,7 +191,7 @@
                   commandId="eu.kalafatic.dstudio.command.openProject"
                   label="Open Project"
                   style="push"
-                  tooltip="Open an existing folder or repository as a DStudio project"/>
+                  tooltip="Open an existing folder or repository as an EVO-Studio project"/>
             <command
                   commandId="eu.kalafatic.dstudio.command.runHarness"
                   label="Run Task"

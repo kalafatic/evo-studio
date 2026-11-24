@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DStudio - Build Script
+# EVO-Studio - Build Script
 
 set -euo pipefail
 
@@ -29,7 +29,7 @@ if ! awk -v v="${MVN_VERSION}" 'BEGIN { split(v,a,"."); if (a[1] > 3 || (a[1] ==
     exit 1
 fi
 
-echo "Building DStudio with Java: $(java -version 2>&1 | grep -m1 version)"
+echo "Building EVO-Studio with Java: $(java -version 2>&1 | grep -m1 version)"
 "${MVN}" -B -DskipTests clean verify
 
-echo "Build successful. Product: product/eu.kalafatic.dstudio.product/target/products/eu.kalafatic.dstudio.product.id/linux/gtk/x86_64/dstudio"
+echo "Build successful. Product: product/eu.kalafatic.dstudio.product/target/products/eu.kalafatic.dstudio.product.id/linux/gtk/x86_64/evostudio"

@@ -1,6 +1,6 @@
 # PHASE-4-TRYST-TEST-STABILIZATION-REPORT.md
 
-**DStudio Phase 4 — WP-4-FINAL.3 deliverable**
+**EVO-Studio Phase 4 — WP-4-FINAL.3 deliverable**
 **Date:** 2026-11-16
 
 ## 1. Reproduction

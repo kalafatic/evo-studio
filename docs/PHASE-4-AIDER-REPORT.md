@@ -1,6 +1,6 @@
 # PHASE-4-AIDER-REPORT.md
 
-**DStudio Phase 4 — WP-4.06 deliverable**
+**EVO-Studio Phase 4 — WP-4.06 deliverable**
 **Date:** 2026-11-16
 
 ## 1. Verified Environment
@@ -42,7 +42,7 @@
   `timeoutSeconds`, `mapRefresh`. A blank model fails honestly with "Aider requires a
   configured model".
 - **Documented side effects (review semantics):** aider stages edited files and writes
-  `.aider*`/`.gitignore` — DStudio review treats only non-`.aider*` changes as reviewable
+  `.aider*`/`.gitignore` — EVO-Studio review treats only non-`.aider*` changes as reviewable
   files; `.gitignore` additions appear in review as normal source changes.
 
 ## 4. Test Evidence (2026-11-16 run)
@@ -50,14 +50,14 @@
 | Suite | Result |
 |---|---|
 | `AiderHarnessAdapterTest` (8) | 8/8 PASS — identity, invalid binary, config round-trip, missing workspace, missing model honest failure, model normalization, artifact filter, ANSI stripping |
-| `AiderLiveExecutionTest` (1, real CLI, no mocks) | 1/1 PASS — full stack DStudio ExecutionService → Aider 0.86.2 → `aider-live-marker.txt` with `dstudio-aider-live-ok` created inside workspace; COMPLETED; events streamed; `.aider*` artifacts excluded (16.0 s) |
+| `AiderLiveExecutionTest` (1, real CLI, no mocks) | 1/1 PASS — full stack EVO-Studio ExecutionService → Aider 0.86.2 → `aider-live-marker.txt` with `dstudio-aider-live-ok` created inside workspace; COMPLETED; events streamed; `.aider*` artifacts excluded (16.0 s) |
 | Full reactor | 57/57 tests, BUILD SUCCESS |
 
 ## 5. Known Limitations
 
 - DeepSeek connectivity was not probed live (requires an API key; configuration surface
   implemented via `--openai-api-base` + provider env keys — documented, not tested).
-- aider's git-index staging side effect is documented but not neutralized (DStudio never
+- aider's git-index staging side effect is documented but not neutralized (EVO-Studio never
   runs git commands itself; review uses working-tree diffs).
-- aider requires a git repository for full diff behavior; in non-git directories DStudio
+- aider requires a git repository for full diff behavior; in non-git directories EVO-Studio
   still runs it (with `--map-refresh files`) but collects no diffs.

@@ -1,13 +1,13 @@
 # PHASE-4-TEIP-INTEGRATION-REPORT.md
 
-**DStudio Phase 4 — WP-4.09 deliverable**
+**EVO-Studio Phase 4 — WP-4.09 deliverable**
 **Date:** 2026-11-16
 
 ## 1. Scope
 
-DStudio implements the **TEIP 1.1 provider** endpoint set per the canonical specification
-(`evolution-121126/docs/protocol/TEIP-1.1.md`, NORMATIVE). DStudio is the first family product
-besides EVO to expose the provider interface. Canonical endpoint default for DStudio:
+EVO-Studio implements the **TEIP 1.1 provider** endpoint set per the canonical specification
+(`evolution-121126/docs/protocol/TEIP-1.1.md`, NORMATIVE). EVO-Studio is the first family product
+besides EVO to expose the provider interface. Canonical endpoint default for EVO-Studio:
 `http://localhost:48080` (family port convention +10000 per product; configurable).
 
 ## 2. Implementation
@@ -18,7 +18,7 @@ Bundle `eu.kalafatic.dstudio.teip` (pure Java, no SWT — loads in headless and 
 |---|---|
 | `TeipWire` | Wire DTOs + canonical error-code table (HTTP status + retryability) |
 | `TeipHttpHandler` | HTTP routing for all `/teip/v1/*` endpoints, auth enforcement, JSON parse/serialize (deprecated aliases `aiMode`/`mcpToolScopes`/`caller.app` accepted), 5 MB limit, `Idempotency-Key` header fallback |
-| `TeipExecutionManager` | Request validation → `ExecutionService` mapping; harness selection (`parameters.harness` → selected default), `parameters.workingDirectory` (documented DStudio extension, open-world), model resolution, status/events/result/cancel mapping |
+| `TeipExecutionManager` | Request validation → `ExecutionService` mapping; harness selection (`parameters.harness` → selected default), `parameters.workingDirectory` (documented EVO-Studio extension, open-world), model resolution, status/events/result/cancel mapping |
 | `TeipAuth` | `dstudio.teip.auth.token` (sysprop/env) mandatory Bearer OR explicit `dstudio.teip.devMode=true` + loopback-only (never a silent default) |
 | `DStudioServer` | JDK `HttpServer` — `/teip/v1` + `/api/status` + `/api/diagnostics` |
 
@@ -44,17 +44,17 @@ Contract conformance (TEIP 1.1):
 | `TeipOpenCodeEndToEndTest` (1, REAL OpenCode through HTTP) | 1/1 PASS — external client → `POST /teip/v1/executions` (202) → real OpenCode 1.19.5 executed in isolated git workspace → `teip-marker.txt` with `dstudio-teip-e2e-ok` created → status polling to COMPLETED → result 200 with `modifiedFiles` including the marker → ≥3 streamed events (20.2 s) |
 | Full reactor | 73/73 tests, BUILD SUCCESS |
 
-## 4. DStudio-Specific Extensions (open-world, TEIP §2)
+## 4. EVO-Studio-Specific Extensions (open-world, TEIP §2)
 
 - `parameters.harness` — explicit harness selection per request (openCode|aider).
 - `parameters.workingDirectory` — target directory for the execution (required unless
-  `parameters.harness` absent and a DStudio default is selected; DStudio executes on the
+  `parameters.harness` absent and a EVO-Studio default is selected; EVO-Studio executes on the
   local host for local family products).
 - `parameters.timeoutSeconds` — per-request timeout (capped by configuration).
 - `health.details.harnesses`, `health.details.serverPort` — provider diagnostics.
 
 No private TEIP variant: all canonical fields, aliases and error codes behave exactly as the
-normative specification requires; clients ignoring DStudio extensions remain fully compatible.
+normative specification requires; clients ignoring EVO-Studio extensions remain fully compatible.
 
 ## 5. Known Limitations
 

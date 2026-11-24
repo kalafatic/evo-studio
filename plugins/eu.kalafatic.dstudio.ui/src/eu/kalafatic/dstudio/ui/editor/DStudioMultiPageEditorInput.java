@@ -5,7 +5,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 /**
- * Editor input of the DStudio harness editor (one per workbench session).
+ * Editor input of the EVO-Studio harness editor (one per workbench session).
  *
  * <p>Deliberately project-independent: the embedded web IDE owns project and session
  * selection through the shared backend, so the input carries no mutable state.
@@ -17,7 +17,7 @@ import org.eclipse.ui.IPersistableElement;
 public final class DStudioMultiPageEditorInput implements IEditorInput {
 
     /** Stable display identity of the main editor input. */
-    public static final String NAME = "DStudio Inference";
+    public static final String NAME = "EVO-Studio Inference";
 
     @Override
     public boolean exists() {
@@ -41,7 +41,7 @@ public final class DStudioMultiPageEditorInput implements IEditorInput {
 
     @Override
     public String getToolTipText() {
-        return "DStudio harness workspace: web IDE + settings";
+        return "EVO-Studio harness workspace: web IDE + settings";
     }
 
     @Override

@@ -207,7 +207,7 @@ public class ExecutionView extends ViewPart {
             try {
                 eventSubscription.close();
             } catch (Exception e) {
-                System.err.println("DStudio: failed to close event subscription: "
+                System.err.println("EVO-Studio: failed to close event subscription: "
                         + e.getMessage());
             }
         }

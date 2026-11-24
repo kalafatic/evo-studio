@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * DStudio backend HTTP server: the TEIP 1.1 provider surface plus the DStudio API
+ * EVO-Studio backend HTTP server: the TEIP 1.1 provider surface plus the EVO-Studio API
  * surface ({@code /api/status}, {@code /api/diagnostics}, {@code /api/inference},
  * {@code /api/events}). Every endpoint uses the same bearer-token/dev-mode
  * authentication; secrets never appear in any response payload.
@@ -209,7 +209,7 @@ public class DStudioServer {
             throw new PortConflictException(bindAddress, port, e);
         } catch (IOException e) {
             server = null;
-            throw new IllegalStateException("Failed to start DStudio server on "
+            throw new IllegalStateException("Failed to start EVO-Studio server on "
                     + bindAddress + ":" + port + ": " + e.getMessage(), e);
         }
     }

@@ -1,4 +1,4 @@
-# DStudio Build and Launch Guide
+# EVO-Studio Build and Launch Guide
 
 ## Verified toolchain
 
@@ -6,7 +6,7 @@
 - Maven 3.9.12 via the included `./mvnw`
 - Linux GTK x86_64
 
-DStudio uses Tycho 4.0.8. The machine-wide Maven 3.8.7 cannot resolve
+EVO-Studio uses Tycho 4.0.8. The machine-wide Maven 3.8.7 cannot resolve
 `tycho-extras:4.0.8`, so a Maven wrapper pinned to 3.9.12 is included.
 
 ```bash
@@ -20,7 +20,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 ./mvnw -B -DskipTests clean verify
 ```
 
-Verified result: `BUILD SUCCESS` for all 11 modules.
+Verified result: `BUILD SUCCESS` for all 13 modules.
 
 `scripts/build.sh` performs the same build with JDK 21 and prefers the included wrapper.
 Override the Maven executable with `MVN_CMD` if needed.
@@ -29,7 +29,7 @@ Override the Maven executable with `MVN_CMD` if needed.
 
 | Product | Directory | Launcher |
 |---|---|---|
-| DStudio RCP | `product/eu.kalafatic.dstudio.product/target/products/eu.kalafatic.dstudio.product.id/linux/gtk/x86_64` | `dstudio` |
+| EVO-Studio RCP | `product/eu.kalafatic.dstudio.product/target/products/eu.kalafatic.dstudio.product.id/linux/gtk/x86_64` | `evostudio` |
 
 Product identities:
 
@@ -38,7 +38,7 @@ Product identities:
 - UI application: `eu.kalafatic.dstudio.application.application`
 - Headless/server application: `eu.kalafatic.dstudio.application.server`
 
-DStudio does not export a separate headless product; the RCP product also contains the
+EVO-Studio does not export a separate headless product; the RCP product also contains the
 server application and can be started headlessly with `-application`.
 
 ## Launch configurations
@@ -50,10 +50,10 @@ other projects or repository variants are imported into the same workspace.
 
 | Launch | Purpose |
 |---|---|
-| `DStudio_RCP_Application.launch` | Full DStudio RCP product |
-| `DStudio_Headless_Server.launch` | DStudio server application from the RCP product |
-| `DStudio_Tests.launch` | PDE JUnit 5 run of `eu.kalafatic.dstudio.tests` |
-| `DStudio_Maven_Build.launch` | `clean verify -DskipTests` with JDK 21 |
+| `EVOStudio_RCP_Application.launch` | Full EVO-Studio RCP product (PDE Runtime Workbench) |
+
+Headless server and tests are launched with `scripts/run-headless.sh` and
+`./mvnw verify` respectively rather than dedicated launch files.
 
 ## Headless runtime
 
@@ -66,11 +66,11 @@ Or directly:
 
 ```bash
 cd product/eu.kalafatic.dstudio.product/target/products/eu.kalafatic.dstudio.product.id/linux/gtk/x86_64
-./dstudio -nosplash -consoleLog -application eu.kalafatic.dstudio.application.server
+./evostudio -nosplash -consoleLog -application eu.kalafatic.dstudio.application.server
 ```
 
-Verified: the server reports `[DStudio] Server listening on 127.0.0.1:48080` and
-`[DStudio] Headless runtime ready` using `~/.dstudio` as the configuration directory. The
+Verified: the server reports `[EVO-Studio] Server listening on 127.0.0.1:48080` and
+`[EVO-Studio] Headless runtime ready` using `~/.dstudio` as the configuration directory. The
 process runs until stopped.
 
 ## Test status
@@ -79,7 +79,7 @@ process runs until stopped.
 ./mvnw -B verify
 ```
 
-Verified result: 105 tests, 0 failures, 0 errors, 0 skipped.
+Verified result: 224 tests, 0 failures, 0 errors, 0 skipped.
 
 The suite includes integration tests for the TEIP server and live Aider/OpenCode harness
 adapters; those require the corresponding external tools to be installed.

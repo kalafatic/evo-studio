@@ -31,22 +31,22 @@ public class DStudioHeadlessRunner {
         try {
             coordinator.advance(DStudioLifecycleStage.APPLICATION_READY);
         } catch (PortConflictException e) {
-            System.err.println("[DStudio] STARTUP FAILED: " + e.getMessage());
-            System.err.println("[DStudio] The DStudio server (TEIP/API/events) could not "
+            System.err.println("[EVO-Studio] STARTUP FAILED: " + e.getMessage());
+            System.err.println("[EVO-Studio] The EVO-Studio server (TEIP/API/events) could not "
                     + "bind " + e.bindAddress() + ":" + e.port() + ".");
-            System.err.println("[DStudio] What to do:");
-            System.err.println("[DStudio]   1. Stop the process occupying the port "
-                    + "(e.g. another DStudio instance or a family product), or");
-            System.err.println("[DStudio]   2. Set teip.port=NNNN in "
+            System.err.println("[EVO-Studio] What to do:");
+            System.err.println("[EVO-Studio]   1. Stop the process occupying the port "
+                    + "(e.g. another EVO-Studio instance or a family product), or");
+            System.err.println("[EVO-Studio]   2. Set teip.port=NNNN in "
                     + coordinator.getPaths().getPropertiesFile() + " or start with "
                     + "-Ddstudio.teip.port=NNNN, then restart.");
-            System.err.println("[DStudio] Your existing configuration is preserved; "
+            System.err.println("[EVO-Studio] Your existing configuration is preserved; "
                     + "nothing was overwritten.");
             coordinator.terminateAfterStartupFailure();
             DStudioStartupExit.terminate(1);
             return Integer.valueOf(1);
         } catch (RuntimeException e) {
-            System.err.println("[DStudio] STARTUP FAILED: " + e.getMessage());
+            System.err.println("[EVO-Studio] STARTUP FAILED: " + e.getMessage());
             e.printStackTrace(System.err);
             coordinator.terminateAfterStartupFailure();
             DStudioStartupExit.terminate(1);
@@ -57,7 +57,7 @@ public class DStudioHeadlessRunner {
         }, "dstudio-headless-shutdown-hook");
         Runtime.getRuntime().addShutdownHook(hook);
         shutdownHook = hook;
-        System.out.println("[DStudio] Headless runtime ready (config dir: "
+        System.out.println("[EVO-Studio] Headless runtime ready (config dir: "
                 + coordinator.getPaths().getConfigurationDirectory() + ")");
         if (cliRequested(context)) {
             // Interactive or scripted CLI: commands are dispatched until stop/exit/EOF,
@@ -143,7 +143,7 @@ public class DStudioHeadlessRunner {
                 }
             }
         } catch (IOException e) {
-            System.err.println("[DStudio] CLI input failed: " + e.getMessage());
+            System.err.println("[EVO-Studio] CLI input failed: " + e.getMessage());
         }
     }
 

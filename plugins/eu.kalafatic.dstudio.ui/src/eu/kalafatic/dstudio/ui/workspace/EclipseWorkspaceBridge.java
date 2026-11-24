@@ -17,7 +17,7 @@ public class EclipseWorkspaceBridge {
             try {
                 ensureProject(project);
             } catch (Exception e) {
-                System.err.println("DStudio: failed to link Eclipse project "
+                System.err.println("EVO-Studio: failed to link Eclipse project "
                         + project.name() + ": " + e.getMessage());
             }
         }
@@ -59,7 +59,7 @@ public class EclipseWorkspaceBridge {
             try {
                 eclipseProject.delete(false, true, null);
             } catch (Exception e) {
-                System.err.println("DStudio: failed to unlink Eclipse project "
+                System.err.println("EVO-Studio: failed to unlink Eclipse project "
                         + project.name() + ": " + e.getMessage());
             }
         }

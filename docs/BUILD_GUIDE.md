@@ -1,6 +1,6 @@
-# DStudio — Build Guide
+# EVO-Studio — Build Guide
 
-Authoritative parent: `/home/petr/git/DStudio-121126` (root `pom.xml`).
+Authoritative parent: `/home/petr/git/EVO-Studio-121126` (root `pom.xml`).
 
 Prerequisites: JDK 21, `./mvnw` (Maven 3.9.12), network for Eclipse 2025-12 and 2024-03 (JUnit) p2 repos.
 

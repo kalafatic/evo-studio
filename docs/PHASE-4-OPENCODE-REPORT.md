@@ -1,6 +1,6 @@
 # PHASE-4-OPENCODE-REPORT.md
 
-**DStudio Phase 4 — WP-4.05 deliverable**
+**EVO-Studio Phase 4 — WP-4.05 deliverable**
 **Date:** 2026-11-16
 
 ## 1. Verified Environment
@@ -52,7 +52,7 @@ type `OPENCODE`, capability `CODE_IMPLEMENTATION`).
 | Suite | Result |
 |---|---|
 | `OpenCodeHarnessAdapterTest` (7) | 7/7 PASS — identity, invalid binary, config round-trip, model normalization, containment, missing workspace, installed-binary probe |
-| `OpenCodeLiveExecutionTest` (2, real CLI, no mocks) | 2/2 PASS — (1) full stack DStudio ExecutionService → OpenCode 1.19.5 → `live-marker.txt` with `dstudio-live-ok` created inside workspace; COMPLETED status; EXECUTION_LOG + EXECUTION_COMPLETED events streamed; review auto-created (34.2 s). (2) model `ollama/definitely-not-an-installed-model-xyz` → FAILED with honest diagnostic |
+| `OpenCodeLiveExecutionTest` (2, real CLI, no mocks) | 2/2 PASS — (1) full stack EVO-Studio ExecutionService → OpenCode 1.19.5 → `live-marker.txt` with `dstudio-live-ok` created inside workspace; COMPLETED status; EXECUTION_LOG + EXECUTION_COMPLETED events streamed; review auto-created (34.2 s). (2) model `ollama/definitely-not-an-installed-model-xyz` → FAILED with honest diagnostic |
 | Full reactor | 57/57 tests, BUILD SUCCESS (Tycho 4.0.8, offline-capable cache now populated) |
 
 ## 5. Known Limitations

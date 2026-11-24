@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 /**
  * RCP-side client for the unified model management surface served by the
- * local DStudio backend ({@code /api/models}, delegated to the shared ENR
+ * local EVO-Studio backend ({@code /api/models}, delegated to the shared ENR
  * service). Returns plain DTO records — no Jackson types cross the OSGi
  * bundle boundary. The web UI calls the same backend surface.
  */

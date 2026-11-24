@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.teip</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>DStudio - TEIP Provider</name>
+    <name>EVO-Studio - TEIP Provider</name>
 </project>

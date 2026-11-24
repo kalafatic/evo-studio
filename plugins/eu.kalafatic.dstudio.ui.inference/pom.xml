@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.ui.inference</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>DStudio - Inference Presentation</name>
+    <name>EVO-Studio - Inference Presentation</name>
 </project>

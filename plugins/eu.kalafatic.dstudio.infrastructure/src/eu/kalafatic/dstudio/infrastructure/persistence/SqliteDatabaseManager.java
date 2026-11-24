@@ -22,7 +22,7 @@ public class SqliteDatabaseManager implements AutoCloseable {
             }
         } catch (Exception e) {
             throw new IllegalStateException(
-                    "Failed to open DStudio database " + databaseFile + ": " + e.getMessage(), e);
+                    "Failed to open EVO-Studio database " + databaseFile + ": " + e.getMessage(), e);
         }
     }
 
@@ -39,7 +39,7 @@ public class SqliteDatabaseManager implements AutoCloseable {
         try {
             connection.close();
         } catch (Exception e) {
-            System.err.println("Failed to close DStudio database: " + e.getMessage());
+            System.err.println("Failed to close EVO-Studio database: " + e.getMessage());
         }
     }
 }

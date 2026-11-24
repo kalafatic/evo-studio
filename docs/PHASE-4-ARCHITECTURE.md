@@ -1,6 +1,6 @@
 # PHASE-4-ARCHITECTURE.md
 
-**DStudio Phase 4 — target architecture (WP-4.01 deliverable)**
+**EVO-Studio Phase 4 — target architecture (WP-4.01 deliverable)**
 **Date:** 2026-11-16
 **Status:** Authoritative target architecture for Phase 4 implementation.
 
@@ -8,7 +8,7 @@
 
 ## 1. Product Definition
 
-DStudio is **one product with two runtime faces** sharing one authoritative domain/application
+EVO-Studio is **one product with two runtime faces** sharing one authoritative domain/application
 core:
 
 1. **Desktop mode** — professional Eclipse RCP WYSIWYG IDE (projects, source editing, harness
@@ -16,8 +16,8 @@ core:
 2. **Headless mode** — server-side Harness Platform exposing the same core through the canonical
    TEIP 1.1 provider endpoint set, without SWT, workbench, X server or browser.
 
-DStudio owns **coding harness infrastructure** for the family. EVO and TRYST keep their domains,
-workflows and persistence; they connect to DStudio through TEIP.
+EVO-Studio owns **coding harness infrastructure** for the family. EVO and TRYST keep their domains,
+workflows and persistence; they connect to EVO-Studio through TEIP.
 
 ## 2. Technology Stack (family-preserving)
 
@@ -171,7 +171,7 @@ Controllers call application services (core); views observe models; core never s
   APPLICATION_TERMINATED` (core, harness, teip, infrastructure only — ui bundle never loaded).
 - Server: JDK HttpServer on **48080** — TEIP base `/teip/v1` plus the operational endpoints
   `/api/status` and `/api/diagnostics` on the same port. Loopback by default; configurable
-  bind address (family convention +10000 per product: EVO 28xxx, TRYST 38xxx, DStudio 48xxx).
+  bind address (family convention +10000 per product: EVO 28xxx, TRYST 38xxx, EVO-Studio 48xxx).
   Port **48180** is reserved for a future standalone diagnostics listener (config key
   `diagnostics.port` exists; no listener is started on it in Phase 4).
 - Shutdown: `CountDownLatch` await + JVM shutdown hook; process cleanup of running harnesses.
@@ -181,7 +181,7 @@ Controllers call application services (core); views observe models; core never s
 
 ## 8. TEIP 1.1 Provider (WP-4.09)
 
-DStudio implements the canonical §4 endpoint set with DStudio as `application`:
+EVO-Studio implements the canonical §4 endpoint set with EVO-Studio as `application`:
 
 | Endpoint | Behavior |
 |---|---|
@@ -199,7 +199,7 @@ DStudio implements the canonical §4 endpoint set with DStudio as `application`:
   majors; `METHOD_NOT_ALLOWED`; redaction of secrets in events/logs.
 - Restart: open executions → FAILED "Server restarted; execution cannot be resumed" (verified EVO
   semantics, TEIP §7.4).
-- DStudio-specific request fields ONLY under `parameters.*` (open-world rule, TEIP §2). No
+- EVO-Studio-specific request fields ONLY under `parameters.*` (open-world rule, TEIP §2). No
   private TEIP variant.
 
 ## 9. Harness Adapters (WP-4.05/4.06)
@@ -234,7 +234,7 @@ DStudio implements the canonical §4 endpoint set with DStudio as `application`:
   pattern) — OSGi DS not required; single authoritative registry instance in core.
 - Config persisted in SQLite `harnesses` table (fixes TRYST G4 defect by design).
 - Secrets: provider API keys come from environment/provider tooling config (e.g., OpenCode's
-  provider config), never persisted by DStudio.
+  provider config), never persisted by EVO-Studio.
 
 ## 10. Family Integration (WP-4.10)
 
@@ -242,8 +242,8 @@ DStudio implements the canonical §4 endpoint set with DStudio as `application`:
 |---|---|---|
 | EVO | New `DStudioCodingHarnessAdapter implements CodingHarnessAdapter` (type `DSTUDIO`) in existing `controller/harness` package + small `DStudioTeipClient` (JDK HttpClient, modeled on TRYST `TeipClient` semantics) + registration in `ToolFactory` + tests. DEVELOPER mode/`CodingHarnessTool` unchanged — they already invoke the selected registry adapter. Config keys: endpoint (default `http://localhost:48080`), authToken, timeoutSeconds | EVO: Developer Mode, Darwin orchestration, project context |
 | TRYST | New `DStudioCodingHarnessAdapter implements CodingHarnessAdapter` (type `DSTUDIO`) in `evo.integration` bundle reusing existing `TeipClient` (endpoint configurable) + registration in `ApplicationLifecycleCoordinator` + tests + persistence via `EvoConfiguration`-style repository or generic harness config | TRYST: tasks, sandboxes, reviews, Git |
-| DCode/DCoder | **Contract only** (skeleton repo): document TEIP client contract DCode will implement, required capabilities, dependencies; implementation plan + blockers | DCode: agent product |
-| DStudio | Distinguishes family clients via TEIP `caller.system`; health/capabilities serve discovery | DStudio: harness platform |
+| EVO-Code/DCoder | **Contract only** (skeleton repo): document TEIP client contract EVO-Code will implement, required capabilities, dependencies; implementation plan + blockers | EVO-Code: agent product |
+| EVO-Studio | Distinguishes family clients via TEIP `caller.system`; health/capabilities serve discovery | EVO-Studio: harness platform |
 
 No product loads another product's classes; all communication is TEIP JSON over HTTP. Local
 execution fallbacks remain available in EVO/TRYST per their existing architectures.
@@ -272,15 +272,15 @@ execution fallbacks remain available in EVO/TRYST per their existing architectur
 - Desktop verification constrained on this host (no X server): plugin tests cover controllers/
   models/views logic; full workbench runtime verification documented as unverified here, with
   explicit launch instructions (same as TRYST practice).
-- Family E2E: real DStudio headless TEIP server + EVO adapter suite + TRYST adapter suite.
+- Family E2E: real EVO-Studio headless TEIP server + EVO adapter suite + TRYST adapter suite.
 ```
 
 ## 13. Key Decisions Requiring Product-Owner Awareness
 
-1. **DStudio port family 48xxx** (TEIP 48080, diagnostics 48180) — follows the family +10000
+1. **EVO-Studio port family 48xxx** (TEIP 48080, diagnostics 48180) — follows the family +10000
    convention; configurable. (Decision recorded here; no PO objection expected but flagged.)
 2. **Eclipse 2025-12** target (not 2024-03) — matches EVO platform, full JDT/EGit caching.
 3. **TEIP request → harness mapping** uses `parameters.harness` (open-world extension) with
-   DStudio-side default selection.
-4. **DCode integration is contract-only** in Phase 4 (skeleton repo has no runtime).
+   EVO-Studio-side default selection.
+4. **EVO-Code integration is contract-only** in Phase 4 (skeleton repo has no runtime).
 5. Desktop workbench runtime verification is limited by the missing X server on this host.

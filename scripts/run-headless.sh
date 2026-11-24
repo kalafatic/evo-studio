@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DStudio - Headless Server Starter
+# EVO-Studio - Headless Server Starter
 
 set -euo pipefail
 
@@ -18,10 +18,10 @@ if [[ "${JAVA_MAJOR}" != "21" ]]; then
 fi
 
 PRODUCT_DIR="product/eu.kalafatic.dstudio.product/target/products/eu.kalafatic.dstudio.product.id/linux/gtk/x86_64"
-LAUNCHER="${PRODUCT_DIR}/dstudio"
+LAUNCHER="${PRODUCT_DIR}/evostudio"
 
 if [[ ! -x "${LAUNCHER}" ]]; then
-    echo "DStudio product not found: ${LAUNCHER}" >&2
+    echo "EVO-Studio product not found: ${LAUNCHER}" >&2
     echo "Run scripts/build.sh first." >&2
     exit 1
 fi

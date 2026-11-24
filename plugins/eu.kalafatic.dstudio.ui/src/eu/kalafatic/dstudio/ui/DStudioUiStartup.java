@@ -49,14 +49,14 @@ public class DStudioUiStartup implements IStartup {
             installEditorLifecycle();
         } catch (RuntimeException e) {
             // Never let workbench editor wiring break the rest of startup.
-            System.err.println("DStudio: editor lifecycle wiring failed: " + e);
+            System.err.println("EVO-Studio: editor lifecycle wiring failed: " + e);
         }
     }
 
     /**
      * The harness editor is the workbench working area. Open it when the initial
      * window appears and restore it after "Reset Perspective" — the same lifecycle
-     * the DCode workbench provides. The editor input is stable, so reopening is
+     * the EVO-Code workbench provides. The editor input is stable, so reopening is
      * idempotent.
      */
     private static void installEditorLifecycle() {
@@ -137,7 +137,7 @@ public class DStudioUiStartup implements IStartup {
         try {
             eu.kalafatic.dstudio.ui.handlers.OpenInferenceEditorHandler.open(page);
         } catch (org.eclipse.ui.PartInitException e) {
-            System.err.println("DStudio: failed to open the inference editor ("
+            System.err.println("EVO-Studio: failed to open the inference editor ("
                     + eu.kalafatic.dstudio.ui.editor.DStudioMultiPageEditor.EDITOR_ID
                     + "): " + e.getMessage());
         }
@@ -196,7 +196,7 @@ public class DStudioUiStartup implements IStartup {
                     try {
                         stream.close();
                     } catch (java.io.IOException e) {
-                        System.err.println("DStudio: console stream close failed: "
+                        System.err.println("EVO-Studio: console stream close failed: "
                                 + e.getMessage());
                     }
                 }

@@ -158,7 +158,7 @@ public class DStudioLifecycleCoordinator {
         try {
             Files.createDirectories(paths.getConfigurationDirectory());
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to create DStudio configuration directory: "
+            throw new IllegalStateException("Failed to create EVO-Studio configuration directory: "
                     + e.getMessage(), e);
         }
         configurationService = new DStudioConfigurationServiceImpl(paths);
@@ -184,7 +184,7 @@ public class DStudioLifecycleCoordinator {
         // CLI is absent on this host).
         harnessRegistry.registerAdapter(
                 new eu.kalafatic.dstudio.harness.claude.ClaudeCodeHarnessAdapter(diffService));
-        // Phase 6: DCode is the default family coding harness.
+        // Phase 6: EVO-Code is the default family coding harness.
         harnessRegistry.registerAdapter(new eu.kalafatic.dstudio.harness.dcode.DCodeHarnessAdapter());
         if (harnessRegistry.getSelectedDefaultHarnessId().isEmpty()) {
             harnessRegistry.selectDefaultHarness(
@@ -277,7 +277,7 @@ public class DStudioLifecycleCoordinator {
 
     /**
      * Resolves the ENR inference-engine endpoint against the running family
-     * environment (family convention, mirror of the DCode RuntimeManager):
+     * environment (family convention, mirror of the EVO-Code RuntimeManager):
      * the {@code dstudio.enr.endpoint} system property always wins; otherwise a
      * reachable well-known candidate is selected — standalone ENR (8111) or
      * EVO-embedded ENR (28780). Existing installations keeping the historical
@@ -379,7 +379,7 @@ public class DStudioLifecycleCoordinator {
                 contextualActionRegistry, agentProfileRegistry, configurationService);
         newServer.start();
         server = newServer;
-        System.out.println("[DStudio] Server listening on " + configuration.teipBindAddress()
+        System.out.println("[EVO-Studio] Server listening on " + configuration.teipBindAddress()
                 + ":" + port);
         onShutdown(() -> {
             DStudioServer current = server;
@@ -414,7 +414,7 @@ public class DStudioLifecycleCoordinator {
                 try {
                     hook.run();
                 } catch (RuntimeException e) {
-                    System.err.println("DStudio shutdown hook failed: " + e.getMessage());
+                    System.err.println("EVO-Studio shutdown hook failed: " + e.getMessage());
                 }
             }
             shutdownHooks.clear();
@@ -433,7 +433,7 @@ public class DStudioLifecycleCoordinator {
             try {
                 listener.stageReached(reached);
             } catch (RuntimeException e) {
-                System.err.println("DStudio lifecycle listener failed: " + e.getMessage());
+                System.err.println("EVO-Studio lifecycle listener failed: " + e.getMessage());
             }
         }
     }

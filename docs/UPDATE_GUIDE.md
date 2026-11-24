@@ -1,4 +1,4 @@
-# DStudio — Update Guide
+# EVO-Studio — Update Guide
 
 Git is controlled by the user (Eclipse EGit). Safe update workflow (also exposed by UPM):
 

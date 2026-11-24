@@ -68,7 +68,7 @@ public class DStudioConfigurationServiceImpl implements ConfigurationService {
             try (Reader reader = Files.newBufferedReader(propertiesFile)) {
                 file.load(reader);
             } catch (IOException e) {
-                System.err.println("DStudio: failed to read " + propertiesFile + ": "
+                System.err.println("EVO-Studio: failed to read " + propertiesFile + ": "
                         + e.getMessage());
             }
         }
@@ -101,16 +101,16 @@ public class DStudioConfigurationServiceImpl implements ConfigurationService {
                 defaults.diagnosticsPort(), file)) {
             // Persist the port correction once so stale values never reappear.
             saveConfiguration(migrated);
-            System.err.println("DStudio: corrected persisted ports to the 48xxx family "
+            System.err.println("EVO-Studio: corrected persisted ports to the 48xxx family "
                     + "(TEIP " + teipPort + ", diagnostics " + diagnosticsPort + ")");
         }
         return migrated;
     }
 
     /**
-     * Port convention normalization: the family convention is DStudio 48xxx / DCode 58xxx.
+     * Port convention normalization: the family convention is EVO-Studio 48xxx / EVO-Code 58xxx.
      * Persisted values equal to the legacy defaults, or to the transient 58xxx values that
-     * briefly shipped (colliding with DCode's 58080), are remapped to the family defaults;
+     * briefly shipped (colliding with EVO-Code's 58080), are remapped to the family defaults;
      * explicit custom ports are preserved.
      */
     private int migrateLegacyPort(int configured, int legacyDefault, int transientValue,
@@ -214,7 +214,7 @@ public class DStudioConfigurationServiceImpl implements ConfigurationService {
                     + e.getMessage(), e);
         }
         try (Writer writer = Files.newBufferedWriter(paths.getPropertiesFile())) {
-            properties.store(writer, "DStudio configuration");
+            properties.store(writer, "EVO-Studio configuration");
         } catch (IOException e) {
             throw new IllegalStateException("Failed to save configuration: "
                     + e.getMessage(), e);

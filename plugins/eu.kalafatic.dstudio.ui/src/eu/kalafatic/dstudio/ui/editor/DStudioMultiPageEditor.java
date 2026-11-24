@@ -48,11 +48,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * DStudio harness editor — the main working area of the workbench, opened
+ * EVO-Studio harness editor — the main working area of the workbench, opened
  * automatically at startup.
  *
  * <ul>
- *   <li><b>Web</b> (initial page): an SWT Browser hosting the <em>actual</em> DStudio
+ *   <li><b>Web</b> (initial page): an SWT Browser hosting the <em>actual</em> EVO-Studio
  *       web IDE over its HTTP endpoint — the same frontend, harness, inference,
  *       sessions, streaming and tool calling as an external browser. The editor
  *       contains no second frontend; it waits for the frontend to become reachable
@@ -102,7 +102,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
 
     @Override
     protected void createPages() {
-        System.out.println("DStudio: creating the harness editor pages "
+        System.out.println("EVO-Studio: creating the harness editor pages "
                 + "(Web + Settings)…");
         Composite webComposite = new Composite(getContainer(), SWT.NONE);
         webComposite.setLayout(new GridLayout(1, false));
@@ -111,11 +111,11 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
         webBar.setLayout(new GridLayout(2, false));
         webBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         webStatus = new Label(webBar, SWT.NONE);
-        webStatus.setText("Connecting to the DStudio web IDE…");
+        webStatus.setText("Connecting to the EVO-Studio web IDE…");
         webStatus.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         webReload = new Button(webBar, SWT.PUSH);
         webReload.setText("Reload");
-        webReload.setToolTipText("Re-check the DStudio web IDE and reload it");
+        webReload.setToolTipText("Re-check the EVO-Studio web IDE and reload it");
         webReload.addListener(SWT.Selection, event -> reloadWeb());
 
         try {
@@ -164,10 +164,10 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
                     @Override
                     public void changed(org.eclipse.swt.browser.TitleEvent event) {
                         if (event.title != null
-                                && event.title.contains("DStudio Settings")) {
+                                && event.title.contains("EVO-Studio Settings")) {
                             settingsReady = true;
                             settingsDiag = "settings page ready (title)";
-                            System.out.println("DStudio: settings page loaded.");
+                            System.out.println("EVO-Studio: settings page loaded.");
                         }
                     }
                 });
@@ -186,7 +186,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
     }
 
     /**
-     * The settings page is served by the DStudio backend web surface (same server as
+     * The settings page is served by the EVO-Studio backend web surface (same server as
      * the web IDE), so it loads over HTTP — the bridge stays a desktop-only
      * integration on top. Bounded readiness wait, never blocking the UI thread.
      */
@@ -239,7 +239,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
                 }
                 if (location.startsWith("http://") || location.startsWith("https://")) {
                     webLoaded = true;
-                    System.out.println("DStudio: web IDE navigated to " + location);
+                    System.out.println("EVO-Studio: web IDE navigated to " + location);
                 }
             }
         });
@@ -251,7 +251,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
 
             @Override
             public void completed(ProgressEvent event) {
-                System.out.println("DStudio: web IDE page loaded.");
+                System.out.println("EVO-Studio: web IDE page loaded.");
             }
         });
         browser.addTitleListener(new TitleListener() {
@@ -261,7 +261,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
                     setWebStatus(event.title == null || event.title.isBlank()
                             ? "Web IDE loaded." : event.title);
                 }
-                System.out.println("DStudio: web IDE title: " + event.title);
+                System.out.println("EVO-Studio: web IDE title: " + event.title);
             }
         });
     }
@@ -276,7 +276,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
             return;
         }
         long generation = readinessGeneration.incrementAndGet();
-        setWebStatus("Connecting to the DStudio web IDE…");
+        setWebStatus("Connecting to the EVO-Studio web IDE…");
         readinessExecutor.execute(() -> {
             for (int attempt = 1; attempt <= READINESS_ATTEMPTS && !disposed
                     && generation == readinessGeneration.get(); attempt++) {
@@ -290,14 +290,14 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
                             resolvedWebUrl = target;
                             setWebStatus("Loading " + target + " …");
                             webBrowser.setUrl(target);
-                            System.out.println("DStudio: loading the web IDE from "
+                            System.out.println("EVO-Studio: loading the web IDE from "
                                     + target);
                         }
                     });
                     return;
                 }
                 if (attempt % 10 == 0) {
-                    System.out.println("DStudio: waiting for the web IDE (attempt "
+                    System.out.println("EVO-Studio: waiting for the web IDE (attempt "
                             + attempt + "/" + READINESS_ATTEMPTS + ")");
                 }
                 try {
@@ -312,10 +312,10 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
                 if (disposed || generation != readinessGeneration.get()) {
                     return;
                 }
-                setWebStatus("The DStudio web IDE is not reachable"
+                setWebStatus("The EVO-Studio web IDE is not reachable"
                         + (endpoint == null ? " (no endpoint)."
                                 : " at " + endpoint + "."));
-                System.err.println("DStudio: web IDE did not become reachable at "
+                System.err.println("EVO-Studio: web IDE did not become reachable at "
                         + (endpoint == null ? "no endpoint" : endpoint));
             });
         });
@@ -350,7 +350,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
 
     /** Manual reload: re-runs the bounded readiness sequence. */
     public void reloadWeb() {
-        System.out.println("DStudio: manual reload of the web IDE requested.");
+        System.out.println("EVO-Studio: manual reload of the web IDE requested.");
         webLoaded = false;
         connectWebApplication();
     }
@@ -406,14 +406,14 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
             case "ready" -> {
                 settingsReady = true;
                 settingsDiag = "ready";
-                System.out.println("DStudio: settings page loaded its "
+                System.out.println("EVO-Studio: settings page loaded its "
                         + "configuration from the core services.");
             }
             case "jserror" -> {
                 settingsDiag = "settings JS error: "
                         + String.valueOf(args.get("message")) + " @"
                         + args.get("line");
-                System.err.println("DStudio: " + settingsDiag);
+                System.err.println("EVO-Studio: " + settingsDiag);
             }
             case "boot" -> background(callbackId, this::bootSettings);
             case "setDefaultHarness" -> background(callbackId,
@@ -961,7 +961,7 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
         if (errorColor != null && !errorColor.isDisposed()) {
             errorColor.dispose();
         }
-        System.out.println("DStudio: harness editor disposed (Browsers and readiness "
+        System.out.println("EVO-Studio: harness editor disposed (Browsers and readiness "
                 + "released).");
         super.dispose();
     }

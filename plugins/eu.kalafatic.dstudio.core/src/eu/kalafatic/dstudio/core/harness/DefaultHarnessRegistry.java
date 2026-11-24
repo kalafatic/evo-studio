@@ -194,7 +194,7 @@ public class DefaultHarnessRegistry implements HarnessRegistry {
             try {
                 result.add(adapter.getCapabilityDescriptor());
             } catch (RuntimeException e) {
-                System.err.println("DStudio capability discovery failed for "
+                System.err.println("EVO-Studio capability discovery failed for "
                         + adapter.getHarnessId() + ": " + e.getMessage());
             }
         }

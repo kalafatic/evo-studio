@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="eu.kalafatic.dstudio.feature"
-      label="DStudio Feature"
+      label="EVO-Studio Feature"
       version="2.6.11.qualifier"
       provider-name="Kalafatic">
 
    <description url="http://www.example.com/description">
-      DStudio - Darwin Studio: professional Eclipse RCP WYSIWYG IDE and headless Harness Platform.
+      EVO-Studio: professional Eclipse RCP WYSIWYG IDE and headless Harness Platform.
    </description>
 
    <copyright>

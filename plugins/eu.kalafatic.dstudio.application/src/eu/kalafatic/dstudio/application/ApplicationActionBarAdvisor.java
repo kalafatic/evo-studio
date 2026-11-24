@@ -11,7 +11,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 
 /**
  * Standard professional-IDE menu bar: File / Edit / Navigate / Search / Models /
- * Harness / Tools / Window / Help from the workbench action factory plus the DStudio
+ * Harness / Tools / Window / Help from the workbench action factory plus the EVO-Studio
  * family actions (web interface, terminal, model and harness surfaces). Project, Run
  * and AI menus are contributed by the UI bundle through org.eclipse.ui.menus so the
  * layering stays ui → application.
@@ -233,7 +233,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     private MenuManager helpMenu() {
         MenuManager menu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
 
-        // DStudio help items: the embedded help site (help.html) and diagnostics are
+        // EVO-Studio help items: the embedded help site (help.html) and diagnostics are
         // served by the backend server, so they always document the running instance.
         menu.add(getAction(ACTION_HELP_CONTENTS));
         menu.add(getAction(ACTION_HELP_GETTING_STARTED));
@@ -276,14 +276,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         return menu;
     }
 
-    // ---------------------------------------------------------- DStudio family actions
+    // ---------------------------------------------------------- EVO-Studio family actions
 
     private void showView(String viewId) {
         try {
             window.getActivePage().showView(viewId);
         } catch (org.eclipse.ui.PartInitException e) {
             org.eclipse.jface.dialogs.MessageDialog.openError(window.getShell(),
-                    "DStudio", "Could not open the view: " + e.getMessage());
+                    "EVO-Studio", "Could not open the view: " + e.getMessage());
         }
     }
 
@@ -295,7 +295,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
                 handlerService.executeCommand(commandId, null);
             } catch (Exception e) {
                 org.eclipse.jface.dialogs.MessageDialog.openError(window.getShell(),
-                        "DStudio", "Command failed: " + e.getMessage());
+                        "EVO-Studio", "Command failed: " + e.getMessage());
             }
         }
     }

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Phase 7 (S4 follow-up): port conflicts must surface as typed, actionable failures —
  * the desktop client resolves them interactively via {@code restartServerOnPort}, the
  * headless client reports and exits. Family port convention: EVO 28xxx, TRYST 38xxx,
- * DCode 48xxx, DStudio 58xxx (TEIP 58080, diagnostics 58180).
+ * EVO-Studio 48xxx (TEIP 48080, diagnostics 48180), EVO-Code 58xxx (TEIP 58080).
  */
 class PortConflictHandlingTest {
 
@@ -101,7 +101,7 @@ class PortConflictHandlingTest {
         DStudioPaths paths = new DStudioPaths(tempDir.resolve("dstudio-legacy"));
         Files.createDirectories(paths.getConfigurationDirectory());
         // persisted configuration from the transient 58xxx convention that collided
-        // with DCode's primary port
+        // with EVO-Code's primary port
         Files.writeString(paths.getPropertiesFile(),
                 "teip.port=58080\ndiagnostics.port=58180\n");
         DStudioLifecycleCoordinator coordinator = new DStudioLifecycleCoordinator(paths);

@@ -43,12 +43,12 @@ public final class DStudioCliCommandTable {
             new Command("logs", "logs show",
                     "Show the most recent event-stream entries.", "logs", false),
             new Command("start", "start",
-                    "Ensure the DStudio server is running (starts automatically).",
+                    "Ensure the EVO-Studio server is running (starts automatically).",
                     "start", false),
             new Command("restart", "restart",
                     "Restart the TEIP/API server on its configured port.",
                     "restart", false),
-            new Command("stop", "stop", "Stop DStudio gracefully.", "stop", true),
+            new Command("stop", "stop", "Stop EVO-Studio gracefully.", "stop", true),
             new Command("exit", "exit", "Exit the CLI (interactive REPL only).",
                     "exit", true));
 
@@ -141,7 +141,7 @@ public final class DStudioCliCommandTable {
                 """);
         topics.put("start", """
                 start
-                  The DStudio server starts automatically with the application (desktop
+                  The EVO-Studio server starts automatically with the application (desktop
                   or headless). This command verifies the server; when it is not running
                   it is started on the configured port.
                 """);
@@ -154,22 +154,22 @@ public final class DStudioCliCommandTable {
                 """);
         topics.put("stop", """
                 stop
-                  Stops DStudio gracefully: executions are shut down, the HTTP server is
+                  Stops EVO-Studio gracefully: executions are shut down, the HTTP server is
                   stopped and the database is closed before the process exits with
                   code 0.
                 """);
         topics.put("exit", """
                 exit
-                  Ends the CLI session and shuts DStudio down gracefully (the same
+                  Ends the CLI session and shuts EVO-Studio down gracefully (the same
                   shutdown path as 'stop'). In scripted mode the CLI also ends at
                   end-of-input.
                 """);
         topics.put("cli", """
-                The DStudio headless CLI is available when the server runs with a
+                The EVO-Studio headless CLI is available when the server runs with a
                 terminal attached or with commands piped to stdin. Type 'help' for the
                 full command list or 'help <topic>' for detailed help on one command
                 family. A leading '/' is optional and commands are case-insensitive;
-                'stop'/'exit' (or end-of-input) shut DStudio down gracefully. Force
+                'stop'/'exit' (or end-of-input) shut EVO-Studio down gracefully. Force
                 daemon mode (no CLI) with -Ddstudio.daemon=true or --daemon.
                 """);
         return topics;

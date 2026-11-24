@@ -410,7 +410,7 @@
       await loadProjects();
       await loadHarnesses();
       if (!bridgeAvailable()) {
-        banner("Applying defaults needs the DStudio desktop bridge; engine, model, "
+        banner("Applying defaults needs the EVO-Studio desktop bridge; engine, model, "
             + "project and harness data are live over HTTP.", "warn");
       }
       if (verbose) { toast("Settings reloaded."); }

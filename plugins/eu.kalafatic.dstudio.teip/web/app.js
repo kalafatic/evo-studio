@@ -1118,7 +1118,7 @@
       renderTab();
       renderContext();
       if (showToast) { toast("Providers, models, projects, harnesses and sessions reloaded."); }
-      log("info", "connected to DStudio at " + window.location.origin);
+      log("info", "connected to EVO-Studio at " + window.location.origin);
     } catch (e) {
       setConnection("disconnected", "error");
       log("error", "Configuration load failed: " + e.message);
@@ -1134,7 +1134,7 @@
     }
     const build = $("frontend-build");
     if (build) { build.textContent = FRONTEND_BUILD; }
-    console.log("DStudio frontend build " + FRONTEND_BUILD
+    console.log("EVO-Studio frontend build " + FRONTEND_BUILD
         + " (" + window.location.origin + ")");
     const conversation = current();
     if (conversation) { state.context = { type: "session", item: conversation }; }

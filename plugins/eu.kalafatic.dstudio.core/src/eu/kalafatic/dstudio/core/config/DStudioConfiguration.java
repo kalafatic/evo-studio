@@ -7,12 +7,12 @@ public record DStudioConfiguration(String appName, String appVersion, Path confi
         boolean teipDevMode, String defaultHarnessId, String defaultModel,
         long executionTimeoutSeconds, String evoMcpEndpoint, String evoMcpToken) {
 
-    public static final String APP_NAME = "DStudio - Darwin Studio";
+    public static final String APP_NAME = "EVO-Studio";
     public static final String APP_VERSION = "2.6.11";
     /**
-     * Family port convention (EVO 28xxx, TRYST 38xxx): DStudio owns the 48xxx block
-     * (primary TEIP port 48080, diagnostics 48180); DCode/DCoder owns the 58xxx block
-     * (58080 default). DStudio must never occupy 58xxx.
+     * Family port convention (EVO 28xxx, TRYST 38xxx): EVO-Studio owns the 48xxx block
+     * (primary TEIP port 48080, diagnostics 48180); EVO-Code owns the 58xxx block
+     * (58080 default). EVO-Studio must never occupy 58xxx.
      */
     public static final int DEFAULT_TEIP_PORT = 48080;
     public static final int DEFAULT_DIAGNOSTICS_PORT = 48180;
@@ -24,7 +24,7 @@ public record DStudioConfiguration(String appName, String appVersion, Path confi
     public static final int LEGACY_TEIP_PORT = 48080;
     public static final int LEGACY_DIAGNOSTICS_PORT = 48180;
     /**
-     * Briefly-shipped 58xxx values that collided with DCode's 58080; persisted
+     * Briefly-shipped 58xxx values that collided with EVO-Code's 58080; persisted
      * occurrences are remapped to the 48xxx defaults on load.
      */
     public static final int TRANSIENT_TEIP_PORT = 58080;

@@ -31,7 +31,7 @@ import org.eclipse.ui.part.ViewPart;
  * Model Manager (shared family infrastructure): provider pull, installed
  * models, live download progress, cancellation and removal. All state lives
  * in the shared ENR model management service; this view consumes it through
- * the local DStudio backend ({@code /api/models}), exactly like the web UI.
+ * the local EVO-Studio backend ({@code /api/models}), exactly like the web UI.
  * Progress is polled on the SWT UI thread with a timer that is cancelled on
  * dispose; no blocking work ever runs on the UI thread.
  */

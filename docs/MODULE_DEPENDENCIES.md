@@ -1,4 +1,4 @@
-# DStudio — Module Dependencies
+# EVO-Studio — Module Dependencies
 
 ```
 targetplatform/eu.kalafatic.dstudio.target

@@ -1,15 +1,15 @@
-# DStudio Codebase Exploration Summary
+# EVO-Studio Codebase Exploration Summary
 
 ## 1. Overall Project Structure
 
-DStudio is a Java 21 Eclipse RCP/Equinox/OSGi application with the following main bundles/modules (dependency direction: `ui → application → {teip, harness, infrastructure} → core`):
+EVO-Studio is a Java 21 Eclipse RCP/Equinox/OSGi application with the following main bundles/modules (dependency direction: `ui → application → {teip, harness, infrastructure} → core`):
 
 | Bundle | Description |
 |--------|-------------|
 | `eu.kalafatic.dstudio.ui` | Presentation: views, editors, perspectives, commands/handlers (SWT/JFace) |
 | `eu.kalafatic.dstudio.application` | Lifecycle coordinator + desktop/headless IApplication |
 | `eu.kalafatic.dstudio.teip` | TEIP 1.1 provider (HTTP, DTOs, auth, execution bridge) |
-| `eu.kalafatic.dstudio.harness` | Harness adapters (opencode, aider, DCode, ClaudeCode) |
+| `eu.kalafatic.dstudio.harness` | Harness adapters (opencode, aider, EVO-Code, ClaudeCode) |
 | `eu.kalafatic.dstudio.infrastructure` | SQLite persistence, configuration, JGit, process support |
 | `eu.kalafatic.dstudio.core` | Domain, SPI, application services, event bus (no UI deps) |
 | `eu.kalafatic.dstudio.ui.inference` | Inference workspace UI (backend-agnostic chat presentation) |
@@ -44,18 +44,18 @@ Key files in root:
 - `plugins/eu.kalafatic.dstudio.ui.inference/src/eu/kalafatic/dstudio/inference/ui/ToolbarBuilder.java` - Renders toolbar from selector specs (SWT `Combo`, `READ_ONLY`)
 - `plugins/eu.kalafatic.dstudio.teip/web/settings.html` lines 96-110: Global execution config with Provider and Model dropdowns
 
-## 3. DCode Comparison/Integration
+## 3. EVO-Code Comparison/Integration
 
-### DCode-related reports
+### EVO-Code-related reports
 - `docs/PHASE-4-DCODE-COMPATIBILITY-REPORT.md` - Contract-only, runtime deferred to Phase 5
 - `docs/PHASE-8-DCODE-DSTUDIO-COORDINATED-REPORT.md` - Coordinated implementation report
-- `PHASE-6-DSTUDIO-INTEGRATION-REPORT.md` - DCode is the default coding harness
+- `PHASE-6-DSTUDIO-INTEGRATION-REPORT.md` - EVO-Code is the default coding harness
 
-### DCode harness integration
-- DCode is the default harness (`eu.kalafatic.dstudio.harness.dcode.DCodeHarnessAdapter`)
-- FHC 1.0 wire mapping over DCode `/api/v1`
-- DCode uses port 58xxx (family convention)
-- DCode Web IDE is DEFERRED; DStudio Web IDE is live-verified
+### EVO-Code harness integration
+- EVO-Code is the default harness (`eu.kalafatic.dstudio.harness.dcode.DCodeHarnessAdapter`)
+- FHC 1.0 wire mapping over EVO-Code `/api/v1`
+- EVO-Code uses port 58xxx (family convention)
+- EVO-Code Web IDE is DEFERRED; EVO-Studio Web IDE is live-verified
 
 ### Harness SPI (`core/harness`)
 - `HarnessRegistry.java` - Authoritative interface

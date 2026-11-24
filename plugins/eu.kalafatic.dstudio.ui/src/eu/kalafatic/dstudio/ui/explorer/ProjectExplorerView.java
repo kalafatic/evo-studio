@@ -98,7 +98,7 @@ public class ProjectExplorerView extends ViewPart {
                                     handlerService.executeCommand(
                                             "eu.kalafatic.dstudio.command.openProject", null);
                                 } catch (Exception e) {
-                                    System.err.println("DStudio: open command failed: "
+                                    System.err.println("EVO-Studio: open command failed: "
                                             + e.getMessage());
                                 }
                             }
@@ -165,7 +165,7 @@ public class ProjectExplorerView extends ViewPart {
         try {
             IDE.openEditorOnFileStore(page, EFS.getStore(entry.file().toURI()));
         } catch (Exception e) {
-            System.err.println("DStudio: failed to open editor for "
+            System.err.println("EVO-Studio: failed to open editor for "
                     + entry.file() + ": " + e.getMessage());
         }
     }

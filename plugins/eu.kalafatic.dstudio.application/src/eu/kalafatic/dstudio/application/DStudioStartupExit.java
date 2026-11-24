@@ -3,7 +3,7 @@ package eu.kalafatic.dstudio.application;
 /**
  * Deterministic process termination for startup-failure paths.
  *
- * <p>DStudio runs inside the Eclipse native launcher (JVM embedded in-process). After a
+ * <p>EVO-Studio runs inside the Eclipse native launcher (JVM embedded in-process). After a
  * failed application start the launcher does not reliably exit on {@code System.exit}/
  * {@code Runtime.halt} (verified live), {@code ProcessHandle.destroy()} is forbidden on
  * the current process, and the JVM's own SIGTERM handling re-enters the OSGi shutdown
@@ -28,7 +28,7 @@ public final class DStudioStartupExit {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            System.err.println("[DStudio] self-termination failed: " + e.getMessage());
+            System.err.println("[EVO-Studio] self-termination failed: " + e.getMessage());
         }
         try {
             ProcessHandle.current().destroyForcibly();

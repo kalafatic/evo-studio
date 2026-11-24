@@ -1,10 +1,10 @@
 # Darwin Family — Contextual Action Contract
 
-Canonical owner: **DStudio** (`eu.kalafatic.dstudio` — repository `/home/petr/git/DStudio-121126`).
+Canonical owner: **EVO-Studio** (`eu.kalafatic.dstudio` — repository `/home/petr/git/EVO-Studio-121126`).
 Contract version: **1.0** (2026-11-20).
 
 This document defines the shared, versioned contract for contextual actions across the four
-Darwin family applications: **EVO**, **TRYST**, **DCode**, **DStudio**. Each repository
+Darwin family applications: **EVO**, **TRYST**, **EVO-Code**, **EVO-Studio**. Each repository
 implements the contract **locally** against its own domain services; there are no shared
 runtime bundles and no cross-repository build dependencies.
 
@@ -234,9 +234,9 @@ reason `not supported by this harness/provider`.
 
 ## 7. Ownership boundaries
 
-- **DStudio** owns harness/provider/model/agent administration capabilities and the
+- **EVO-Studio** owns harness/provider/model/agent administration capabilities and the
   canonical contract.
-- **DCode** owns native coding execution and its local sessions.
+- **EVO-Code** owns native coding execution and its local sessions.
 - **TRYST** owns task/workflow/repository/sandbox/session lifecycle.
 - **EVO** owns Darwin orchestration and its existing session/iteration lifecycle.
 Cross-application communication continues through existing TEIP/FHC interfaces; the

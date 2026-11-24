@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unified model management HTTP surface ({@code /api/models}): the DStudio
+ * Unified model management HTTP surface ({@code /api/models}): the EVO-Studio
  * backend delegates provider pull/list/remove and shared download jobs to
  * the family ENR service. ENR is mocked here; the ENR implementation itself
  * is verified in its own repository. Both the web UI and the RCP Model

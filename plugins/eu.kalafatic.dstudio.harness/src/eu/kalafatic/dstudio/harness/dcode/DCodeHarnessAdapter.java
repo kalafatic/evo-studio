@@ -22,16 +22,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * DCode coding-harness adapter for DStudio (Phase 6, WP-6.7). Delegates executions to the
- * native DCode harness through its stable /api/v1 surface (FHC 1.0 wire mapping). DCode
- * owns agent execution and its harness-specific state; DStudio owns executions, review and
- * persistence. DCode never commits in delegated mode — sessions with changes end in
- * WAITING_FOR_APPROVAL and the diff is collected for DStudio review.
+ * EVO-Code coding-harness adapter for EVO-Studio (Phase 6, WP-6.7). Delegates executions to
+ * the native EVO-Code harness through its stable /api/v1 surface (FHC 1.0 wire mapping).
+ * EVO-Code owns agent execution and its harness-specific state; EVO-Studio owns executions,
+ * review and persistence. EVO-Code never commits in delegated mode — sessions with changes
+ * end in WAITING_FOR_APPROVAL and the diff is collected for EVO-Studio review.
  */
 public class DCodeHarnessAdapter implements HarnessAdapter {
 
     public static final String HARNESS_ID = "dcode";
-    public static final String HARNESS_NAME = "DCode - Darwin Code";
+    public static final String HARNESS_NAME = "EVO-Code";
     public static final String HARNESS_TYPE = "DCODE";
 
     public static final String CONFIG_ENDPOINT = "endpoint";
@@ -41,10 +41,10 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
     public static final String CONFIG_TIMEOUT_SECONDS = "timeoutSeconds";
 
     /**
-     * Family port convention: DCode/DCoder owns the 58xxx block (58080 default); it
-     * must never point at DStudio's own TEIP port (48xxx block, 48080 primary).
+     * Family port convention: EVO-Code owns the 58xxx block (58080 default); it
+     * must never point at EVO-Studio's own TEIP port (48xxx block, 48080 primary).
      */
-    public static final String DEFAULT_ENDPOINT = "http://localhost:58080"; // DCode owns 58xxx (58080)
+    public static final String DEFAULT_ENDPOINT = "http://localhost:58080"; // EVO-Code owns 58xxx (58080)
 
     private final Map<String, String> config = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
@@ -85,7 +85,7 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
         String model = config.getOrDefault(CONFIG_MODEL, "");
         if (!model.isBlank()) {
             models.add(new HarnessCapabilityDescriptor.ModelDescriptor(model, model,
-                    "DCode", true, 0, true));
+                    "EVO-Code", true, 0, true));
         }
         return new HarnessCapabilityDescriptor(HARNESS_ID, HARNESS_NAME, HARNESS_TYPE,
                 List.of("CODE_IMPLEMENTATION", "CODE_ANALYSIS"),
@@ -104,13 +104,13 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
         try {
             HttpResponse<String> response = send("GET", "/health", null);
             if (response.statusCode() == 200) {
-                return HarnessConnectionTestResult.ok("DCode harness available at "
+                return HarnessConnectionTestResult.ok("EVO-Code harness available at "
                         + endpoint());
             }
-            return HarnessConnectionTestResult.error("DCode at " + endpoint()
+            return HarnessConnectionTestResult.error("EVO-Code at " + endpoint()
                     + " returned HTTP " + response.statusCode());
         } catch (Exception e) {
-            return HarnessConnectionTestResult.error("DCode harness unreachable at "
+            return HarnessConnectionTestResult.error("EVO-Code harness unreachable at "
                     + endpoint() + ": " + e.getMessage());
         }
     }
@@ -151,7 +151,7 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
         if (request.workingDirectory() == null
                 || !java.nio.file.Files.isDirectory(request.workingDirectory())) {
             return HarnessExecutionResult.error(-1,
-                    "DCode working directory does not exist: "
+                    "EVO-Code working directory does not exist: "
                             + request.workingDirectory());
         }
         Duration effectiveTimeout = timeout();
@@ -160,7 +160,7 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
                     effectiveTimeout.toMillis()));
         }
         sink.emit(ExecutionEventType.EXECUTION_STARTED,
-                "DCode execution started in " + request.workingDirectory());
+                "EVO-Code execution started in " + request.workingDirectory());
         String sessionId = null;
         try {
             String workspaceId = createWorkspace(
@@ -170,13 +170,13 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
                     request.workingDirectory().toAbsolutePath().toString());
             String model = request.model() != null && !request.model().isBlank()
                     ? request.model() : config.getOrDefault(CONFIG_MODEL, "");
-            sessionId = createSession("DStudio execution " + sanitize(request.taskId()),
+            sessionId = createSession("EVO-Studio execution " + sanitize(request.taskId()),
                     workspaceId, config.getOrDefault(CONFIG_PROVIDER_ID, ""), model);
             String effectivePrompt = request.prompt() != null && !request.prompt().isBlank()
                     ? request.prompt() : request.instruction();
             startSession(sessionId, effectivePrompt);
             sink.emit(ExecutionEventType.EXECUTION_LOG,
-                    "DCode session " + sessionId + " submitted");
+                    "EVO-Code session " + sessionId + " submitted");
 
             long deadline = System.currentTimeMillis() + effectiveTimeout.toMillis();
             int loggedMessages = 0;
@@ -184,17 +184,17 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
                 if (request.cancellationSupplier().getAsBoolean()) {
                     cancelSession(sessionId);
                     sink.emit(ExecutionEventType.EXECUTION_CANCELLED,
-                            "DCode execution cancelled");
-                    return HarnessExecutionResult.cancelled("DCode execution cancelled");
+                            "EVO-Code execution cancelled");
+                    return HarnessExecutionResult.cancelled("EVO-Code execution cancelled");
                 }
                 if (System.currentTimeMillis() > deadline) {
                     cancelSession(sessionId);
-                    sink.emit(ExecutionEventType.EXECUTION_LOG, "DCode execution timed out");
-                    return HarnessExecutionResult.timedOut("DCode execution timed out");
+                    sink.emit(ExecutionEventType.EXECUTION_LOG, "EVO-Code execution timed out");
+                    return HarnessExecutionResult.timedOut("EVO-Code execution timed out");
                 }
                 List<String> messages = messages(sessionId);
                 for (int i = loggedMessages; i < messages.size(); i++) {
-                    sink.log("[DCode] " + messages.get(i));
+                    sink.log("[EVO-Code] " + messages.get(i));
                 }
                 loggedMessages = messages.size();
 
@@ -212,29 +212,29 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
                         sink.emit(ExecutionEventType.EXECUTION_COMPLETED, summary,
                                 Map.of("modifiedFiles", changes.files()));
                         return HarnessExecutionResult.ok(
-                                "DCode execution completed: " + summary, changes.files(),
+                                "EVO-Code execution completed: " + summary, changes.files(),
                                 changes.diff());
                     }
                     case "FAILED" -> {
                         sink.emit(ExecutionEventType.EXECUTION_FAILED,
-                                "DCode execution failed");
+                                "EVO-Code execution failed");
                         return HarnessExecutionResult.error(-1,
-                                "DCode execution failed: " + lastMessage(messages));
+                                "EVO-Code execution failed: " + lastMessage(messages));
                     }
                     case "CANCELLED" -> {
                         return HarnessExecutionResult.cancelled(
-                                "DCode execution was cancelled");
+                                "EVO-Code execution was cancelled");
                     }
                     default -> Thread.sleep(2000);
                 }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return HarnessExecutionResult.cancelled("DCode execution interrupted");
+            return HarnessExecutionResult.cancelled("EVO-Code execution interrupted");
         } catch (Exception e) {
-            sink.emit(ExecutionEventType.EXECUTION_FAILED, "DCode execution failed: "
+            sink.emit(ExecutionEventType.EXECUTION_FAILED, "EVO-Code execution failed: "
                     + e.getMessage());
-            return HarnessExecutionResult.error(-1, "DCode execution failed: "
+            return HarnessExecutionResult.error(-1, "EVO-Code execution failed: "
                     + e.getMessage());
         }
     }
@@ -332,7 +332,7 @@ public class DCodeHarnessAdapter implements HarnessAdapter {
     private JsonNode requireJson(HttpResponse<String> response, int expected,
             String operation) throws Exception {
         if (response.statusCode() != expected) {
-            throw new IllegalStateException("DCode " + operation + " failed: HTTP "
+            throw new IllegalStateException("EVO-Code " + operation + " failed: HTTP "
                     + response.statusCode() + " " + response.body());
         }
         return mapper.readTree(response.body());

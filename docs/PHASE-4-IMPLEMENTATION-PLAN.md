@@ -1,6 +1,6 @@
 # PHASE-4-IMPLEMENTATION-PLAN.md
 
-**DStudio Phase 4 — implementation plan (WP-4.01 deliverable)**
+**EVO-Studio Phase 4 — implementation plan (WP-4.01 deliverable)**
 **Date:** 2026-11-16
 **Status:** Approved-for-execution structure; each WP must be completed, built, tested and
 documented before the next major WP. Any deviation requires a recorded reason.
@@ -9,7 +9,7 @@ documented before the next major WP. Any deviation requires a recorded reason.
 
 ## 0. Ground Truth Summary
 
-DStudio is a **greenfield** product (skeleton repo). Phase 4 builds the complete product on the
+EVO-Studio is a **greenfield** product (skeleton repo). Phase 4 builds the complete product on the
 family conventions verified in the audit: Java 21, Eclipse RCP/OSGi, Tycho 4.0.8, Eclipse
 2025-12 target, SQLite persistence, JDK HttpServer, TEIP 1.1 canonical spec
 (`evolution-121126/docs/protocol/TEIP-1.1.md`). Environment verified: opencode 1.19.5,
@@ -87,21 +87,21 @@ Deliverables: `docs/PHASE-4-ARCHITECTURE-AUDIT.md`, `docs/PHASE-4-ARCHITECTURE.m
 ### WP-4.10 — Complete Family Connectors
 - EVO: `DStudioCodingHarnessAdapter` + `DStudioTeipClient` in `controller/harness`, registration
   in `ToolFactory`, config persistence in `connected-applications.json` model, tests. EVO
-  Developer Mode can select DStudio as provider (existing selection mechanism reused).
+  Developer Mode can select EVO-Studio as provider (existing selection mechanism reused).
 - TRYST: `DStudioCodingHarnessAdapter` in `evo.integration` reusing `TeipClient`, registration
-  in `ApplicationLifecycleCoordinator`, persisted config, tests. TRYST tasks delegate to DStudio
+  in `ApplicationLifecycleCoordinator`, persisted config, tests. TRYST tasks delegate to EVO-Studio
   through the existing `HarnessAiDelegator` seam.
-- DCode/DCoder: contract documentation + implementation plan (skeleton repo).
-- Acceptance: EVO harness suite passes with a live DStudio headless server (real HTTP); TRYST
-  harness suite passes against live DStudio; compatibility matrix. Deliverables:
+- EVO-Code/DCoder: contract documentation + implementation plan (skeleton repo).
+- Acceptance: EVO harness suite passes with a live EVO-Studio headless server (real HTTP); TRYST
+  harness suite passes against live EVO-Studio; compatibility matrix. Deliverables:
   `docs/PHASE-4-FAMILY-INTEGRATION-REPORT.md`,
   `docs/PHASE-4-FAMILY-COMPATIBILITY-MATRIX.md`.
 
 ### WP-4.11 — End-to-End Verification and Final Closure
-- Full reactor builds of DStudio + modified EVO + modified TRYST; all test suites re-run.
-- E2E scenarios: EVO Developer Mode → TEIP → DStudio → OpenCode → EVO; TRYST task → TEIP →
-  DStudio → OpenCode/Aider → TRYST; DStudio desktop harness execution (service-level, host
-  GUI-constrained); DStudio headless external client; harness switching; failures/cancellation
+- Full reactor builds of EVO-Studio + modified EVO + modified TRYST; all test suites re-run.
+- E2E scenarios: EVO Developer Mode → TEIP → EVO-Studio → OpenCode → EVO; TRYST task → TEIP →
+  EVO-Studio → OpenCode/Aider → TRYST; EVO-Studio desktop harness execution (service-level, host
+  GUI-constrained); EVO-Studio headless external client; harness switching; failures/cancellation
   across TEIP.
 - Deliverables: `docs/PHASE-4-END-TO-END-TEST-REPORT.md`, `docs/PHASE-4-FINAL-CLOSURE.md`
   (with the §13 closure structure, DoD checklist with evidence pointers, known limitations,
@@ -139,8 +139,8 @@ verified in WP-4.04/4.05 so no rework is expected.
 
 - No X server/xvfb on this host → desktop GUI runtime verification is service/plugin-level;
   workbench launch steps documented for a graphical host (same constraint TRYST Phase 3 faced).
-- Port 28080 occupied by a third-party app → all DStudio live TEIP tests use 48080 (or explicit
+- Port 28080 occupied by a third-party app → all EVO-Studio live TEIP tests use 48080 (or explicit
   override).
-- DCode/DCoder has no runtime → contract-only deliverable.
+- EVO-Code/DCoder has no runtime → contract-only deliverable.
 - Family repo AGENTS.md files prohibit git operations by agents — all evidence is filesystem/
   build/test based; no commits.

@@ -1,6 +1,6 @@
 # PHASE-7-UNIFIED-BACKEND-REPORT.md
 
-**DStudio Phase 7 — S4 Unified Backend deliverable**
+**EVO-Studio Phase 7 — S4 Unified Backend deliverable**
 **Date:** 2026-11-19
 **Status:** Implemented and verified. This report describes actual implemented behavior;
 all evidence below was produced by running the code (build, tests, live headless server).
@@ -33,7 +33,7 @@ before).
 - `SqliteHarnessStore` and `SqliteInferenceEngineStore` now require a `SecretCodec` and
   apply it to `saveConfiguration`/`findConfiguration`. Verified by test: raw
   `config_json` in SQLite never contains the plaintext secret.
-- Existing masking behavior preserved: DCode/ENR adapters still return `******` from
+- Existing masking behavior preserved: EVO-Code/ENR adapters still return `******` from
   `getConnectionConfiguration`; no API route returns credentials.
 
 ### 2.2 Global event stream (SSE)
@@ -125,20 +125,20 @@ before).
 
 ### 6.1 Ports
 
-Family convention (EVO 28xxx → TRYST 38xxx → DStudio 48xxx → DCode 58xxx; additional
+Family convention (EVO 28xxx → TRYST 38xxx → EVO-Studio 48xxx → EVO-Code 58xxx; additional
 services step by +100 inside each block):
 
 | Product | Primary port | Diagnostics / additional |
 |---|---|---|
 | EVO | 28080 | 28180, 28280 (MCP), 28380, 28480, 28580 |
 | TRYST | 38080 | 38280, 38480 |
-| DStudio | **48080** (TEIP/API/events) | **48180** (diagnostics, config-only) |
-| DCode/DCoder | 58080 | 58180+ |
+| EVO-Studio | **48080** (TEIP/API/events) | **48180** (diagnostics, config-only) |
+| EVO-Code/DCoder | 58080 | 58180+ |
 
 - `DStudioConfiguration.DEFAULT_TEIP_PORT` reverted to **48080** (a stray uncommitted
   48081 change had broken the convention); `DEFAULT_DIAGNOSTICS_PORT` = 48180.
 - `DCodeHarnessAdapter.DEFAULT_ENDPOINT` corrected to **http://localhost:58080** — it
-  previously pointed at DStudio's own TEIP port.
+  previously pointed at EVO-Studio's own TEIP port.
 
 ### 6.2 Port conflicts are interactive and actionable
 
@@ -175,7 +175,7 @@ services step by +100 inside each block):
   on a host with Claude Code to complete verification.**
 - **Harness/provider compatibility matrix foundation**: `HarnessCapabilityDescriptor`
   gained `supportedProviderTypes` — OpenCode: OLLAMA/OPENAI_COMPATIBLE; Aider:
-  OLLAMA/OPENAI_COMPATIBLE/ANTHROPIC; DCode: DCODE_NATIVE; Claude: ANTHROPIC. Exposed
+  OLLAMA/OPENAI_COMPATIBLE/ANTHROPIC; EVO-Code: DCODE_NATIVE; Claude: ANTHROPIC. Exposed
   per harness in `/api/diagnostics` so clients can hide incompatible combinations.
 - Explicit selection wins: OpenCode/Aider now honor the per-task `request.model()`
   (and `request.agent()` for OpenCode) instead of silently overriding with config
@@ -261,7 +261,7 @@ services step by +100 inside each block):
   (`TeipApiEndpointTest` 14, live `TeipOpenCodeEndToEndTest`) — EVO/TRYST wire
   contracts unchanged.
 - Family note: EVO/TRYST live family tests (`DStudioLiveE2eTest`) run in their own
-  repositories against a running DStudio at 48080; the DStudio side they exercise is
+  repositories against a running EVO-Studio at 48080; the EVO-Studio side they exercise is
   covered here by the same TEIP surface tests.
 
 ## 13. Final verification totals (this report)
@@ -298,13 +298,13 @@ services step by +100 inside each block):
   (`evo_model:latest` → `latest`); it now removes only the `ollama:` engine
   prefix. Live-verified with real streamed inference via the web API.
 - **Port family test**: `DCodeFamilyIntegrationTest` default endpoint corrected
-  to DCode's 58xxx convention (58080); DCode itself was migrated off 48080 so
-  DStudio and DCode no longer collide (simultaneous operation verified live).
+  to EVO-Code's 58xxx convention (58080); EVO-Code itself was migrated off 48080 so
+  EVO-Studio and EVO-Code no longer collide (simultaneous operation verified live).
 
 ## 15. Addendum 2026-11-22 (b) — Harness defaults, web tasks and CLI inference
 
 - **Default harness on fresh install**: `DStudioLifecycleCoordinator` registers
-  DCode last and selects it as the default only when no persisted selection
+  EVO-Code last and selects it as the default only when no persisted selection
   exists; `/api/diagnostics` now exposes `defaultHarness` plus a per-harness
   `default` flag so every client (web/RCP) can show the selection honestly.
   Unavailable/disabled harnesses fail the execution with an explicit diagnostic —
@@ -319,10 +319,10 @@ services step by +100 inside each block):
   the sessions of every client). Live-verified: a CLI-created session is visible
   through the web API after restart (same SQLite store) — cross-mode state
   consistency.
-- **DCode port lifecycle**: DCode now persists allocated/fallback ports in
+- **EVO-Code port lifecycle**: EVO-Code now persists allocated/fallback ports in
   `dcode-config.json` and reuses them on restart; a configured-but-occupied port
   falls back deterministically inside the 58xxx block (warning logged, new port
-  persisted). DCode's CLI resolves the authoritative port (bound property →
+  persisted). EVO-Code's CLI resolves the authoritative port (bound property →
   `-Ddcode.port` override → persisted config → family default) instead of
   hardcoding 58080. Live-verified: conflict → 58081, restart → 58081 reused.
 
@@ -360,12 +360,12 @@ services step by +100 inside each block):
   contain no m2e bundles; the cycle comes from the m2e bundles of the host Eclipse
   IDE used for PDE launches. No product change required.
 - Workspace recovery message — benign Eclipse workbench-state refresh after
-  non-clean exits; DStudio itself shuts down cleanly (verified: server stop, ports
+  non-clean exits; EVO-Studio itself shuts down cleanly (verified: server stop, ports
   released, 0 exceptions).
 
 ## 17. Addendum 2026-11-22 (d) — Unified frontend delivery architecture
 
-**Root cause of the "UI unchanged" report**: the developer launches DStudio/DCode as
+**Root cause of the "UI unchanged" report**: the developer launches EVO-Studio/EVO-Code as
 **PDE product launches** from the Eclipse IDE. In that mode the runtime classpath of
 each workspace bundle is its output folder (`dev.properties` → `target/classes`),
 and the `web/` resources were only packaged by Tycho into the product jars — they
@@ -387,7 +387,7 @@ edited frontend (and `mvn clean` had removed the IDE's old copies).
   bundle content differs from the source tree (staleness) or when the frontend
   build constant drifts from the backend version field.
 - Frontend build identifier `web-20261122-r4`: visible badge in the UI, logged at
-  boot, and exposed via `/api/status` (`frontendVersion`) and DCode
+  boot, and exposed via `/api/status` (`frontendVersion`) and EVO-Code
   `/api/v1/health` (`frontendVersion`).
 
 **Developer workflow**: one edit in `web/` → IDE auto-build copies it to the
@@ -398,7 +398,7 @@ the new source-folder declaration automatically.
 ## 18. Addendum 2026-11-22 (e) — Eclipse Run/Debug finalization
 
 - **Serving mechanism unified on the OSGi bundle API**: `WebAssetsHandler` now
-  resolves `web/…` through `Bundle.getEntry` (the same mechanism DCode's
+  resolves `web/…` through `Bundle.getEntry` (the same mechanism EVO-Code's
   `StaticContent.BundleEntry` already used). Packaged products read the jar
   entries; PDE workspace launches read the same logical paths from the
   directory-installed bundle — one source, one mechanism, zero dependency on
@@ -407,7 +407,7 @@ the new source-folder declaration automatically.
   output folder — the exact hazard to avoid).
 - **Diagnostics**: `/api/status` now reports `frontendVersion`,
   `resourceSource: "osgi-bundle"` and `executionMode: "pde"|"product"`
-  (diagnostic only; never selects a serving path). DCode mirrors this in
+  (diagnostic only; never selects a serving path). EVO-Code mirrors this in
   `/api/v1/health`.
 - **Shared launch configuration** committed at
   `features/eu.kalafatic.dstudio.feature/DStudio_RCP_Application.launch`
@@ -442,7 +442,7 @@ Browser's API calls received 401 and the UI showed "offline".
 - Non-loopback clients keep the pre-existing optional bearer-token gate
   (`dstudio.teip.auth.token` / `DSTUDIO_TEIP_AUTH_TOKEN`); without a token remote
   access is rejected as before. No new security mechanism was introduced.
-- DCode already behaved this way (`DCodeApi.isAuthorized` is open when no token
+- EVO-Code already behaved this way (`DCodeApi.isAuthorized` is open when no token
   is configured) — verified, unchanged.
 - Tests updated to the new contract: `LocalLoopbackAuthTest` (loopback API/SSE/
   workspace/TEIP reachable without token and regardless of a configured token);
@@ -455,13 +455,13 @@ Browser's API calls received 401 and the UI showed "offline".
 group labels no longer clip at 280 px panel width (both products).
 
 **Runtime verification (real RCP product, no token, no devMode)**:
-- DStudio RCP: `[DStudio] Server listening on 127.0.0.1:48086`; log
-  "web IDE title: DStudio — Inference" + "web IDE page loaded"; loopback
+- EVO-Studio RCP: `[EVO-Studio] Server listening on 127.0.0.1:48086`; log
+  "web IDE title: EVO-Studio — Inference" + "web IDE page loaded"; loopback
   `/api/status` 200 (`executionMode:"product"`, `frontendVersion`),
   `/api/inference/engines` 200, `/teip/v1/health` 200 **without any credential**;
   four live TCP connections from the RCP's WebKit network process (SPA API calls
   + the `/api/events` SSE stream) prove the embedded browser is connected.
-- DCode RCP: embedded server RUNNING on 58080, "Web Browser created (WebKit)",
+- EVO-Code RCP: embedded server RUNNING on 58080, "Web Browser created (WebKit)",
   `/api/v1/health` 200 without credentials; the served `css/app.css` contains the
   grid nav fix.
 - Screenshots captured: `/tmp/opencode/ui/dstudio-noauth.png`,

@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.util.Optional;
 
 /**
- * Authentication for the DStudio management API surface ({@code /api/*}).
+ * Authentication for the EVO-Studio management API surface ({@code /api/*}).
  *
  * <p>Current phase policy: <b>loopback clients are always local-trusted</b> — the
  * embedded SWT Browser, the desktop application, CLI tools and local integrations

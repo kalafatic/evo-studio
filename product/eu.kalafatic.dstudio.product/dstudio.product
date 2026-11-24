@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<product name="DStudio - Darwin Studio" uid="eu.kalafatic.dstudio.product.id"
+<product name="EVO-Studio" uid="eu.kalafatic.dstudio.product.id"
          id="eu.kalafatic.dstudio.application.product"
          application="eu.kalafatic.dstudio.application.application"
          version="2.6.11.qualifier" type="features" includeLaunchers="true" autoMountHierarchy="true">
@@ -9,7 +9,7 @@
       <vmArgs>-Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=true</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
-   <launcher name="dstudio"><win useIco="false"><bmp/></win></launcher>
+   <launcher name="evostudio"><win useIco="false"><bmp/></win></launcher>
    <vm/>
    <splash
       location="eu.kalafatic.dstudio.application"

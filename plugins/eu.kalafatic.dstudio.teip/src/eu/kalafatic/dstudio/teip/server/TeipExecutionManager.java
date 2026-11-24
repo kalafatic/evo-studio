@@ -264,7 +264,7 @@ public class TeipExecutionManager {
 
     /**
      * Optional platform-context pre-step: when EVO Cognitive Services are
-     * configured, DStudio retrieves a bounded context package from EVO and
+     * configured, EVO-Studio retrieves a bounded context package from EVO and
      * prepends it to the harness instruction, then correlates a cognitive
      * session with this execution. When EVO is unavailable or unconfigured
      * the instruction is passed through unchanged (graceful degradation).

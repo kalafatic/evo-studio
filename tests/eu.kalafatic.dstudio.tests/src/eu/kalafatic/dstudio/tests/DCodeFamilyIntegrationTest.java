@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Family integration (Phase 8, §10): DStudio orchestrates DCode as its native EVO
- * Family coding harness through the FHC 1.0 contract. Requires a running DCode
- * headless server (default http://localhost:58080 — DCode owns the 58xxx block, override with
- * -Ddcode.live.endpoint=...). Skips silently when DCode is absent.
+ * Family integration (Phase 8, §10): EVO-Studio orchestrates EVO-Code as its native EVO
+ * Family coding harness through the FHC 1.0 contract. Requires a running EVO-Code
+ * headless server (default http://localhost:58080 — EVO-Code owns the 58xxx block, override with
+ * -Ddcode.live.endpoint=...). Skips silently when EVO-Code is absent.
  *
- * <p>Verified live: DStudio creates a workspace/repository/session in DCode, DCode's
- * native engine produces REAL file changes, and DStudio collects the changed files and
+ * <p>Verified live: EVO-Studio creates a workspace/repository/session in EVO-Code, EVO-Code's
+ * native engine produces REAL file changes, and EVO-Studio collects the changed files and
  * diff for review.</p>
  */
 class DCodeFamilyIntegrationTest {
@@ -44,7 +44,7 @@ class DCodeFamilyIntegrationTest {
         DCodeHarnessAdapter adapter = new DCodeHarnessAdapter();
         adapter.updateConfiguration(Map.of("endpoint", endpoint()));
         if (!adapter.testConnection().success()) {
-            return; // DCode server not running: silent skip per family convention
+            return; // EVO-Code server not running: silent skip per family convention
         }
         Path workspace = tempDir.resolve("family-ws");
         Files.createDirectories(workspace);
@@ -75,17 +75,17 @@ class DCodeFamilyIntegrationTest {
                         logLines.add(line);
                     }
                 });
-        assertTrue(result.success(), "DCode execution must succeed: "
+        assertTrue(result.success(), "EVO-Code execution must succeed: "
                 + result.errorMessage());
         assertTrue(Files.isRegularFile(workspace.resolve("family-marker.txt")),
-                "DCode must create the requested file on disk");
+                "EVO-Code must create the requested file on disk");
         assertEquals("FAMILY_OK",
                 Files.readString(workspace.resolve("family-marker.txt")).trim());
         assertFalse(result.modifiedFiles().isEmpty(),
-                "DStudio must collect the changed files from DCode");
+                "EVO-Studio must collect the changed files from EVO-Code");
         assertTrue(result.modifiedFiles().contains("family-marker.txt"));
         assertTrue(result.diffText().contains("family-marker.txt"),
-                "DStudio must collect the diff from DCode");
+                "EVO-Studio must collect the diff from EVO-Code");
         System.out.println("[DCodeFamilyIntegrationTest] live family execution: files="
                 + result.modifiedFiles() + " logLines=" + logLines.size());
     }
@@ -99,8 +99,8 @@ class DCodeFamilyIntegrationTest {
         if (result.success()) {
             assertTrue(result.message().contains("available"), result.message());
         } else {
-            // absent DCode must produce a clear, honest diagnostic
-            assertTrue(result.message().contains("DCode"), result.message());
+            // absent EVO-Code must produce a clear, honest diagnostic
+            assertTrue(result.message().contains("EVO-Code"), result.message());
         }
     }
 }

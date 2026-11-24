@@ -46,12 +46,12 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
 
 /**
- * The DStudio inference workspace: the same OpenCode-like chat presentation as DCode,
- * over DStudio's own backends.
+ * The EVO-Studio inference workspace: the same OpenCode-like chat presentation as EVO-Code,
+ * over EVO-Studio's own backends.
  *
  * <p>The conversation runs on the inference-engine service (streaming chunks,
  * persisted multi-turn sessions). Coding tasks run through the selected
- * <b>harness</b> (DCode / OpenCode / Claude Code / Aider) via the execution service;
+ * <b>harness</b> (EVO-Code / OpenCode / Claude Code / Aider) via the execution service;
  * live execution events stream into the conversation. The Harness selector drives the
  * execution backend and capability-aware configuration: harness agents, connection
  * state and compatible providers.</p>
@@ -150,7 +150,7 @@ public final class InferenceWorkspaceView extends ViewPart implements ChatWorksp
     private void loadProjects() {
         var service = DStudioUiPlugin.getInstance().projectService();
         if (service == null) {
-            ui.setStatus("DStudio services not ready", StatusKind.ERROR);
+            ui.setStatus("EVO-Studio services not ready", StatusKind.ERROR);
             return;
         }
         List<SelectOption> options = new ArrayList<>();

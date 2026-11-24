@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Headless CLI of the DStudio server runtime. Reads single lines, dispatches them
+ * Headless CLI of the EVO-Studio server runtime. Reads single lines, dispatches them
  * against {@link DStudioCliCommandTable} (a leading '/' is optional) and prints the
  * results. Every command only reads capabilities that actually exist on the shared
  * core services exposed by the lifecycle coordinator; nothing is invented and no
@@ -39,9 +39,9 @@ import java.util.Optional;
  */
 public final class DStudioCli {
 
-    public static final String PROMPT = "dstudio> ";
+    public static final String PROMPT = "evostudio> ";
     public static final String BANNER =
-            "DStudio headless CLI — type 'help' for commands, 'exit' to stop.";
+            "EVO-Studio headless CLI — type 'help' for commands, 'exit' to stop.";
 
     private static final int MAX_SUGGESTIONS = 3;
     private static final int MAX_EDIT_DISTANCE = 2;
@@ -104,8 +104,8 @@ public final class DStudioCli {
             case "logs" -> logs(args);
             case "start" -> start();
             case "restart" -> restart();
-            case "stop" -> out.println("Stopping DStudio…");
-            case "exit" -> out.println("Exiting the DStudio CLI.");
+            case "stop" -> out.println("Stopping EVO-Studio…");
+            case "exit" -> out.println("Exiting the EVO-Studio CLI.");
             default -> {
                 // table lookup guarantees a known name
             }
@@ -114,7 +114,7 @@ public final class DStudioCli {
 
     private void help(String[] args) {
         if (args.length == 0) {
-            out.println("DStudio headless CLI commands (a leading '/' is optional):");
+            out.println("EVO-Studio headless CLI commands (a leading '/' is optional):");
             for (DStudioCliCommandTable.Command command : DStudioCliCommandTable.COMMANDS) {
                 out.println("  " + command.syntax() + " — " + command.shortHelp());
             }
@@ -585,16 +585,16 @@ public final class DStudioCli {
         }
         DStudioServer server = coordinator.getServer();
         if (server != null && server.isRunning()) {
-            out.println("DStudio server already running on " + bindAddress() + ":"
+            out.println("EVO-Studio server already running on " + bindAddress() + ":"
                     + boundPort() + ".");
             return;
         }
         try {
             coordinator.restartServerOnPort(boundPort());
-            out.println("DStudio server started on " + bindAddress() + ":"
+            out.println("EVO-Studio server started on " + bindAddress() + ":"
                     + boundPort() + ".");
         } catch (RuntimeException e) {
-            out.println("Failed to start DStudio server: " + e.getMessage());
+            out.println("Failed to start EVO-Studio server: " + e.getMessage());
         }
     }
 
@@ -605,10 +605,10 @@ public final class DStudioCli {
         }
         try {
             coordinator.restartServerOnPort(boundPort());
-            out.println("DStudio server restarted on " + bindAddress() + ":"
+            out.println("EVO-Studio server restarted on " + bindAddress() + ":"
                     + boundPort() + ".");
         } catch (RuntimeException e) {
-            out.println("Failed to restart DStudio server: " + e.getMessage());
+            out.println("Failed to restart EVO-Studio server: " + e.getMessage());
         }
     }
 

@@ -407,7 +407,7 @@ window.Inference = (function () {
     return "dstudio";
   }
 
-  function productName() { return "DStudio"; }
+  function productName() { return "EVO-Studio"; }
 
   async function providers() {
     await detect();
@@ -484,14 +484,14 @@ window.Inference = (function () {
 
   async function testProvider(providerId) {
     if (!bridgeAvailable()) {
-      throw new Error("Provider tests require the DStudio desktop bridge.");
+      throw new Error("Provider tests require the EVO-Studio desktop bridge.");
     }
     return bridgeCall("testEngine", { engineId: providerId });
   }
 
   async function applyDefaults(selection) {
     if (!bridgeAvailable()) {
-      throw new Error("Applying defaults for DStudio requires the desktop bridge.");
+      throw new Error("Applying defaults for EVO-Studio requires the desktop bridge.");
     }
     if (selection.harnessId) {
       await bridgeCall("setDefaultHarness", { harnessId: selection.harnessId });

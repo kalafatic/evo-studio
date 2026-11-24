@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.infrastructure</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>DStudio - Infrastructure</name>
+    <name>EVO-Studio - Infrastructure</name>
 </project>

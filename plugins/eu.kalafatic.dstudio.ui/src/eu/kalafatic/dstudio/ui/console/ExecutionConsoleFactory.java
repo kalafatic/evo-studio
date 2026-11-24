@@ -8,7 +8,7 @@ import org.eclipse.ui.console.MessageConsole;
 
 public class ExecutionConsoleFactory implements IConsoleFactory {
 
-    public static final String CONSOLE_NAME = "DStudio Execution Console";
+    public static final String CONSOLE_NAME = "EVO-Studio Execution Console";
 
     @Override
     public void openConsole() {

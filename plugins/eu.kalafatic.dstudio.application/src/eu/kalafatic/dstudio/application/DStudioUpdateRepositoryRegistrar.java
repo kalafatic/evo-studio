@@ -20,7 +20,7 @@ import org.osgi.framework.ServiceReference;
  */
 public final class DStudioUpdateRepositoryRegistrar {
 
-    private static final String REPOSITORY_NAME = "DStudio Local Updates";
+    private static final String REPOSITORY_NAME = "EVO-Studio Local Updates";
 
     private DStudioUpdateRepositoryRegistrar() {
     }

@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.core</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>DStudio - Core</name>
+    <name>EVO-Studio - Core</name>
 </project>

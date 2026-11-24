@@ -29,7 +29,7 @@ public class DefaultEventBus implements EventBus {
         try {
             ((Subscriber<T>) subscriber).listener().accept(event);
         } catch (RuntimeException e) {
-            System.err.println("DStudio event listener failed: " + e.getMessage());
+            System.err.println("EVO-Studio event listener failed: " + e.getMessage());
         }
     }
 

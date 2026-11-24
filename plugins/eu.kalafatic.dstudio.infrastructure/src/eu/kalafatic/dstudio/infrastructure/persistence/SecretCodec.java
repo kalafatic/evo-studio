@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * maps are persisted through this codec, which transparently encrypts values whose keys
  * look sensitive ({@code token}, {@code apiKey}, {@code secret}, {@code password},
  * {@code credential}). The 256-bit master key lives in {@code secrets.key} inside the
- * DStudio configuration directory with owner-only permissions; if the file is missing
+ * EVO-Studio configuration directory with owner-only permissions; if the file is missing
  * a fresh random key is generated on first use.</p>
  *
  * <p>Wire format: {@code enc:<base64 IV>:<base64 ciphertext>} (AES/GCM/NoPadding,
@@ -162,7 +162,7 @@ public class SecretCodec {
         } catch (UnsupportedOperationException e) {
             // non-POSIX filesystem: permissions are managed by the platform
         } catch (Exception e) {
-            System.err.println("DStudio: could not restrict " + keyFile + " permissions: "
+            System.err.println("EVO-Studio: could not restrict " + keyFile + " permissions: "
                     + e.getMessage());
         }
     }

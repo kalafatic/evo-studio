@@ -1,11 +1,11 @@
 # PHASE-4-DESKTOP-IDE-REPORT.md
 
-**DStudio Phase 4 — WP-4.07 deliverable**
+**EVO-Studio Phase 4 — WP-4.07 deliverable**
 **Date:** 2026-11-16
 
 ## 1. Scope
 
-The DStudio desktop mode is a professional Eclipse RCP WYSIWYG IDE built on the Eclipse
+The EVO-Studio desktop mode is a professional Eclipse RCP WYSIWYG IDE built on the Eclipse
 2025-12 platform (classic 3.x workbench), with JDT (Java editing), EGit (repository views),
 Eclipse Search, Compare, Console and the Common Navigator primitives available.
 
@@ -25,7 +25,7 @@ Eclipse Search, Compare, Console and the Common Navigator primitives available.
   hidden-file filtering, folder-first sorting, project + folder + file icons, multi-select).
 - Commands/handlers: Open Project (`DirectoryDialog`), Refresh (F5), Close Project
   (context menu), Run Harness Here (context menu).
-- `EclipseWorkspaceBridge` links every DStudio project into the Eclipse workspace
+- `EclipseWorkspaceBridge` links every EVO-Studio project into the Eclipse workspace
   (linked project for external roots), enabling IFile-based editing, markers and JDT.
 
 ### Source editing (WYSIWYG)
@@ -35,7 +35,7 @@ Eclipse Search, Compare, Console and the Common Navigator primitives available.
   diagnostics markers (Problems view) and Eclipse Search for workspace projects.
 
 ### Development environment
-- Execution console: `org.eclipse.ui.console` MessageConsole factory ("DStudio Execution
+- Execution console: `org.eclipse.ui.console` MessageConsole factory ("EVO-Studio Execution
   Console"); `DStudioUiStartup` subscribes to the core EventBus and streams execution
   events into the console (EXECUTION_LOG, TOOL_INVOKED, lifecycle events).
 - Problems view (`org.eclipse.ui.views.ProblemView`), EGit views in the Repository
@@ -94,4 +94,4 @@ export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 - No custom language servers; JDT covers Java, other languages use the standard text
   editor (per constraints, no invented tooling).
 - EGit views require repositories to be opened through EGit's own import flow
-  (DStudio's Project Explorer + JGit diff collection are independent of that).
+  (EVO-Studio's Project Explorer + JGit diff collection are independent of that).

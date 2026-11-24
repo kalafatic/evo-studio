@@ -19,14 +19,14 @@ import java.util.logging.Logger;
  * MCP client for EVO Cognitive Services (port 28280, JSON-RPC 2.0 over
  * HTTP POST /mcp, protocol 2024-11-05).
  *
- * <p>Wire-only integration: DStudio never imports EVO classes. Every call
+ * <p>Wire-only integration: EVO-Studio never imports EVO classes. Every call
  * carries the EVO-issued application token; identity parameters are hints
  * validated by EVO against the token. When EVO is unavailable every method
- * degrades gracefully (null/false); DStudio's local execution remains
+ * degrades gracefully (null/false); EVO-Studio's local execution remains
  * unchanged.</p>
  *
  * <p>Phase 1 identity: application token. The operator name can be sent as
- * a metadata hint via {@link #contextGet} when DStudio is configured with
+ * a metadata hint via {@link #contextGet} when EVO-Studio is configured with
  * a per-user mapping.</p>
  */
 public class EvoMcpClient {

@@ -18,7 +18,7 @@ import eu.kalafatic.dstudio.core.service.ExecutionService;
 /**
  * Contextual actions for executions (coding tasks) and direct-inference sessions.
  * Only state-permitted operations are contributed: cancel for active work, details and
- * history for everything. Pause/resume/archive/delete are not supported by the DStudio
+ * history for everything. Pause/resume/archive/delete are not supported by the EVO-Studio
  * execution service and are shown disabled with an explanation (TRYST implements them
  * on its own lifecycle).
  */
@@ -102,7 +102,7 @@ public class ExecutionContextActionProvider implements ContextualActionProvider 
                         ContextualActionDescriptor.Confirmation.DANGEROUS);
             }
             actions.add(ProviderSupport.disabled(descriptor,
-                    "Not supported by the DStudio execution service"));
+                    "Not supported by the EVO-Studio execution service"));
         }
         return actions;
     }

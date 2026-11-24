@@ -1,10 +1,10 @@
-# DStudio — Unified RCP / Web UX Standard — Delivery Report
+# EVO-Studio — Unified RCP / Web UX Standard — Delivery Report
 
 Date: 2026-11-21
 
 ## 1. Executive summary
 
-DStudio already implements the standard: Tools → Open Terminal / Open Web
+EVO-Studio already implements the standard: Tools → Open Terminal / Open Web
 Interface with live port resolution, a full Help menu (Contents/Getting
 Started/Context Help/Keyboard Shortcuts/CLI Commands/Diagnostics/About), F1
 context help via the served `help.html`, the Darwin Family Contextual Action
@@ -55,7 +55,7 @@ default/Edit/Clone/Configure/Export/Inspect/Delete), Execution (Cancel/Details/
 History), plus Project Explorer file entries (Open/Copy Path/Open Terminal/Refresh).
 
 Not exposed (no backend operation owns them): Folder Create/Rename/Delete, File
-Rename/Delete, Session Rename/Duplicate/Delete (contributed disabled — DStudio
+Rename/Delete, Session Rename/Duplicate/Delete (contributed disabled — EVO-Studio
 does not own session duplication), Console Clear/Copy/Save-Output (standard
 Eclipse `MessageConsole` toolbar only).
 
@@ -94,8 +94,8 @@ Eclipse `MessageConsole` toolbar only).
   - `help` → full command list including `start` and `restart`.
   - `status` → `APPLICATION_READY`, TEIP server running on 127.0.0.1:48242.
   - `restart` → real restart: a new server instance bound to the same port
-    ("[DStudio] Server listening on 127.0.0.1:48242" +
-    "DStudio server restarted on 127.0.0.1:48242."), then `status` confirmed the
+    ("[EVO-Studio] Server listening on 127.0.0.1:48242" +
+    "EVO-Studio server restarted on 127.0.0.1:48242."), then `status` confirmed the
     restarted server.
   - `exit` → clean shutdown.
 
@@ -114,5 +114,5 @@ Eclipse `MessageConsole` toolbar only).
   and `DStudioCli` (application bundle) — headless safety keeps them separate.
 - The stale `ApplicationActionBarAdvisor` comment mentions a non-existent "AI"
   menu (cosmetic, left untouched).
-- Session rename/duplicate/delete are not owned by DStudio (family contract:
+- Session rename/duplicate/delete are not owned by EVO-Studio (family contract:
   contributed disabled).

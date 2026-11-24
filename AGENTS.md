@@ -1,10 +1,10 @@
-# DStudio – Agent Instructions
+# EVO-Studio – Agent Instructions
 
 ## 1. Project Identity
 
-DStudio is an independent Java 21 Eclipse RCP / Equinox / OSGi application and server platform.
+EVO-Studio is an independent Java 21 Eclipse RCP / Equinox / OSGi application and server platform.
 
-DStudio is **one product with two runtime faces sharing one authoritative domain/application
+EVO-Studio is **one product with two runtime faces sharing one authoritative domain/application
 core**:
 
 1. **Desktop mode** — professional Eclipse RCP WYSIWYG IDE (projects, source editing,
@@ -12,9 +12,9 @@ core**:
 2. **Headless mode** — server-side Harness Platform exposing the same core through the
    canonical TEIP 1.1 provider endpoint set (`/teip/v1/*`), without SWT, workbench or X.
 
-DStudio owns the coding-harness infrastructure for the product family (OpenCode, Aider,
-future adapters). EVO, TRYST and other family products connect to DStudio through TEIP;
-they keep their own domains, workflows and persistence.
+EVO-Studio owns the coding-harness infrastructure for the product family (EVO-Code,
+OpenCode, Aider, future adapters). EVO, TRYST and other family products connect to
+EVO-Studio through TEIP; they keep their own domains, workflows and persistence.
 
 ## 2. Fundamental Development Principles
 
@@ -75,8 +75,8 @@ eu.kalafatic.dstudio.core          → domain, SPI, application services, event 
 ## 6. TEIP Provider
 
 - The canonical specification is `evolution-121126/docs/protocol/TEIP-1.1.md` (NORMATIVE).
-  DStudio implements it as a provider; no private wire variants. DStudio-specific fields
-  go under `parameters.*` only (open-world rule).
+  EVO-Studio implements it as a provider; no private wire variants. EVO-Studio-specific
+  fields go under `parameters.*` only (open-world rule).
 - Preserve: 202/200 idempotent create, persisted idempotency, event cursor `nextSequence`,
   409 non-terminal result, idempotent cancel, canonical error envelope/codes, mandatory
   auth with explicit dev-mode opt-out (`dstudio.teip.auth.token` /
@@ -105,7 +105,7 @@ eu.kalafatic.dstudio.core          → domain, SPI, application services, event 
 5. Run relevant tests; real-execution evidence over mocks at every external seam
    (harness CLIs, TEIP wire).
 6. Verify headless behavior with the materialized product
-   (`./dstudio -headless -vmargs -Ddstudio.config.dir=<dir>`); verify clean shutdown.
+   (`./evostudio -headless -vmargs -Ddstudio.config.dir=<dir>`); verify clean shutdown.
 7. Update the relevant PHASE-4 report if architectural relationships change.
 8. Report only work and verification that actually occurred.
 
@@ -115,7 +115,7 @@ eu.kalafatic.dstudio.core          → domain, SPI, application services, event 
   happens on graphical hosts).
 - Live harness tests skip silently when the CLI is absent; they must assert real file
   effects, not mocked adapters.
-- Family live tests (`DStudioLiveE2eTest` in EVO/TRYST) require a running DStudio at
+- Family live tests (`DStudioLiveE2eTest` in EVO/TRYST) require a running EVO-Studio at
   `http://localhost:48080` (override: `-Ddstudio.live.endpoint=...`).
 - JUnit pinned to 5.10.2 (2024-03 location in the .target); do not raise to 5.14/6.0
   without re-verifying Tycho compatibility.
@@ -135,6 +135,6 @@ and anything not verified. Never present a proposal as completed work.
 
 ## 12. Governing Principle
 
-DStudio is one coherent product: a professional IDE and a headless Harness Platform on one
-core, serving the whole product family through TEIP. Preserve the shared core, the SPI
+EVO-Studio is one coherent product: a professional IDE and a headless Harness Platform on
+one core, serving the whole product family through TEIP. Preserve the shared core, the SPI
 authority and the TEIP contract above convenience.

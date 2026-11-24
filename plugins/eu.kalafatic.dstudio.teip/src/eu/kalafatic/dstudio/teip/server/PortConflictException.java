@@ -14,7 +14,7 @@ public class PortConflictException extends IllegalStateException {
 
     public PortConflictException(String bindAddress, int port, Throwable cause) {
         super("Port " + port + " on " + bindAddress + " is already in use by another "
-                + "process (another DStudio instance, a family product such as DCoder, "
+                + "process (another EVO-Studio instance, a family product such as EVO-Code, "
                 + "or an unrelated application)", cause);
         this.bindAddress = bindAddress;
         this.port = port;

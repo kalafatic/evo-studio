@@ -20,12 +20,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Claude Code coding-harness adapter for DStudio (Phase 7, S2). Delegates executions to
+ * Claude Code coding-harness adapter for EVO-Studio (Phase 7, S2). Delegates executions to
  * the Anthropic Claude Code CLI through its documented headless interface:
  * {@code claude --print --output-format stream-json --verbose [--model X] -p "<prompt>"}.
  *
  * <p>Claude Code is Anthropic-native: its supported provider type is {@code ANTHROPIC}
- * (authentication via the standard {@code ANTHROPIC_API_KEY} environment). DStudio owns
+ * (authentication via the standard {@code ANTHROPIC_API_KEY} environment). EVO-Studio owns
  * lifecycle, configuration, streaming, cancellation and changed-file collection; the CLI
  * owns the agent loop.</p>
  *

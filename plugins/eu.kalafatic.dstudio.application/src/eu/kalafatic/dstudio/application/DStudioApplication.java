@@ -45,7 +45,7 @@ public class DStudioApplication implements IApplication {
             coordinator.advance(DStudioLifecycleStage.CORE_SERVICE_INITIALIZATION);
         } catch (RuntimeException e) {
             return reportStartupFailure(coordinator,
-                    "DStudio core services failed to initialize", e);
+                    "EVO-Studio core services failed to initialize", e);
         }
         if (isHeadlessRequested(context)) {
             headlessRunner = new DStudioHeadlessRunner(coordinator);
@@ -74,7 +74,7 @@ public class DStudioApplication implements IApplication {
                 display.dispose();
             }
         } catch (RuntimeException e) {
-            return reportStartupFailure(coordinator, "DStudio failed to start", e);
+            return reportStartupFailure(coordinator, "EVO-Studio failed to start", e);
         } finally {
             coordinator.advance(DStudioLifecycleStage.APPLICATION_TERMINATED);
         }
@@ -98,14 +98,14 @@ public class DStudioApplication implements IApplication {
                 PortConflictDialog dialog = new PortConflictDialog(null,
                         current.bindAddress(), current.port(), suggested, extra);
                 if (dialog.open() != Window.OK) {
-                    System.out.println("[DStudio] User chose to exit after port conflict on "
+                    System.out.println("[EVO-Studio] User chose to exit after port conflict on "
                             + current.port() + ".");
                     return false;
                 }
                 int chosen = dialog.getSelectedPort();
                 try {
                     coordinator.restartServerOnPort(chosen);
-                    System.out.println("[DStudio] Server restarted on port " + chosen
+                    System.out.println("[EVO-Studio] Server restarted on port " + chosen
                             + " (persisted in dstudio.properties).");
                     return true;
                 } catch (PortConflictException retried) {
@@ -124,7 +124,7 @@ public class DStudioApplication implements IApplication {
      */
     private Object reportStartupFailure(DStudioLifecycleCoordinator coordinator,
             String title, RuntimeException failure) {
-        System.err.println("[DStudio] " + title + ": " + failure.getMessage());
+        System.err.println("[EVO-Studio] " + title + ": " + failure.getMessage());
         failure.printStackTrace(System.err);
         try {
             org.eclipse.swt.widgets.Display display =
@@ -132,7 +132,7 @@ public class DStudioApplication implements IApplication {
             try {
                 IStatus status = new Status(IStatus.ERROR, PLUGIN_ID,
                         title + ": " + failure.getMessage(), failure);
-                ErrorDialog.openError(null, "DStudio \u2014 Startup Failure",
+                ErrorDialog.openError(null, "EVO-Studio \u2014 Startup Failure",
                         title + ".\n\nWhat to do: " + remediation(failure)
                                 + "\n\nDetails are available below.", status);
             } finally {
@@ -151,10 +151,10 @@ public class DStudioApplication implements IApplication {
             return "another process occupies port " + conflict.port() + " on "
                     + conflict.bindAddress() + ". Stop the conflicting process, or set "
                     + "teip.port=NNNN in ~/.dstudio/dstudio.properties, then restart "
-                    + "DStudio.";
+                    + "EVO-Studio.";
         }
         return "review the error details, fix the underlying cause (or adjust "
-                + "~/.dstudio/dstudio.properties) and restart DStudio.";
+                + "~/.dstudio/dstudio.properties) and restart EVO-Studio.";
     }
 
     @Override

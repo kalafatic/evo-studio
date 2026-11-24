@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.harness</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>DStudio - Harness Adapters</name>
+    <name>EVO-Studio - Harness Adapters</name>
 </project>

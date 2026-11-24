@@ -45,7 +45,7 @@ public class PortConflictDialog extends Dialog {
     @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
-        shell.setText("Port conflict \u2014 DStudio");
+        shell.setText("Port conflict \u2014 EVO-Studio");
     }
 
     @Override
@@ -55,21 +55,21 @@ public class PortConflictDialog extends Dialog {
 
         Label title = new Label(area, SWT.WRAP);
         title.setFont(area.getFont());
-        title.setText("The DStudio backend server cannot start: port " + conflictPort
+        title.setText("The EVO-Studio backend server cannot start: port " + conflictPort
                 + " on " + bindAddress + " is already in use.");
         title.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         Label explanation = new Label(area, SWT.WRAP);
-        explanation.setText("This port carries the DStudio server (TEIP 1.1, API and live "
-                + "events) used by the Web IDE and by EVO/TRYST. Another DStudio instance, "
-                + "a family product (EVO, TRYST, DCode) or an unrelated application is "
+        explanation.setText("This port carries the EVO-Studio server (TEIP 1.1, API and live "
+                + "events) used by the Web IDE and by EVO/TRYST. Another EVO-Studio instance, "
+                + "a family product (EVO, TRYST, EVO-Code) or an unrelated application is "
                 + "already listening on it.\n\n"
                 + "What you can do:\n"
                 + "  1. Stop the conflicting process and click \"" + OK_LABEL + "\" to "
                 + "retry on the same port, or\n"
                 + "  2. Enter a different free port below (it is saved to "
                 + "~/.dstudio/dstudio.properties), or\n"
-                + "  3. Exit DStudio and set teip.port=NNNN in "
+                + "  3. Exit EVO-Studio and set teip.port=NNNN in "
                 + "~/.dstudio/dstudio.properties yourself.");
         explanation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -95,7 +95,7 @@ public class PortConflictDialog extends Dialog {
         Label familyNote = new Label(area, SWT.WRAP);
         familyNote.setForeground(area.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
         familyNote.setText("Family port convention: EVO 28xxx, TRYST 38xxx, "
-                + "DStudio 48xxx (TEIP 48080, diagnostics 48180), DCode 58xxx "
+                + "EVO-Studio 48xxx (TEIP 48080, diagnostics 48180), EVO-Code 58xxx "
                 + "(TEIP 58080).");
         familyNote.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -120,6 +120,6 @@ public class PortConflictDialog extends Dialog {
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, OK, OK_LABEL, true);
-        createButton(parent, CANCEL, "Exit DStudio", false);
+        createButton(parent, CANCEL, "Exit EVO-Studio", false);
     }
 }

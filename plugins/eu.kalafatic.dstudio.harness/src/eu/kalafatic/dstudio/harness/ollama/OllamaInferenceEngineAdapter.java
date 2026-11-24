@@ -18,7 +18,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
- * Ollama inference-engine adapter for DStudio (Phase 6, WP-6.7). Alternative family
+ * Ollama inference-engine adapter for EVO-Studio (Phase 6, WP-6.7). Alternative family
  * inference engine alongside ENR: model discovery via /api/tags, chat via /api/chat,
  * streaming via /api/chat stream=true, unload via keep_alive 0.
  */

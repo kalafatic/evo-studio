@@ -33,7 +33,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowStatusLine(true);
         configurer.setShowProgressIndicator(true);
         configurer.setShowPerspectiveBar(true);
-        configurer.setTitle("DStudio - Darwin Studio");
+        configurer.setTitle("EVO-Studio");
     }
 
     @Override

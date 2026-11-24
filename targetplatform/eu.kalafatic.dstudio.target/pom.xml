@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.target</artifactId>
     <packaging>eclipse-target-definition</packaging>
-    <name>DStudio - Target Platform</name>
+    <name>EVO-Studio - Target Platform</name>
 </project>

@@ -122,7 +122,7 @@ public final class ProcessExecutionSupport {
                 }
             }
         } catch (IOException e) {
-            System.err.println("DStudio process stream drain failed: " + e.getMessage());
+            System.err.println("EVO-Studio process stream drain failed: " + e.getMessage());
         }
     }
 }

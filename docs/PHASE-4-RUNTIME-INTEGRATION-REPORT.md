@@ -1,6 +1,6 @@
 # PHASE-4-RUNTIME-INTEGRATION-REPORT.md
 
-**DStudio Phase 4 — WP-4.03 + WP-4.08 deliverables**
+**EVO-Studio Phase 4 — WP-4.03 + WP-4.08 deliverables**
 **Date:** 2026-11-16
 
 ## 1. Headless Runtime (WP-4.03)
@@ -52,11 +52,11 @@ Cross-mode evidence:
 | Cancellation | fake-harness cancel (QUEUED + RUNNING), TEIP idempotent cancel + 404, real OpenCode SIGTERM probe (process gone ≤3 s) |
 | Timeout | adapter-level timeout → `TIMED_OUT` (TEIP-mapped to FAILED); service test `timeoutProducesTimedOutStatus` |
 | Concurrent tasks | `concurrentSubmissionsAreIsolated`; TEIP concurrency via async executor |
-| Invalid harness config / missing executable | adapter connection-test failures; `unknownHarnessRejectedWith422`; invalid binary tests (EVO/TRYST/DStudio) |
-| Unavailable model | real OpenCode invalid model → honest FAILED with diagnostic (DStudio + TRYST suites) |
+| Invalid harness config / missing executable | adapter connection-test failures; `unknownHarnessRejectedWith422`; invalid binary tests (EVO/TRYST/EVO-Studio) |
+| Unavailable model | real OpenCode invalid model → honest FAILED with diagnostic (EVO-Studio + TRYST suites) |
 | Duplicate requests / idempotency | persisted `execution_idempotency`; 202/200 replay over HTTP; service-level idempotency |
 | Server restart recovery | `reconcileAfterRestartFailsOpenExecutions` |
-| Network interruption | TEIP error envelope `SERVICE_UNAVAILABLE` reserved; TRYST client retry semantics exist upstream; DStudio side returns structured errors on adapter failures |
+| Network interruption | TEIP error envelope `SERVICE_UNAVAILABLE` reserved; TRYST client retry semantics exist upstream; EVO-Studio side returns structured errors on adapter failures |
 
 ## 4. Known Limitations
 

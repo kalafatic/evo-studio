@@ -290,7 +290,7 @@ public class OpenCodeHarnessAdapter implements HarnessAdapter {
             Files.createDirectories(stateDir);
             Files.createDirectories(cacheDir);
         } catch (IOException e) {
-            System.err.println("DStudio: failed to create harness run dirs: "
+            System.err.println("EVO-Studio: failed to create harness run dirs: "
                     + e.getMessage());
         }
         env.put("XDG_DATA_HOME", dataDir.toString());

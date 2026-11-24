@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * DStudio → DCode harness adapter wire tests (Phase 6, WP-6.7).
+ * EVO-Studio → EVO-Code harness adapter wire tests (Phase 6, WP-6.7).
  */
 class DCodeHarnessAdapterTest {
 

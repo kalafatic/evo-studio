@@ -1,6 +1,6 @@
 # PHASE-4-DESKTOP-GUI-ACCEPTANCE-REPORT.md
 
-**DStudio Phase 4 — WP-4-FINAL.1 deliverable**
+**EVO-Studio Phase 4 — WP-4-FINAL.1 deliverable**
 **Date:** 2026-11-16
 **Environment:** The verification host NOW HAS an X server (X.Org 21.1.11 on `DISPLAY=:1`,
 user session `petr :1`) — the earlier "no X server" constraint is resolved. SWT/GTK3 runtime
@@ -21,12 +21,12 @@ mouse events. The exact reproducible procedure is documented in §6 so a graphic
 
 | # | Check | Evidence |
 |---|---|---|
-| 1 | Product starts on the real X display | DStudio window `0x6014e6` "DStudio - Darwin Studio" 1468x929 (client 1440x863) mapped on :1; multiple launches |
+| 1 | Product starts on the real X display | EVO-Studio window `0x6014e6` "EVO-Studio - EVO Studio" 1468x929 (client 1440x863) mapped on :1; multiple launches |
 | 2 | Workbench opens without errors (after fixes) | `dstudio-gui4.log`: **0 error messages**; clean fresh-workspace launch shows no dialogs |
 | 3 | Keyboard input reaches the workbench | XTest-injected Ctrl+3 opened Eclipse Quick Access — 323,215 pixels changed in window captures before/after (byte-exact xwd diffs) |
 | 4 | Toolbar is interactive | Toolbar click at (140,109) opened the **"Run Coding Task"** dialog (window 620x420, title verified via `xwininfo`); other positions opened tool-button popups (186x40/211x40/276x119 windows at the toolbar row) |
 | 5 | Clean shutdown via window close | Alt+F4 on the workbench window → process exited, TEIP port 48080 released, no orphan processes (verified twice) |
-| 6 | Desktop mode runs the shared core | TEIP server bound on 48080 inside the desktop app (`[DStudio] Server listening on 127.0.0.1:48080` in the GUI launch log) |
+| 6 | Desktop mode runs the shared core | TEIP server bound on 48080 inside the desktop app (`[EVO-Studio] Server listening on 127.0.0.1:48080` in the GUI launch log) |
 | 7 | Workbench state persistence plumbing | Eclipse `-data` workspace metadata written (`org.eclipse.e4.workbench/workbench.xmi`, `.metadata/.plugins/*` incl. jdt/egit/ui.workbench) |
 | 8 | Views render without exceptions | Structural pixel analysis of the workbench window shows the trim/toolbar/perspective chrome, empty explorer/editor areas (white view surfaces), table borders for harness/execution views; log clean |
 | 9 | Restart persistence | Projects/configuration live in `~/.dstudio` SQLite + properties (verified in prior phases); workbench layout via setSaveAndRestore |
@@ -59,8 +59,8 @@ mouse events. The exact reproducible procedure is documented in §6 so a graphic
 - AT-SPI was reachable (bus `/run/user/1000/at-spi/bus_1`) but SWT/GTK did not register an
   accessible tree (the GTK3 atk-bridge module is not installed), so widget-level a11y
   enumeration was unavailable.
-- The user's session runs Firefox/Double Commander overlapping the DStudio window; the WM
-  must raise/activate DStudio (EWMH `_NET_ACTIVE_WINDOW`) before synthetic clicks land.
+- The user's session runs Firefox/Double Commander overlapping the EVO-Studio window; the WM
+  must raise/activate EVO-Studio (EWMH `_NET_ACTIVE_WINDOW`) before synthetic clicks land.
 
 ## 6. Reproducible Test Procedure (for a graphical operator / vision-capable agent)
 

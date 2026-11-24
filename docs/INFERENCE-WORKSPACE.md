@@ -1,8 +1,8 @@
-# DStudio Inference Workspace (OpenCode-like AI coding chat with harness selection)
+# EVO-Studio Inference Workspace (OpenCode-like AI coding chat with harness selection)
 
 ## Purpose
 
-The same inference workspace presentation as DCode, over DStudio's own backends:
+The same inference workspace presentation as EVO-Code, over EVO-Studio's own backends:
 conversation with streaming, markdown/code rendering, composer, session navigation,
 project/agent/profile/search selection, execution status and a prominent Harness
 selector connecting to the harness-specific execution backend.
@@ -25,7 +25,7 @@ Development perspective.
   (`streamMessage`), Stop cancels cooperatively; sessions persist in SQLite
   (multi-turn, New/Open/Rename/Delete).
 - Tasks: the composer's **Run task** action submits through
-  `ExecutionService` with the selected harness (DCode / OpenCode / Claude Code /
+  `ExecutionService` with the selected harness (EVO-Code / OpenCode / Claude Code /
   Aider). Live `ExecutionEvent`s (QUEUED/STARTED/LOG/TOOL/COMPLETED/FAILED/
   CANCELLED) stream into the conversation; modified files are listed on completion.
 - Harness selection is capability-aware: the Agent selector is populated from the

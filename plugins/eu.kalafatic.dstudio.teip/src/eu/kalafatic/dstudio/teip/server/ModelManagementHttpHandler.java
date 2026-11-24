@@ -25,7 +25,7 @@ import java.util.Optional;
 /**
  * Unified model management HTTP surface ({@code /api/models}): provider pull,
  * installed-model listing, shared download jobs with live progress,
- * cancellation and removal. DStudio owns no model management state — every
+ * cancellation and removal. EVO-Studio owns no model management state — every
  * operation is delegated to the shared family model management service
  * hosted by ENR ({@code /api/v1/models/...}). The ENR endpoint follows the
  * configured ENR inference engine (config key {@code endpoint}), the
@@ -164,7 +164,7 @@ public class ModelManagementHttpHandler implements HttpHandler {
     /**
      * Forwards a request to the shared ENR model management service and streams
      * the response back verbatim (status + JSON body). Upstream failures are
-     * mapped to the DStudio envelope with {@code UPSTREAM_UNAVAILABLE}.
+     * mapped to the EVO-Studio envelope with {@code UPSTREAM_UNAVAILABLE}.
      */
     private void forward(HttpExchange exchange, String method, String path,
                          String body) throws IOException {

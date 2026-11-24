@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-/** Shared Server-Sent-Events plumbing for the DStudio API surface. */
+/** Shared Server-Sent-Events plumbing for the EVO-Studio API surface. */
 public final class SseSupport {
 
     private SseSupport() {

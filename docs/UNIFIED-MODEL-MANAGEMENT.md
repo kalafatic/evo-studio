@@ -1,14 +1,14 @@
-# DStudio — Unified Model Management Integration (shared ENR infrastructure)
+# EVO-Studio — Unified Model Management Integration (shared ENR infrastructure)
 
 Date: 2026-11-22 (updated after the initial functional-testing iteration)
-Status: Implemented, tested and live-verified (DStudio 2.6.11).
+Status: Implemented, tested and live-verified (EVO-Studio 2.6.11).
 
 ## 1. Objective
 
-DStudio consumes the shared family model management service owned by ENR —
+EVO-Studio consumes the shared family model management service owned by ENR —
 it holds **no** model management state, no download jobs and no provider
 registry of its own. Pulls, progress, cancellation and removal execute in
-ENR; DStudio serves them through its embedded backend and both UIs.
+ENR; EVO-Studio serves them through its embedded backend and both UIs.
 
 ## 2. Components
 

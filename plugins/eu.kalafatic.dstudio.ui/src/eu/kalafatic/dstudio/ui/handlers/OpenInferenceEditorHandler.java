@@ -12,7 +12,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
- * Opens (or activates) the single shared DStudio harness editor — the main working
+ * Opens (or activates) the single shared EVO-Studio harness editor — the main working
  * area. The editor input is stable, so repeated executions (startup auto-open,
  * Perspective Reset recovery, Project Explorer double-click, Window menu) converge
  * on the same part; no duplicates.
@@ -23,20 +23,20 @@ public class OpenInferenceEditorHandler extends AbstractHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
         IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
         if (window == null) {
-            System.out.println("DStudio: cannot open the harness editor — no "
+            System.out.println("EVO-Studio: cannot open the harness editor — no "
                     + "workbench window.");
             return null;
         }
         IWorkbenchPage page = window.getActivePage();
         if (page == null) {
-            System.out.println("DStudio: cannot open the harness editor — no active "
+            System.out.println("EVO-Studio: cannot open the harness editor — no active "
                     + "page.");
             return null;
         }
         try {
             open(page);
         } catch (PartInitException e) {
-            throw new ExecutionException("Cannot open the DStudio harness editor", e);
+            throw new ExecutionException("Cannot open the EVO-Studio harness editor", e);
         }
         return null;
     }
@@ -49,7 +49,7 @@ public class OpenInferenceEditorHandler extends AbstractHandler {
         var editor = page.openEditor(new DStudioMultiPageEditorInput(),
                 DStudioMultiPageEditor.EDITOR_ID);
         page.activate(editor);
-        System.out.println("DStudio: inference editor ready: " + editor.getTitle());
+        System.out.println("EVO-Studio: inference editor ready: " + editor.getTitle());
         return editor;
     }
 }

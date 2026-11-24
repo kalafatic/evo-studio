@@ -13,5 +13,5 @@
 
     <artifactId>eu.kalafatic.dstudio.application</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>DStudio - Application</name>
+    <name>EVO-Studio - Application</name>
 </project>

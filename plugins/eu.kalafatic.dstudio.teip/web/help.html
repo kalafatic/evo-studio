@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DStudio — Help</title>
+<title>EVO-Studio — Help</title>
 <link rel="stylesheet" href="style.css">
 <style>
 /* Help-specific layout over the shared UPM design tokens in style.css. */
@@ -47,7 +47,7 @@ li { margin: 4px 0; }
 </head>
 <body>
 <header>
-  <h1>DStudio Help</h1>
+  <h1>EVO-Studio Help</h1>
   <nav>
     <a href="#top">Overview</a>
     <a href="#getting-started">Getting Started</a>
@@ -61,9 +61,9 @@ li { margin: 4px 0; }
 </header>
 <main>
 
-<h2 id="top">DStudio Overview</h2>
-<p>DStudio (Darwin Studio) is the professional IDE and headless Harness Platform of the
-Darwin product family. One shared core runs two faces: the <strong>desktop IDE</strong>
+<h2 id="top">EVO-Studio Overview</h2>
+<p>EVO-Studio (EVO Studio) is the professional IDE and headless Harness Platform of the
+EVO product family. One shared core runs two faces: the <strong>desktop IDE</strong>
 (projects, source editing, harness execution, monitoring and review) and the
 <strong>headless server</strong> that exposes the same core through the TEIP&nbsp;1.1
 provider endpoints (<code>/teip/v1/*</code>) plus this web interface and API.</p>
@@ -82,12 +82,12 @@ surface.</p>
       toolbar and enter the path of a folder or repository.</li>
   <li><strong>Configure the coding harness.</strong> Open the <em>Harnesses</em> view
       (menu <em>Harness → Show Harness View</em>) to select the default harness
-      (DCode is the family default; OpenCode, Aider and Claude Code adapters are
+      (EVO-Code is the family default; OpenCode, Aider and Claude Code adapters are
       available).</li>
   <li><strong>Run a coding task.</strong> Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd>
       (<kbd>⌘</kbd>+<kbd>Enter</kbd> on macOS), use <em>Run → Run Coding Task…</em>, or
       the <em>Coding Task</em> panel in the web interface. The execution appears in the
-      <em>Executions</em> view and its log output in the DStudio Execution Console.</li>
+      <em>Executions</em> view and its log output in the EVO-Studio Execution Console.</li>
   <li><strong>Review the changes.</strong> After an execution, open the
       <em>Change Review</em> view to accept or reject each changed file.</li>
   <li><strong>Use the AI assistant.</strong> The <em>Inference Engines</em> view
@@ -153,8 +153,8 @@ session, close project, …), <em>Open Web Interface</em> and <em>Refresh</em>. 
 space shows <em>Open Project…</em>.</p>
 
 <h3 id="harness">Harnesses</h3>
-<p>The Harnesses view manages the coding-harness adapters registered with DStudio
-(DCode, OpenCode, Aider, Claude Code). You can select the default harness, enable or
+<p>The Harnesses view manages the coding-harness adapters registered with EVO-Studio
+(EVO-Code, OpenCode, Aider, Claude Code). You can select the default harness, enable or
 disable harnesses, run a live connection test and edit each harness configuration
 (model, provider type, auto-approve, …). Harness configuration is persisted in the
 database and shared with the headless server.</p>
@@ -186,7 +186,7 @@ select an execution, review each changed file with the compare editor, then acce
 reject the changes. Decisions are persisted and visible to the execution history.</p>
 
 <h2 id="cli">CLI Commands (headless)</h2>
-<p>When DStudio runs headless (<code>-headless</code> or the <code>server</code>
+<p>When EVO-Studio runs headless (<code>-headless</code> or the <code>server</code>
 application) with a terminal attached — or with commands piped to stdin — it offers a
 small command line. A leading <code>/</code> is optional, commands are
 case-insensitive, and <code>exit</code>/<code>stop</code> (or end-of-input) shut the
@@ -206,15 +206,15 @@ config show                        Show non-secret configuration values.
 logs show                          Show the most recent event-stream entries.
 start                              Ensure the server is running (starts automatically).
 restart                            Restart the TEIP/API server on its configured port.
-stop                               Stop DStudio gracefully.
-exit                               Exit the CLI (shuts DStudio down like 'stop').
+stop                               Stop EVO-Studio gracefully.
+exit                               Exit the CLI (shuts EVO-Studio down like 'stop').
 </code></pre>
 <ul>
   <li><code>status</code>/<code>web</code> resolve the port from the actually bound
       server — the port is never hardcoded.</li>
   <li><code>sessions</code> maps to the execution service: list, show and idempotent
       cancel only (no delete/create).</li>
-  <li><code>providers</code> maps to the harness registry: DStudio's harness adapters
+  <li><code>providers</code> maps to the harness registry: EVO-Studio's harness adapters
       are the family's coding providers.</li>
   <li><code>config show</code> never prints secrets (auth tokens are excluded).</li>
   <li><code>logs show</code> tails the buffered event stream — the same stream served
@@ -231,7 +231,7 @@ session/task/inference events with monotonically increasing sequence numbers; cl
 replay missed events with <code>?afterSequence=…</code>. Both endpoints require the
 bearer token unless dev mode is enabled (<code>dstudio.teip.devMode=true</code>).
 <code>/api/status</code> reports application, version and readiness.</p>
-<p class="note">DStudio diagnostics port <code>48180</code> is reserved by the family
+<p class="note">EVO-Studio diagnostics port <code>48180</code> is reserved by the family
 convention (family +10000); this build serves diagnostics on the primary TEIP port as
 documented above.</p>
 

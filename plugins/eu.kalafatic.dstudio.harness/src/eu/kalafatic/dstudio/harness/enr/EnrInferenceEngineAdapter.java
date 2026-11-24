@@ -18,7 +18,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
- * ENR inference-engine adapter for DStudio (Phase 6, WP-6.7). Consumes the ENR 1.0 wire
+ * ENR inference-engine adapter for EVO-Studio (Phase 6, WP-6.7). Consumes the ENR 1.0 wire
  * contract (base /enr/v1): health, model discovery, model lifecycle, blocking chat, SSE
  * streaming and runtime status. ENR is the default family inference engine; the Ollama
  * adapter remains registered as an alternative.
@@ -93,7 +93,7 @@ public class EnrInferenceEngineAdapter implements InferenceEngineAdapter {
     @Override
     public InferenceConnectionTestResult testConnection() {
         // Canonical ENR 1.0 health path; /health is a legacy fallback for older
-        // ENR deployments (family convention, mirror of the DCode EnrProvider).
+        // ENR deployments (family convention, mirror of the EVO-Code EnrProvider).
         try {
             HttpResponse<String> response = send("GET", "/enr/v1/health", null);
             if (response.statusCode() == 200) {

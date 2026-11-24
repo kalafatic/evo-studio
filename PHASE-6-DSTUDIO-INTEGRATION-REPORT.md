@@ -1,13 +1,13 @@
 # PHASE-6-DSTUDIO-INTEGRATION-REPORT.md
 
-Phase 6 — DStudio integration summary (master report: EVO repository
+Phase 6 — EVO-Studio integration summary (master report: EVO repository
 `PHASE-6-DSTUDIO-INTEGRATION-REPORT.md`)
 Date: 2026-11-17
 
 ## Result
 
-- **DCode is the default coding harness**: `eu.kalafatic.dstudio.harness.dcode.
-  DCodeHarnessAdapter` (FHC 1.0 wire mapping over DCode `/api/v1`), registered in
+- **EVO-Code is the default coding harness**: `eu.kalafatic.dstudio.harness.dcode.
+  DCodeHarnessAdapter` (FHC 1.0 wire mapping over EVO-Code `/api/v1`), registered in
   `DStudioLifecycleCoordinator.onCoreServiceInitialization()` and selected as default
   when nothing is explicitly selected; OpenCode/Aider remain registered.
 - **ENR is the default inference engine**: new `eu.kalafatic.dstudio.core.inference`
@@ -16,13 +16,13 @@ Date: 2026-11-17
   (alternative). Harness and inference engines are independently configurable and
   replaceable.
 - **Headless access**: `InferenceHttpHandler` mounted under `/api/inference` on the
-  DStudio server (engines, models, load/unload, runtime status, chat); TEIP 1.1 surface
+  EVO-Studio server (engines, models, load/unload, runtime status, chat); TEIP 1.1 surface
   unchanged.
 - **IDE access**: new `InferenceView` (engines + models, set-default/enable/test/
-  refresh/load/unload) added to the Harness perspective; DCode is manageable through the
+  refresh/load/unload) added to the Harness perspective; EVO-Code is manageable through the
   existing HarnessView.
 - **Persistence**: inference-engine state persists in `dstudio.db` (V2); execution
-  history/review persistence unchanged for DCode executions (same `ExecutionService`
+  history/review persistence unchanged for EVO-Code executions (same `ExecutionService`
   path with restart reconciliation).
 
 ## Verification (this repository)

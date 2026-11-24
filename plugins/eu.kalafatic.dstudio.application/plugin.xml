@@ -5,11 +5,11 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            name="DStudio - Darwin Studio"
+            name="EVO-Studio"
             application="eu.kalafatic.dstudio.application.application">
          <property
                name="appName"
-               value="DStudio">
+               value="EVO-Studio">
          </property>
          <property
                name="windowImages"
@@ -17,7 +17,7 @@
          </property>
          <property
                name="aboutText"
-               value="DStudio - Darwin Studio&#x0A;&#x0A;Version: {0} (Build {1})&#x0A;&#x0A;Higher-level development and agent orchestration platform.&#x0A;Copyright (c) Kalafatic. All rights reserved.">
+               value="EVO-Studio&#x0A;&#x0A;Version: {0} (Build {1})&#x0A;&#x0A;Higher-level development and agent orchestration platform.&#x0A;Copyright (c) Kalafatic. All rights reserved.">
          </property>
       </product>
    </extension>

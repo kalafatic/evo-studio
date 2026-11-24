@@ -13,7 +13,7 @@
 
     <artifactId>eu.kalafatic.dstudio.product</artifactId>
     <packaging>eclipse-repository</packaging>
-    <name>DStudio - Product Repository</name>
+    <name>EVO-Studio - Product Repository</name>
 
     <build>
         <plugins>

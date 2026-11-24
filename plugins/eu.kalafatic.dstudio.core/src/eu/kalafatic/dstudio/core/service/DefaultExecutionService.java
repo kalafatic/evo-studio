@@ -374,10 +374,10 @@ public class DefaultExecutionService implements ExecutionService {
     @Override
     public void reconcileAfterRestart() {
         for (ExecutionTask task : store.listOpenExecutions()) {
-            task.markNotResumed("DStudio restarted; execution cannot be resumed");
+            task.markNotResumed("EVO-Studio restarted; execution cannot be resumed");
             store.updateExecution(task);
             appendEvent(task.getId(), ExecutionEventType.EXECUTION_FAILED,
-                    "DStudio restarted; execution cannot be resumed");
+                    "EVO-Studio restarted; execution cannot be resumed");
         }
     }
 

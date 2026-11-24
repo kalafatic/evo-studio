@@ -76,7 +76,7 @@ class WebIdeWorkspaceApiTest {
     void webAssetsAreServed() throws Exception {
         HttpResponse<String> index = send("GET", "/", null);
         assertEquals(200, index.statusCode());
-        assertTrue(index.body().contains("DStudio"), index.body());
+        assertTrue(index.body().contains("EVO-Studio"), index.body());
         assertTrue(index.headers().firstValue("Content-Type").orElse("")
                 .contains("text/html"));
         HttpResponse<String> app = send("GET", "/web/app.js", null);

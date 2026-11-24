@@ -1,13 +1,13 @@
 # PHASE-4-TRYST-PERSISTENCE-REPORT.md
 
-**DStudio Phase 4 — WP-4-FINAL.2 deliverable**
+**EVO-Studio Phase 4 — WP-4-FINAL.2 deliverable**
 **Date:** 2026-11-16
 
 ## 1. Requirement
 
-The TRYST-side DStudio connection configuration was in-memory per adapter instance; after a
+The TRYST-side EVO-Studio connection configuration was in-memory per adapter instance; after a
 TRYST restart all provider settings were lost. This work package persists the non-secret
-DStudio provider configuration using TRYST's existing SQLite/persistence conventions.
+EVO-Studio provider configuration using TRYST's existing SQLite/persistence conventions.
 
 ## 2. Implementation (reuses existing TRYST architecture)
 
@@ -35,7 +35,7 @@ deviation.
 | Provider can be enabled/disabled; disabled state persists and gates `isAvailable()`/`executeTask` | PASS (`disabledConfigurationIsUnavailable`) |
 | Existing local execution remains intact | PASS (TRYST full suite 337/337 — OpenCode adapter, TaskWorker and EVO adapter regressions all green) |
 | Configuration changes do not corrupt active tasks | PASS (config writes are single-row upserts on the `dstudio_configurations` table; no task tables touched; full suite green) |
-| Reconnection | PASS (`testConnection` re-checks the live endpoint; live DStudio E2E re-run) |
+| Reconnection | PASS (`testConnection` re-checks the live endpoint; live EVO-Studio E2E re-run) |
 
 ## 4. Test Evidence
 

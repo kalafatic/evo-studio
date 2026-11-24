@@ -14,7 +14,7 @@ import eu.kalafatic.dstudio.core.service.ProjectService;
 import eu.kalafatic.dstudio.core.model.Project;
 
 /**
- * Contextual actions for projects. Only operations the DStudio domain actually owns
+ * Contextual actions for projects. Only operations the EVO-Studio domain actually owns
  * are contributed; build/test/git actions belong to other family products and are not
  * listed at all (they are never shown as executable here).
  */

@@ -1,10 +1,10 @@
-# DStudio — Project Structure
+# EVO-Studio — Project Structure
 
 Authoritative parent/aggregator: **`pom.xml` (repository root)** — `eu.kalafatic.dstudio.parent` 2.6.11-SNAPSHOT
 
 | Layer | Location | Notes |
 |---|---|---|
-| Repository root | `/home/petr/git/DStudio-121126` | Git root; parent POM at root |
+| Repository root | `/home/petr/git/EVO-Studio-121126` | Git root; parent POM at root |
 | Build system | Maven + Tycho 4.0.8, `./mvnw` | Java 21 |
 | Target platform | Eclipse 2025-12 SimRel (+ JUnit from 2024-03) | `targetplatform/eu.kalafatic.dstudio.target/eu.kalafatic.dstudio.target.target` |
 | Feature | `features/eu.kalafatic.dstudio.feature/feature.xml` | |
@@ -18,7 +18,7 @@ Authoritative parent/aggregator: **`pom.xml` (repository root)** — `eu.kalafat
 | targetplatform/eu.kalafatic.dstudio.target | Target definition |
 | plugins/eu.kalafatic.dstudio.core | Core services |
 | plugins/eu.kalafatic.dstudio.infrastructure | Infrastructure; embeds + exports jackson 2.20 |
-| plugins/eu.kalafatic.dstudio.harness | OpenCode/Aider/DCode/ENR harness adapters |
+| plugins/eu.kalafatic.dstudio.harness | OpenCode/Aider/EVO-Code/ENR harness adapters |
 | plugins/eu.kalafatic.dstudio.teip | TEIP provider (MCP client + HTTP handlers) |
 | plugins/eu.kalafatic.dstudio.application | RCP application |
 | plugins/eu.kalafatic.dstudio.ui | SWT UI |

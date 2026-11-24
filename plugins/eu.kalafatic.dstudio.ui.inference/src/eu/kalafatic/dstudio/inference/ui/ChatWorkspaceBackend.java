@@ -4,8 +4,8 @@ import java.util.List;
 
 /**
  * Product-side implementation of the inference workspace. The presentation bundle is
- * backend-agnostic: DCode implements this over its session/agent execution API,
- * DStudio implements it over its inference engines and harness adapters.
+ * backend-agnostic: EVO-Code implements this over its session/agent execution API,
+ * EVO-Studio implements it over its inference engines and harness adapters.
  *
  * <p>All methods are invoked on the SWT display thread; implementations must return
  * quickly and perform backend work asynchronously.</p>

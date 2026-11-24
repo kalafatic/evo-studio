@@ -6,10 +6,10 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
- * Inference-engine adapter SPI (Phase 6, WP-6.7). DStudio manages inference engines
+ * Inference-engine adapter SPI (Phase 6, WP-6.7). EVO-Studio manages inference engines
  * (ENR by default) independently from coding harnesses: model discovery, model lifecycle,
  * generation, streaming and runtime status. Engines are replaceable — ENR, Ollama or
- * future providers — and never own DStudio sessions, executions or repositories.
+ * future providers — and never own EVO-Studio sessions, executions or repositories.
  */
 public interface InferenceEngineAdapter {
 

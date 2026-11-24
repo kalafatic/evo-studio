@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Live integration of the DStudio EvoMcpClient against a running EVO MCP
+ * Live integration of the EVO-Studio EvoMcpClient against a running EVO MCP
  * server (127.0.0.1:28280). Skips silently when EVO is not running, so the
  * suite stays green in isolation. When run with EVO up, this is the real
  * client-side half of the cross-application contract.
@@ -73,7 +73,7 @@ public class EvoMcpClientLiveIntegrationTest {
             return;
         }
         boolean stored = client.memoryStore(ENDPOINT, TOKEN,
-                "DStudio live client verification note", "FACT", "PROJECT", PROJECT, 0.9);
+                "EVO-Studio live client verification note", "FACT", "PROJECT", PROJECT, 0.9);
         assertTrue(stored, "memory_store must succeed against live EVO");
 
         String sessionId = client.sessionCreate(ENDPOINT, TOKEN, "TASK", PROJECT,
