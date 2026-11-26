@@ -235,6 +235,28 @@
         + (provider.status ? " · " + provider.status : "");
   }
 
+  // Persisted last-used runtime/model (restored on startup for new sessions).
+  const SELECTION_KEY = "dstudio.selection.v1";
+
+  function loadSelection() {
+    try {
+      const raw = localStorage.getItem(SELECTION_KEY);
+      if (!raw) { return; }
+      const saved = JSON.parse(raw);
+      if (saved && saved.providerId) { state.providerId = saved.providerId; }
+      if (saved && saved.modelId) { state.modelId = saved.modelId; }
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  function saveSelection() {
+    try {
+      localStorage.setItem(SELECTION_KEY, JSON.stringify({
+        providerId: state.providerId || "",
+        modelId: state.modelId || ""
+      }));
+    } catch (e) { /* storage unavailable */ }
+  }
+
   async function refreshProviders() {
     state.allProviders = (await providers()).filter((p) => p.enabled !== false);
     const keep = state.providerId
@@ -269,11 +291,23 @@
       } catch (e) { /* keep empty */ }
     }
     const keep = preferredModelId || state.modelId;
+    const available = keep && state.allModels.some((m) => m.id === keep);
     fillSelect(select, state.allModels.map((m) => ({
       id: m.id,
       label: (m.providerName ? m.providerName + " :: " : "") + m.name
-    })), keep, "no model");
+    })), available ? keep : "", "no model");
+    if (keep && !available && state.allModels.length) {
+      // Never silently select an arbitrary model when the previous one disappeared.
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "(model unavailable — select)";
+      select.insertBefore(placeholder, select.firstChild);
+      select.value = "";
+      log("warning", "Previously selected model '" + keep + "' is not available from "
+          + providerId + "; select a model.");
+    }
     state.modelId = select.value || "";
+    saveSelection();
   }
 
   async function refreshProjects() {
@@ -932,6 +966,21 @@
           + "Engines, models, projects and harnesses are configured in Settings.";
       placeholder.appendChild(title);
       placeholder.appendChild(text);
+      const examples = document.createElement("div");
+      examples.className = "placeholder-examples";
+      ["Explain this project", "Write a Java method that reverses a string",
+        "Suggest a unit test", "Why might my build fail?"].forEach((sample) => {
+        const chip = document.createElement("button");
+        chip.className = "btn placeholder-chip";
+        chip.textContent = sample;
+        chip.onclick = () => {
+          const input = $("promptInput");
+          input.value = sample;
+          input.focus();
+        };
+        examples.appendChild(chip);
+      });
+      placeholder.appendChild(examples);
       logBox.appendChild(placeholder);
       return;
     }
@@ -1346,8 +1395,9 @@
           !state.connected);
     };
     $("providerSelect").onchange = async () => {
-      state.modelId = "";
-      await refreshModels("");
+      const previousModel = state.modelId;
+      await refreshModels(previousModel);
+      saveSelection();
       updateTopbar(); renderContext(); renderLeft(); renderChat();
     };
     $("modelSelect").onchange = () => {
@@ -1357,6 +1407,7 @@
         state.providerId = model.providerId;
         $("providerSelect").value = model.providerId;
       }
+      saveSelection();
       updateTopbar(); renderContext(); renderLeft(); renderChat();
     };
 
@@ -1497,6 +1548,7 @@
   async function boot() {
     applyTheme("btn-theme");
     loadStore();
+    loadSelection();
     if (window.DStudioTasks) {
       window.DStudioTasks.boot({ $, esc, toast, log, json, projects, harnesses });
     }

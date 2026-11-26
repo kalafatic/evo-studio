@@ -108,11 +108,17 @@ public final class DStudioMultiPageEditor extends MultiPageEditorPart {
         webComposite.setLayout(new GridLayout(1, false));
 
         Composite webBar = new Composite(webComposite, SWT.NONE);
-        webBar.setLayout(new GridLayout(2, false));
+        webBar.setLayout(new GridLayout(3, false));
         webBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         webStatus = new Label(webBar, SWT.NONE);
         webStatus.setText("Connecting to the EVO-Studio web IDE…");
         webStatus.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        Button openBrowser = new Button(webBar, SWT.PUSH);
+        openBrowser.setText("Open in Browser");
+        openBrowser.setToolTipText("Open the full EVO-Studio web IDE in your system browser");
+        openBrowser.addListener(SWT.Selection,
+                event -> eu.kalafatic.dstudio.ui.workbench.WebInterfaceLauncher
+                        .openWebInterface());
         webReload = new Button(webBar, SWT.PUSH);
         webReload.setText("Reload");
         webReload.setToolTipText("Re-check the EVO-Studio web IDE and reload it");
