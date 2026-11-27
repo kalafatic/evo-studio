@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio UI
 Bundle-SymbolicName: eu.kalafatic.dstudio.ui;singleton:=true
 Bundle-Version: 2.6.11.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: eu.kalafatic.dstudio.ui.DStudioUiPlugin
 Automatic-Module-Name: eu.kalafatic.dstudio.ui

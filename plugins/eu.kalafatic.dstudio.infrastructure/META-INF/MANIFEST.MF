@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio Infrastructure
 Bundle-SymbolicName: eu.kalafatic.dstudio.infrastructure
 Bundle-Version: 2.6.11.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: eu.kalafatic.dstudio.infrastructure
 Require-Bundle: eu.kalafatic.dstudio.core;bundle-version="2.6.11"
 Import-Package: org.eclipse.jgit.api;version="[7.0.0,8.0.0)",

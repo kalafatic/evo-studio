@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio Inference Presentation
 Bundle-SymbolicName: eu.kalafatic.dstudio.ui.inference;singleton:=true
 Bundle-Version: 2.6.11.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Kalafatic
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=21))"
 Require-Bundle: org.eclipse.swt;bundle-version="3.0.0",

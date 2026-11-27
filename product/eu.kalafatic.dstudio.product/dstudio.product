@@ -39,7 +39,7 @@
       <plugin id="eu.kalafatic.dstudio.application" autoStart="true" startLevel="4" />
       <plugin id="eu.kalafatic.dstudio.ui" autoStart="true" startLevel="4" />
    </configurations>
-   <preferencesInfo><targetPlatform>JavaSE-21</targetPlatform></preferencesInfo>
+   <preferencesInfo><targetPlatform>JavaSE-25</targetPlatform></preferencesInfo>
    <cssInfo/>
    <properties>
       <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default"/>

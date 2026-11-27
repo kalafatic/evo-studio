@@ -1311,9 +1311,18 @@
       return;
     }
     panel.hidden = false;
-    content.innerHTML = "<div class=\"empty-note\">No file changes for this session. "
-        + "File-change review is available in the desktop Change Review view after a "
-        + "coding task.</div>";
+    // The EVO-Studio web inference backend currently exposes no change/diff endpoint
+    // (see /api/inference/*). The professional diff workspace UI is available in the
+    // shared shell.css / js/diff.js layer; it activates automatically once the backend
+    // serves a {repositories:[{changedFiles[], diff}]} payload. Until then, file-change
+    // review remains in the desktop Change Review view.
+    content.innerHTML = "<div class=\"diff-workspace\">"
+        + "<div class=\"diff-workspace-head\"><span class=\"diff-title\">Code changes</span>"
+        + "<span class=\"diff-totals\">no change endpoint</span></div>"
+        + "<div class=\"diff-workspace-body\"><div class=\"empty-note\">"
+        + "No file-change data available over the web interface. "
+        + "File-change review is available in the desktop Change Review view after a coding task."
+        + "</div></div></div>";
   }
 
   // ---------------- wiring ----------------

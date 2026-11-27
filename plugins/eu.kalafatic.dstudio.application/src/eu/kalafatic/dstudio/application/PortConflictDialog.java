@@ -95,8 +95,8 @@ public class PortConflictDialog extends Dialog {
         Label familyNote = new Label(area, SWT.WRAP);
         familyNote.setForeground(area.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
         familyNote.setText("Family port convention: EVO 28xxx, TRYST 38xxx, "
-                + "EVO-Studio 48xxx (TEIP 48080, diagnostics 48180), EVO-Code 58xxx "
-                + "(TEIP 58080).");
+                + "EVO-Studio 58xxx (TEIP 58080, diagnostics 58180), EVO-Code 48xxx "
+                + "(TEIP 48080).");
         familyNote.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         return area;

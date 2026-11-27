@@ -33,7 +33,7 @@ public class AddProviderDialog extends Dialog {
     /** Recommended default endpoints per provider type. */
     private static final Map<String, String> DEFAULT_ENDPOINTS = Map.of(
             "OLLAMA", "http://127.0.0.1:11434",
-            "ENR", "http://127.0.0.1:8111",
+            "ENR", "http://127.0.0.1:28780",
             "OPENAI_COMPATIBLE", "http://127.0.0.1:11434/v1",
             "ANTHROPIC", "https://api.anthropic.com");
 

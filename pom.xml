@@ -11,9 +11,9 @@
     <name>EVO-Studio - Parent</name>
 
     <properties>
-        <tycho.version>4.0.8</tycho.version>
+        <tycho.version>5.0.4</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.xml/com.sun.org.apache.xerces.internal.parsers=ALL-UNNAMED --add-opens=java.xml/com.sun.org.apache.xerces.internal.impl=ALL-UNNAMED</argLine>
         <tycho.buildArgLine>-Djdk.xml.maxGeneralEntitySizeLimit=2000000 -Djdk.xml.maxEntityCountLimit=2000000</tycho.buildArgLine>
     </properties>
@@ -61,7 +61,7 @@
                             <version>${project.version}</version>
                         </artifact>
                     </target>
-                    <executionEnvironment>JavaSE-21</executionEnvironment>
+                    <executionEnvironment>JavaSE-25</executionEnvironment>
                     <environments>
                         <environment>
                             <os>linux</os>
@@ -76,7 +76,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>21</release>
+                    <release>25</release>
                     <compilerArgs>
                         <arg>--add-opens</arg>
                         <arg>java.base/java.lang=ALL-UNNAMED</arg>

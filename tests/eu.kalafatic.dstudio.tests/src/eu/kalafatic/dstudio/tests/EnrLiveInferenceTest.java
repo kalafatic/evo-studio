@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Timeout;
  */
 class EnrLiveInferenceTest {
 
-    private static final String DEFAULT_ENDPOINT = "http://127.0.0.1:8111";
+    private static final String DEFAULT_ENDPOINT = "http://127.0.0.1:28780";
 
     private EnrInferenceEngineAdapter adapter() {
         EnrInferenceEngineAdapter adapter = new EnrInferenceEngineAdapter();

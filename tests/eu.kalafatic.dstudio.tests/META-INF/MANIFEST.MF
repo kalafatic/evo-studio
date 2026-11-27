@@ -3,9 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio Tests
 Bundle-SymbolicName: eu.kalafatic.dstudio.tests
 Bundle-Version: 2.6.11.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-21
-Require-Bundle: junit-jupiter-api;bundle-version="[5.10.2,5.10.3)",
- junit-jupiter-engine;bundle-version="[5.10.2,5.10.3)",
+Bundle-RequiredExecutionEnvironment: JavaSE-25
+Require-Bundle: junit-jupiter-api;bundle-version="[5.0.0,6.0.0)",
+ junit-jupiter-engine;bundle-version="[5.0.0,6.0.0)",
  org.eclipse.osgi,
  org.eclipse.equinox.app,
  eu.kalafatic.dstudio.core;bundle-version="2.6.11",

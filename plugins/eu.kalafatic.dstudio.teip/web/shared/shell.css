@@ -1,0 +1,236 @@
+/*
+ * EVO shared frontend design system — shell foundation.
+ * Shared by EVO-Studio (AI Inference) and EVO-Code (Darwin Code) so both products
+ * present as one professional product family. This file only supplies the design
+ * tokens and shell-level components (splitters, command palette, context menu,
+ * scrollbars, status bar, keyboard hints) that the existing per-product styles
+ * intentionally do not define; it never overrides product-specific rules.
+ *
+ * Primary theme: restrained dark. Optional light theme via [data-theme="light"].
+ */
+
+:root {
+  /* ----- core surface tokens (dark) ----- */
+  --evo-bg: #10141c;
+  --evo-bg-2: #161b26;
+  --evo-panel: #1a2029;
+  --evo-panel-2: #202834;
+  --evo-border: #2a3442;
+  --evo-border-strong: #39465a;
+  --evo-text: #e8ecf3;
+  --evo-text-2: #9aa6b6;
+  --evo-text-3: #6b7789;
+  --evo-accent: #4f8ef7;
+  --evo-accent-soft: #23344e;
+  --evo-ok: #3fb982;
+  --evo-warn: #e0aa4e;
+  --evo-err: #ef7a6f;
+
+  /* ----- typography ----- */
+  --evo-sans: "Inter", "Segoe UI", "DejaVu Sans", system-ui, -apple-system, sans-serif;
+  --evo-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "DejaVu Sans Mono", Consolas, monospace;
+
+  /* ----- metrics ----- */
+  --evo-fs: 13px;
+  --evo-fs-sm: 12px;
+  --evo-fs-xs: 11px;
+  --evo-space-1: 4px;
+  --evo-space-2: 8px;
+  --evo-space-3: 12px;
+  --evo-space-4: 16px;
+  --evo-radius: 5px;
+  --evo-shadow: 0 2px 8px rgba(0, 0, 0, 0.32);
+  --evo-overlay: rgba(8, 11, 17, 0.5);
+}
+
+[data-theme="light"] {
+  --evo-bg: #f4f6f9;
+  --evo-bg-2: #eceff4;
+  --evo-panel: #ffffff;
+  --evo-panel-2: #f7f9fb;
+  --evo-border: #d7dce4;
+  --evo-border-strong: #c3cad5;
+  --evo-text: #1b2434;
+  --evo-text-2: #5c6a7e;
+  --evo-text-3: #8b96a8;
+  --evo-accent: #2f6bd8;
+  --evo-accent-soft: #e8effa;
+  --evo-ok: #1f8a4c;
+  --evo-warn: #a86a00;
+  --evo-err: #c23b2e;
+  --evo-overlay: rgba(16, 24, 40, 0.25);
+}
+
+/* =====================================================================
+ * Splitter handles — injected between adjacent panels by shell.js.
+ * ===================================================================== */
+.evo-splitter {
+  flex: none;
+  background: transparent;
+  z-index: 20;
+  position: relative;
+}
+.evo-splitter::after {
+  content: "";
+  position: absolute;
+  background: var(--evo-border);
+  transition: background 120ms ease;
+}
+.evo-splitter--horizontal { width: 5px; cursor: col-resize; }
+.evo-splitter--horizontal::after {
+  left: 2px; top: 0; bottom: 0; width: 1px;
+}
+.evo-splitter--vertical { height: 5px; cursor: row-resize; }
+.evo-splitter--vertical::after {
+  top: 2px; left: 0; right: 0; height: 1px;
+}
+.evo-splitter:hover::after,
+.evo-splitter--active::after { background: var(--evo-accent); width: 1px; }
+.evo-splitter--vertical:hover::after,
+.evo-splitter--vertical.evo-splitter--active::after { width: auto; height: 1px; }
+
+body.evo-dragging { cursor: col-resize; user-select: none; }
+body.evo-dragging-vertical { cursor: row-resize; }
+
+/* =====================================================================
+ * Command palette (Ctrl+K)
+ * ===================================================================== */
+.evo-palette-overlay {
+  position: fixed; inset: 0;
+  background: var(--evo-overlay);
+  z-index: 900;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 12vh;
+}
+.evo-palette {
+  width: min(560px, 92vw);
+  background: var(--evo-panel);
+  border: 1px solid var(--evo-border-strong);
+  border-radius: var(--evo-radius);
+  box-shadow: var(--evo-shadow);
+  overflow: hidden;
+  font-family: var(--evo-sans);
+}
+.evo-palette-input {
+  width: 100%;
+  border: none; outline: none;
+  background: transparent;
+  color: var(--evo-text);
+  font-size: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--evo-border);
+}
+.evo-palette-list { max-height: 320px; overflow-y: auto; padding: 4px; }
+.evo-palette-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: 4px; cursor: pointer;
+  color: var(--evo-text-2); font-size: var(--evo-fs-sm);
+}
+.evo-palette-item[data-active="true"] { background: var(--evo-accent-soft); color: var(--evo-text); }
+.evo-palette-item .evo-palette-key {
+  margin-left: auto; font-family: var(--evo-mono); font-size: 11px;
+  color: var(--evo-text-3);
+}
+.evo-palette-empty { padding: 14px; color: var(--evo-text-3); font-size: var(--evo-fs-sm); text-align: center; }
+
+/* =====================================================================
+ * Context menu
+ * ===================================================================== */
+.evo-context-menu {
+  position: fixed; z-index: 950;
+  min-width: 180px;
+  background: var(--evo-panel);
+  border: 1px solid var(--evo-border-strong);
+  border-radius: var(--evo-radius);
+  box-shadow: var(--evo-shadow);
+  padding: 4px;
+  font-family: var(--evo-sans);
+}
+.evo-context-menu .evo-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px; border-radius: 4px; cursor: pointer;
+  color: var(--evo-text-2); font-size: var(--evo-fs-sm); white-space: nowrap;
+}
+.evo-context-menu .evo-menu-item:hover { background: var(--evo-accent-soft); color: var(--evo-text); }
+.evo-context-menu .evo-menu-sep {
+  height: 1px; background: var(--evo-border); margin: 4px 6px;
+}
+.evo-context-menu .evo-menu-item[data-danger="true"] { color: var(--evo-err); }
+.evo-context-menu .evo-menu-item .evo-menu-key {
+  margin-left: auto; font-family: var(--evo-mono); font-size: 11px; color: var(--evo-text-3);
+}
+
+/* =====================================================================
+ * Scrollbars — thin, theme-aware, no double scrollbars.
+ * ===================================================================== */
+.evo-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--evo-border-strong) transparent; }
+.evo-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.evo-scroll::-webkit-scrollbar-thumb {
+  background: var(--evo-border-strong); border-radius: 6px;
+  border: 2px solid transparent; background-clip: padding-box;
+}
+.evo-scroll::-webkit-scrollbar-thumb:hover { background: var(--evo-text-3); background-clip: padding-box; }
+.evo-scroll::-webkit-scrollbar-corner { background: transparent; }
+
+/* =====================================================================
+ * Shared utility
+ * ===================================================================== */
+.evo-muted { color: var(--evo-text-3); }
+.evo-mono { font-family: var(--evo-mono); }
+.evo-kbd {
+  font-family: var(--evo-mono); font-size: 11px;
+  color: var(--evo-text-3);
+  border: 1px solid var(--evo-border-strong);
+  border-bottom-width: 2px; border-radius: 4px;
+  padding: 1px 5px; background: var(--evo-panel-2);
+}
+.evo-tooltip {
+  position: fixed; z-index: 960; pointer-events: none;
+  background: var(--evo-panel-2); border: 1px solid var(--evo-border-strong);
+  color: var(--evo-text); border-radius: 4px; padding: 4px 8px;
+  font-size: var(--evo-fs-xs); font-family: var(--evo-sans);
+  box-shadow: var(--evo-shadow); max-width: 320px;
+}
+
+/* =====================================================================
+ * Professional diff / code-review workspace
+ * ===================================================================== */
+.diff-workspace { display: flex; flex-direction: column; min-height: 0; border: 1px solid var(--evo-border); border-radius: var(--evo-radius); overflow: hidden; margin-bottom: 10px; }
+.diff-workspace-head { display: flex; align-items: center; gap: 12px; padding: 6px 10px; background: var(--evo-panel-2); border-bottom: 1px solid var(--evo-border); font-size: var(--evo-fs-sm); }
+.diff-workspace-head .diff-title { font-weight: 600; color: var(--evo-text); }
+.diff-workspace-head .diff-totals { color: var(--evo-text-2); font-family: var(--evo-mono); font-size: var(--evo-fs-xs); }
+.diff-workspace-head .diff-search { margin-left: auto; background: var(--evo-panel); border: 1px solid var(--evo-border-strong); border-radius: 4px; padding: 3px 8px; color: var(--evo-text); font-size: var(--evo-fs-xs); min-width: 160px; }
+.diff-workspace-body { display: flex; min-height: 0; max-height: 60vh; }
+.diff-explorer { width: 260px; flex: none; overflow-y: auto; border-right: 1px solid var(--evo-border); background: var(--evo-panel); padding: 4px; }
+.diff-explorer-item { display: flex; align-items: center; gap: 6px; width: 100%; text-align: left; padding: 4px 6px; border-radius: 4px; color: var(--evo-text-2); font-size: var(--evo-fs-xs); cursor: pointer; background: none; border: none; }
+.diff-explorer-item:hover { background: var(--evo-panel-2); color: var(--evo-text); }
+.diff-explorer-item.active { background: var(--evo-accent-soft); color: var(--evo-text); }
+.diff-explorer-item .diff-path { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--evo-mono); }
+.diff-status { flex: none; width: 14px; height: 14px; line-height: 14px; text-align: center; border-radius: 3px; font-family: var(--evo-mono); font-size: 10px; font-weight: 700; }
+.diff-status-M { color: var(--evo-warn); background: rgba(224,170,78,.15); }
+.diff-status-A { color: var(--evo-ok); background: rgba(63,185,130,.15); }
+.diff-status-D { color: var(--evo-err); background: rgba(239,122,111,.15); }
+.diff-status-\\? { color: var(--evo-text-3); background: var(--evo-panel-2); }
+.diff-viewer { flex: 1; min-width: 0; overflow: auto; font-family: var(--evo-mono); font-size: var(--evo-fs-xs); background: var(--evo-bg-2); }
+.diff { min-width: 100%; width: max-content; }
+.diff-line { display: flex; align-items: flex-start; line-height: 1.5; white-space: pre; }
+.diff-num { flex: none; width: 44px; text-align: right; padding: 0 6px; color: var(--evo-text-3); user-select: none; border-right: 1px solid var(--evo-border); background: var(--evo-panel); }
+.diff-sign { flex: none; width: 16px; text-align: center; color: var(--evo-text-3); user-select: none; }
+.diff-code { flex: 1; padding: 0 8px; color: var(--evo-text); }
+.diff-add { background: rgba(63,185,130,.12); }
+.diff-add .diff-sign { color: var(--evo-ok); }
+.diff-del { background: rgba(239,122,111,.12); }
+.diff-del .diff-sign { color: var(--evo-err); }
+.diff-hunk { background: var(--evo-accent-soft); color: var(--evo-accent); }
+.diff-hunk .diff-code { color: var(--evo-accent); }
+.diff-meta { color: var(--evo-text-3); font-style: italic; }
+.diff-file-head { display: flex; justify-content: space-between; gap: 12px; padding: 5px 10px; background: var(--evo-panel-2); border: 1px solid var(--evo-border); border-top: none; font-family: var(--evo-mono); font-size: var(--evo-fs-xs); }
+.diff-file-name { color: var(--evo-text); }
+.diff-file-stat, .diff-file-stat .add, .diff-file-stat .del { font-family: var(--evo-mono); }
+.diff-totals .add, .diff-file-stat .add { color: var(--evo-ok); }
+.diff-totals .del, .diff-file-stat .del { color: var(--evo-err); }
+.tok-kw { color: #c792ea; }
+.tok-str { color: #9ece6a; }
+.tok-com { color: var(--evo-text-3); font-style: italic; }
+.tok-num { color: #e0af68; }
+.diff mark, .diff-viewer mark { background: rgba(224,170,78,.4); color: inherit; border-radius: 2px; }

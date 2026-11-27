@@ -111,7 +111,7 @@ class SecretCodecTest {
             new SchemaMigrationService().migrate(db.connection());
             SqliteHarnessStore store = new SqliteHarnessStore(db.connection(),
                     new SecretCodec(tempDir));
-            store.saveConfiguration("dcode", Map.of("endpoint", "http://localhost:58080",
+            store.saveConfiguration("dcode", Map.of("endpoint", "http://localhost:48080",
                     "authToken", "super-secret-token", "model", "family-model"));
             try (PreparedStatement ps = db.connection().prepareStatement(
                     "SELECT config_json FROM harness_config WHERE harness_id = 'dcode'");
@@ -121,7 +121,7 @@ class SecretCodecTest {
                 assertFalse(raw.contains("super-secret-token"),
                         "plaintext secret must never reach the database");
                 assertTrue(raw.contains("enc:"));
-                assertTrue(raw.contains("http://localhost:58080"));
+                assertTrue(raw.contains("http://localhost:48080"));
             }
             Map<String, String> loaded = store.findConfiguration("dcode");
             assertEquals("super-secret-token", loaded.get("authToken"));

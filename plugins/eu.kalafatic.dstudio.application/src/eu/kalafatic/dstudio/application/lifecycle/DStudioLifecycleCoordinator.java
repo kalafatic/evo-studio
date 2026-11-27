@@ -278,13 +278,12 @@ public class DStudioLifecycleCoordinator {
     /**
      * Resolves the ENR inference-engine endpoint against the running family
      * environment (family convention, mirror of the EVO-Code RuntimeManager):
-     * the {@code dstudio.enr.endpoint} system property always wins; otherwise a
-     * reachable well-known candidate is selected — standalone ENR (8111) or
-     * EVO-embedded ENR (28780). Existing installations keeping the historical
-     * default are migrated when the default is unreachable while a candidate
-     * answers; explicitly configured non-default endpoints are never touched.
-     * The resolved endpoint is persisted through the engine registry so every
-     * consumer (adapter, model management passthrough) follows it.
+     * the {@code dstudio.enr.endpoint} system property always wins; otherwise the
+     * authoritative ENR API endpoint (28780) is used. Existing installations
+     * keeping the historical default are migrated when the default is unreachable
+     * while a candidate answers; explicitly configured non-default endpoints are
+     * never touched. The resolved endpoint is persisted through the engine
+     * registry so every consumer (adapter, model management passthrough) follows it.
      */
     private void resolveEnrEndpoint(InferenceEngineRegistry registry) {
         String configured = System.getProperty("dstudio.enr.endpoint");
@@ -306,8 +305,7 @@ public class DStudioLifecycleCoordinator {
                 .equals(endpoint)) {
             return; // unreachable user-configured endpoint: leave it untouched
         }
-        for (String candidate : List.of("http://127.0.0.1:8111",
-                "http://127.0.0.1:28780")) {
+        for (String candidate : List.of("http://127.0.0.1:28780")) {
             if (candidate.equals(endpoint) || !enrAnswers(candidate)) {
                 continue;
             }

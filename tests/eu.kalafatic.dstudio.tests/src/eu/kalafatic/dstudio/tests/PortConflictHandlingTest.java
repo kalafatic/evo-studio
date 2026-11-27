@@ -27,7 +27,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Phase 7 (S4 follow-up): port conflicts must surface as typed, actionable failures —
  * the desktop client resolves them interactively via {@code restartServerOnPort}, the
  * headless client reports and exits. Family port convention: EVO 28xxx, TRYST 38xxx,
- * EVO-Studio 48xxx (TEIP 48080, diagnostics 48180), EVO-Code 58xxx (TEIP 58080).
+ * EVO-Studio 58xxx (TEIP 58080, diagnostics 58180), EVO-Code 48xxx (TEIP 48080).
  */
 class PortConflictHandlingTest {
 
@@ -91,28 +91,28 @@ class PortConflictHandlingTest {
 
     @Test
     void familyPortConventions() {
-        assertEquals(48080, eu.kalafatic.dstudio.core.config.DStudioConfiguration.DEFAULT_TEIP_PORT);
-        assertEquals(48180, eu.kalafatic.dstudio.core.config.DStudioConfiguration.DEFAULT_DIAGNOSTICS_PORT);
-        assertEquals("http://localhost:58080", DCodeHarnessAdapter.DEFAULT_ENDPOINT);
+        assertEquals(58080, eu.kalafatic.dstudio.core.config.DStudioConfiguration.DEFAULT_TEIP_PORT);
+        assertEquals(58180, eu.kalafatic.dstudio.core.config.DStudioConfiguration.DEFAULT_DIAGNOSTICS_PORT);
+        assertEquals("http://localhost:48080", DCodeHarnessAdapter.DEFAULT_ENDPOINT);
     }
 
     @Test
     void legacyPersistedPortsMigrateToNewFamily() throws Exception {
         DStudioPaths paths = new DStudioPaths(tempDir.resolve("dstudio-legacy"));
         Files.createDirectories(paths.getConfigurationDirectory());
-        // persisted configuration from the transient 58xxx convention that collided
-        // with EVO-Code's primary port
+        // persisted configuration from the legacy 48xxx convention that EVO-Studio
+        // must migrate away from
         Files.writeString(paths.getPropertiesFile(),
-                "teip.port=58080\ndiagnostics.port=58180\n");
+                "teip.port=48080\ndiagnostics.port=48180\n");
         DStudioLifecycleCoordinator coordinator = new DStudioLifecycleCoordinator(paths);
         coordinator.advance(DStudioLifecycleStage.CONFIGURATION_INITIALIZATION);
         var configuration = coordinator.getConfigurationService().getConfiguration();
-        assertEquals(48080, configuration.teipPort());
-        assertEquals(48180, configuration.diagnosticsPort());
+        assertEquals(58080, configuration.teipPort());
+        assertEquals(58180, configuration.diagnosticsPort());
         // the corrected values are persisted for the next launch
         String properties = Files.readString(paths.getPropertiesFile());
-        assertTrue(properties.contains("teip.port=48080"), properties);
-        assertTrue(properties.contains("diagnostics.port=48180"), properties);
+        assertTrue(properties.contains("teip.port=58080"), properties);
+        assertTrue(properties.contains("diagnostics.port=58180"), properties);
     }
 
     @Test
@@ -121,11 +121,11 @@ class PortConflictHandlingTest {
         Files.createDirectories(paths.getConfigurationDirectory());
         // persisted configuration already on the family convention stays unchanged
         Files.writeString(paths.getPropertiesFile(),
-                "teip.port=48080\ndiagnostics.port=48180\n");
+                "teip.port=58080\ndiagnostics.port=58180\n");
         DStudioLifecycleCoordinator coordinator = new DStudioLifecycleCoordinator(paths);
         coordinator.advance(DStudioLifecycleStage.CONFIGURATION_INITIALIZATION);
         var configuration = coordinator.getConfigurationService().getConfiguration();
-        assertEquals(48080, configuration.teipPort());
-        assertEquals(48180, configuration.diagnosticsPort());
+        assertEquals(58080, configuration.teipPort());
+        assertEquals(58180, configuration.diagnosticsPort());
     }
 }

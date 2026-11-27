@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio Harness Adapters
 Bundle-SymbolicName: eu.kalafatic.dstudio.harness
-Bundle-Version: 2.6.11.202611251111
+Bundle-Version: 2.6.11.202611271901
 Automatic-Module-Name: eu.kalafatic.dstudio.harness
 Require-Bundle: eu.kalafatic.dstudio.core;bundle-version="2.6.11",eu.kal
  afatic.dstudio.infrastructure;bundle-version="2.6.11"
@@ -11,5 +11,5 @@ Export-Package: eu.kalafatic.dstudio.harness,eu.kalafatic.dstudio.harnes
  ess.dcode,eu.kalafatic.dstudio.harness.enr,eu.kalafatic.dstudio.harness
  .ollama,eu.kalafatic.dstudio.harness.openai,eu.kalafatic.dstudio.harnes
  s.anthropic,eu.kalafatic.dstudio.harness.claude
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=21))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=25))"
 

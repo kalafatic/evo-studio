@@ -101,17 +101,16 @@ public class DStudioConfigurationServiceImpl implements ConfigurationService {
                 defaults.diagnosticsPort(), file)) {
             // Persist the port correction once so stale values never reappear.
             saveConfiguration(migrated);
-            System.err.println("EVO-Studio: corrected persisted ports to the 48xxx family "
+            System.err.println("EVO-Studio: corrected persisted ports to the 58xxx family "
                     + "(TEIP " + teipPort + ", diagnostics " + diagnosticsPort + ")");
         }
         return migrated;
     }
 
     /**
-     * Port convention normalization: the family convention is EVO-Studio 48xxx / EVO-Code 58xxx.
-     * Persisted values equal to the legacy defaults, or to the transient 58xxx values that
-     * briefly shipped (colliding with EVO-Code's 58080), are remapped to the family defaults;
-     * explicit custom ports are preserved.
+     * Port convention normalization: the family convention is EVO-Studio 58xxx / EVO-Code 48xxx.
+     * Persisted values equal to the legacy 48xxx defaults are remapped to the 58xxx family
+     * defaults; the current 58xxx defaults and explicit custom ports are preserved.
      */
     private int migrateLegacyPort(int configured, int legacyDefault, int transientValue,
             int newDefault) {

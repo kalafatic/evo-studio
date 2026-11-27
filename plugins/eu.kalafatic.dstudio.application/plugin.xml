@@ -41,4 +41,15 @@
          <run class="eu.kalafatic.dstudio.application.DStudioServerApplication"/>
       </application>
    </extension>
+   <extension
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            id="eu.kalafatic.dstudio.application.splashHandler"
+            class="eu.kalafatic.dstudio.application.splash.DStudioSplashHandler">
+      </splashHandler>
+      <splashHandlerProductBinding
+            productId="eu.kalafatic.dstudio.application.product"
+            splashId="eu.kalafatic.dstudio.application.splashHandler">
+      </splashHandlerProductBinding>
+   </extension>
 </plugin>

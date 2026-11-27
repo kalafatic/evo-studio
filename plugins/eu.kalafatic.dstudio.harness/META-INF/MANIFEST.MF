@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio Harness Adapters
 Bundle-SymbolicName: eu.kalafatic.dstudio.harness
 Bundle-Version: 2.6.11.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: eu.kalafatic.dstudio.harness
 Require-Bundle: eu.kalafatic.dstudio.core;bundle-version="2.6.11",
  eu.kalafatic.dstudio.infrastructure;bundle-version="2.6.11"

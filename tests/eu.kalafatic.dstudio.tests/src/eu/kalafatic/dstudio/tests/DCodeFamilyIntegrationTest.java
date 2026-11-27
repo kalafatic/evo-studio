@@ -20,7 +20,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Family integration (Phase 8, §10): EVO-Studio orchestrates EVO-Code as its native EVO
  * Family coding harness through the FHC 1.0 contract. Requires a running EVO-Code
- * headless server (default http://localhost:58080 — EVO-Code owns the 58xxx block, override with
+ * headless server (default http://localhost:48080 — EVO-Code owns the 48xxx block, override with
  * -Ddcode.live.endpoint=...). Skips silently when EVO-Code is absent.
  *
  * <p>Verified live: EVO-Studio creates a workspace/repository/session in EVO-Code, EVO-Code's

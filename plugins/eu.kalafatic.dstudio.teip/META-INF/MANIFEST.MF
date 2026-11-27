@@ -4,7 +4,7 @@ Bundle-Name: EVO-Studio TEIP Provider
 Bundle-SymbolicName: eu.kalafatic.dstudio.teip
 Import-Package: org.osgi.framework;version="[1.10.0,2.0.0)"
 Bundle-Version: 2.6.11.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: eu.kalafatic.dstudio.teip
 Require-Bundle: eu.kalafatic.dstudio.core;bundle-version="2.6.11",
  eu.kalafatic.dstudio.infrastructure;bundle-version="2.6.11"
