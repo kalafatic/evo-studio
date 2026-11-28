@@ -40,7 +40,7 @@
     <a id="btn-settings" class="icon-btn" href="settings.html" title="Providers, models, projects, harnesses">⚙</a>
     <a id="btn-help" class="icon-btn" href="help.html" target="_blank" rel="noopener" title="Help and documentation">?</a>
     <button id="btn-more" class="icon-btn" title="More actions">⋮</button>
-    <span id="frontend-build" class="build-badge" title="Frontend revision">web</span>
+    <span id="frontend-build" class="build-badge" title="Frontend revision">web r6</span>
     <div id="more-menu" class="menu" hidden>
       <button data-action="new-session">New Session</button>
       <button data-action="export-console">Export Console</button>
@@ -90,26 +90,26 @@
     </div>
 
     <!-- D. BOTTOM COMPOSER -->
-    <section id="composer">
+    <section id="composer" class="evo-composer">
       <div id="attachments" class="attachments" hidden></div>
-      <div class="composer-box">
-        <textarea id="promptInput" rows="3"
+      <div class="composer-box evo-composer-box">
+        <textarea id="promptInput" rows="2"
           placeholder="Ask the model… (Enter to send, Shift+Enter for a new line)"></textarea>
-        <div class="composer-bar">
-          <div class="composer-actions">
+        <div class="composer-bar evo-composer-bar">
+          <div class="composer-actions evo-composer-actions">
             <button id="attach-btn" class="icon-btn" title="Attach a project file">📎</button>
             <input id="file-input" type="file" multiple hidden>
             <select id="context-select" class="context-select" title="Attach context from the active project">
               <option value="">no project context</option>
             </select>
           </div>
-          <div class="composer-right">
+          <div class="composer-right evo-composer-right">
             <span id="sendStatus" class="muted"></span>
             <button id="cancelBtn" class="btn btn-danger" hidden>Stop</button>
             <button id="sendBtn" class="btn btn-primary">Send</button>
           </div>
         </div>
-        <div class="composer-hint">Enter to send · Shift+Enter for new line · Ctrl+K to focus</div>
+        <div class="composer-hint evo-composer-hint">Enter to send · Shift+Enter for new line · Ctrl+K to focus</div>
       </div>
     </section>
   </main>

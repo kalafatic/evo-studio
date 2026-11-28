@@ -12,7 +12,7 @@ window.Inference = (function () {
   const THEME_KEY = "dstudio.theme.v1";
   /** Frontend revision — visible in the UI, logged at boot and asserted by the
    *  backend `frontendVersion` field so stale bundles are detected immediately. */
-  const FRONTEND_BUILD = "web-20261122-r4";
+  const FRONTEND_BUILD = "web-20261127-r6";
   const state = { backend: "dstudio", meta: {} };
 
   function $(id) { return document.getElementById(id); }

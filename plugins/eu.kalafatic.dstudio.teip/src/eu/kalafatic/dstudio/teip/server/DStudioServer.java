@@ -31,7 +31,7 @@ public class DStudioServer {
     public static final String STATUS_PATH = "/api/status";
     /** Frontend revision the web UI reports; must match web/common.js
      *  FRONTEND_BUILD (asserted by FrontendDeliveryTest). */
-    public static final String FRONTEND_VERSION = "web-20261122-r4";
+    public static final String FRONTEND_VERSION = "web-20261127-r6";
     public static final String DIAGNOSTICS_PATH = "/api/diagnostics";
     public static final String INFERENCE_PATH = InferenceHttpHandler.PATH;
     public static final String EVENTS_PATH = EventsSseHandler.PATH;

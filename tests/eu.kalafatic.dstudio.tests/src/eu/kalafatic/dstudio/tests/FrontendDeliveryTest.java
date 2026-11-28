@@ -28,9 +28,10 @@ class FrontendDeliveryTest {
 
     private static final List<String> FILES = List.of(
             "web/index.html", "web/common.js", "web/app.js", "web/style.css",
-            "web/settings.html", "web/settings.js", "web/tasks.js", "web/help.html");
+            "web/settings.html", "web/settings.js", "web/tasks.js", "web/help.html",
+            "web/shared/shell.css", "web/shared/shell.js", "web/shared/shell-init.js");
 
-    private static final String BUILD = "web-20261122-r4";
+    private static final String BUILD = "web-20261127-r6";
 
     /** Locates the source tree for content comparison (repo checkout layout). */
     private Path sourceRoot() {

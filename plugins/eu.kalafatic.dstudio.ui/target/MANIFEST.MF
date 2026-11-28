@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EVO-Studio UI
 Bundle-SymbolicName: eu.kalafatic.dstudio.ui;singleton:=true
-Bundle-Version: 2.6.11.202611271901
+Bundle-Version: 2.6.11.202611280307
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: eu.kalafatic.dstudio.ui.DStudioUiPlugin
 Automatic-Module-Name: eu.kalafatic.dstudio.ui

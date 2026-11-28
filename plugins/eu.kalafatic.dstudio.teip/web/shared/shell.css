@@ -234,3 +234,79 @@ body.evo-dragging-vertical { cursor: row-resize; }
 .tok-com { color: var(--evo-text-3); font-style: italic; }
 .tok-num { color: #e0af68; }
 .diff mark, .diff-viewer mark { background: rgba(224,170,78,.4); color: inherit; border-radius: 2px; }
+
+/* =====================================================================
+ * Unified control grid & desktop density
+ *
+ * Both products consume these metrics so that every single-line control
+ * (input, combo, button, tab, chip) shares one height derived from the
+ * 12px control font, and every labelled field starts its control on the
+ * same column. Product stylesheets reference the tokens below instead of
+ * hard-coding their own padding/height, which keeps EVO-Studio and
+ * EVO-Code pixel-identical.
+ * ===================================================================== */
+:root {
+  --evo-ctl-fs: 12px;          /* control value font size */
+  --evo-ctl-fs-sm: 11px;       /* secondary control / chip font size */
+  --evo-ctl-h: 24px;           /* unified single-line control height */
+  --evo-ctl-h-sm: 22px;        /* compact tab / chip height */
+  --evo-ctl-pad: 0 8px;        /* horizontal control padding */
+  --evo-ctl-gap: 6px;          /* gap between controls on one row */
+  --evo-gutter: 12px;          /* chrome inset shared by header/sidebar/footer */
+  --evo-content-gutter: 20px;  /* transcript / composer content inset */
+  --evo-label-col: 56px;       /* fixed label column width */
+  --evo-combo-w: 160px;        /* unified combo/select width */
+}
+
+/* Row / field scaffolding shared by both products. */
+.evo-row {
+  display: flex; align-items: center; gap: var(--evo-ctl-gap); min-width: 0;
+}
+.evo-toolbar {
+  display: flex; align-items: center; gap: var(--evo-ctl-gap);
+  flex-wrap: wrap; min-width: 0;
+}
+.evo-field {
+  display: flex; align-items: center; gap: var(--evo-ctl-gap); min-width: 0;
+}
+.evo-field-label {
+  flex: none; width: var(--evo-label-col); min-width: var(--evo-label-col);
+  text-align: right; font-size: 10px; line-height: 1;
+  text-transform: uppercase; letter-spacing: .4px;
+  color: var(--evo-text-3); white-space: nowrap;
+}
+.evo-grid {
+  display: grid; align-items: center;
+  gap: var(--evo-ctl-gap) var(--evo-gutter);
+}
+
+/* Boxed inference composer — identical in EVO-Studio and EVO-Code. */
+.evo-composer {
+  flex: none; width: 100%; min-width: 0;
+  border-top: 1px solid var(--evo-border);
+  background: var(--evo-panel);
+  padding: 8px var(--evo-gutter) 6px;
+}
+.evo-composer-box {
+  width: 100%; min-width: 0;
+  border: 1px solid var(--evo-border-strong);
+  background: var(--evo-bg);
+  padding: 6px 8px 4px;
+}
+.evo-composer-box textarea {
+  display: block; width: 100%; min-width: 0;
+  border: none; outline: none; background: transparent;
+  resize: vertical; min-height: 40px; max-height: 220px;
+  padding: 0; font-family: var(--evo-sans);
+  font-size: 13px; line-height: 1.5; color: var(--evo-text);
+}
+.evo-composer-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.evo-composer-actions { display: flex; align-items: center; gap: var(--evo-ctl-gap); }
+.evo-composer-right { display: flex; align-items: center; gap: 8px; }
+.evo-composer-hint {
+  text-align: center; font-size: 10px;
+  color: var(--evo-text-3); margin-top: 4px;
+}

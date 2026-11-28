@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <libraryInfos>
-    <libraryInfo home="/usr/lib/jvm/java-25-openjdk-amd64" version="25.0.5.0.3"/>
-    <libraryInfo home="/usr/lib/jvm/java-17-openjdk-amd64" version="17.0.21.0.3"/>
-    <libraryInfo home="/usr/lib/jvm/java-21-openjdk-amd64" version="21.0.13.0.3"/>
-    <libraryInfo home="/usr/lib/jvm/java-8-openjdk-amd64" version="1.8.0_512">
+    <libraryInfo home="/usr/lib/jvm/java-25-openjdk-amd64" version="25.0.5.1"/>
+    <libraryInfo home="/usr/lib/jvm/java-17-openjdk-amd64" version="17.0.21.1"/>
+    <libraryInfo home="/usr/lib/jvm/java-21-openjdk-amd64" version="21.0.13.1"/>
+    <libraryInfo home="/usr/lib/jvm/java-8-openjdk-amd64" version="1.8.0_514">
         <bootpath>
             <entry path="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar"/>
             <entry path="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar"/>
